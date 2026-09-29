@@ -14,6 +14,18 @@ function adminValue(array $source, string $key, string $default=''): string {
     return isset($source[$key]) && is_string($source[$key]) ? $source[$key] : $default;
 }
 function adminCsrf(): string { return '<input type="hidden" name="csrf" value="'.esc($_SESSION['admin_csrf']).'">'; }
+function adminGlyph(string $name): string {
+    $paths = [
+        'news'=>'<path d="M4 4h16v16H4zM8 8h8M8 12h8M8 16h4"/>',
+        'agreements'=>'<path d="M7 3h7l4 4v14H6V3zM14 3v5h4M9 12h6M9 16h6"/>',
+        'drafts'=>'<path d="m4 16 11-11 4 4L8 20H4zM13 7l4 4"/>',
+        'media'=>'<rect x="3" y="3" width="18" height="18" rx="3"/><path d="m3 17 6-6 5 5 3-3 4 4"/><circle cx="15" cy="8" r="1"/>',
+        'home'=>'<path d="m3 10 9-7 9 7M5 9v12h14V9M9 21v-8h6v8"/>',
+        'arrow'=>'<path d="M6 18 18 6M6 6h12v12"/>',
+        'logout'=>'<path d="M9 4H4v16h5M10 12h11m-4-4 4 4-4 4"/>',
+    ];
+    return '<svg class="admin-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'.($paths[$name]??$paths['news']).'</svg>';
+}
 function adminPage(string $title, string $content, int $status=200): never {
     http_response_code($status);
     header('Content-Type: text/html; charset=utf-8');
@@ -21,10 +33,19 @@ function adminPage(string $title, string $content, int $status=200): never {
     header('X-Robots-Tag: noindex, nofollow');
     header("Content-Security-Policy: default-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self'; img-src 'self' https://ceps.edu.ba https://www.ceps.edu.ba; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'");
     header('X-Content-Type-Options: nosniff');
-    echo '<!doctype html><html lang="hr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'.esc($title).' | CEPS administracija</title><link rel="stylesheet" href="/assets/admin.css"><script src="/assets/admin-editor.js" defer></script></head><body><header><a href="/admin">CEPS <span>Administracija</span></a><a href="/">Otvori web</a></header><main>';
-    if (!empty($_SESSION['admin_user'])) echo '<nav><a href="/admin">Novosti</a><a href="/admin?module=agreements">Sporazumi</a><a href="/admin?module=drafts">Nacrti</a><a href="/admin?module=media">Slike i PDF</a><a href="/admin?module=home">Naslovnica</a><form method="post" action="/admin">'.adminCsrf().'<button name="action" value="logout">Odjava</button></form></nav>';
-    echo '<h1>'.esc($title).'</h1>'.$content.'</main></body></html>';exit;
+    $signedIn=!empty($_SESSION['admin_user']);
+    $module=adminValue($_GET,'module','news');
+    $labels=['news'=>'Novosti','drafts'=>'Nacrti','agreements'=>'Sporazumi','media'=>'Slike i PDF','home'=>'Naslovnica'];
+    $description=['news'=>'Objave, događanja i informacije za studente.','drafts'=>'Nastavite pripremu sadržaja prije objave.','agreements'=>'Partneri i dokumenti o suradnji.','media'=>'Sve prenesene slike i dokumenti na jednom mjestu.','home'=>'Uredite slajdove i obavijest na naslovnici.'];
+    echo '<!doctype html><html lang="hr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'.esc($title).' | CEPS administracija</title><link rel="stylesheet" href="/assets/admin.css?v=2"><script src="/assets/admin-editor.js?v=2" defer></script></head><body class="'.($signedIn?'admin-app':'admin-auth').'"><a class="skip-link" href="#admin-main">Preskoči na sadržaj</a>';
+    if($signedIn){
+        echo '<aside class="admin-sidebar"><a class="admin-brand" href="/admin"><span class="brand-mark">C</span><span><strong>CEPS</strong><small>Administracija</small></span></a><p class="nav-caption">UPRAVLJANJE WEBOM</p><nav aria-label="Administracija">';
+        foreach($labels as $key=>$label)echo '<a href="/admin?module='.$key.'"'.($module===$key?' aria-current="page"':'').'>'.adminGlyph($key).'<span>'.$label.'</span></a>';
+        echo '</nav><div class="sidebar-bottom"><span class="account-avatar">'.esc(mbSafeInitial((string)$_SESSION['admin_user'])).'</span><div><strong>'.esc((string)$_SESSION['admin_user']).'</strong><small>Administrator</small></div><form method="post" action="/admin">'.adminCsrf().'<button name="action" value="logout" aria-label="Odjava" title="Odjava">'.adminGlyph('logout').'</button></form></div></aside>';
+    }
+    echo '<div class="admin-workspace"><header class="admin-topbar"><span>'.($signedIn?'Sadržaj / '.esc($labels[$module]??'Administracija'):'CEPS / Administracija').'</span><a href="/" target="_blank" rel="noopener">Otvori web '.adminGlyph('arrow').'</a></header><main id="admin-main"><div class="page-heading"><p class="eyebrow">'.($signedIn?'VAŠ RADNI PROSTOR':'DOBRO DOŠLI').'</p><h1>'.esc($title).'</h1><p>'.esc($signedIn?($description[$module]??'Upravljajte sadržajem weba.'):'Prijavite se za upravljanje CEPS webom.').'</p></div>'.$content.'</main><footer class="admin-footer">CEPS · Centar za poslovne studije</footer></div></body></html>';exit;
 }
+function mbSafeInitial(string $name): string { preg_match('/^./us',$name,$match); return strtoupper($match[0]??'A'); }
 function adminFingerprint(array $row): string { ksort($row); return hash('sha256',serialize($row)); }
 function adminFlags(): array {
     $flags=['Hr'=>'Hrvatski','En'=>'Engleski','De'=>'Njemački','Aktivnosti'=>'Aktivnosti','Konkursi'=>'Natječaji','Naslovnica'=>'Naslovnica','Istaknuto'=>'Istaknuto','PE'=>'Poslovna ekonomija','Energetika'=>'Energetika','Zastita'=>'Zaštita','Sigurnost'=>'Sigurnost','Promet'=>'Promet'];
@@ -128,15 +149,22 @@ function adminRun(): never {
                 $pdo->commit();header('Location: '.$base.'&id='.$id.'&saved=1',true,303);exit;
             } catch(Throwable $e) { if($pdo->inTransaction())$pdo->rollBack();$error=$e instanceof InvalidArgumentException || $e instanceof RuntimeException && !$e instanceof PDOException ? $e->getMessage() : 'Spremanje nije uspjelo. Pokušajte ponovo.';error_log('Admin save: '.$e->getMessage()); }
         }
-        adminPage($id==='new'?'Novi zapis':'Uredi zapis',adminEditor($module,$values,$version,$base,$id,$error).adminRevisionList($pdo,$module,$id));
+        adminPage($module==='news'?($id==='new'?'Nova novost':'Uredi novost'):($id==='new'?'Novi sporazum':'Uredi sporazum'),adminEditor($module,$values,$version,$base,$id,$error).adminRevisionList($pdo,$module,$id));
     }
     $q=trim(adminValue($_GET,'q'));$page=max(1,min(100000,(int)adminValue($_GET,'page','1')));$offset=($page-1)*30;
     $stmt=$pdo->prepare("SELECT * FROM $table WHERE $name LIKE ? ORDER BY ID DESC LIMIT 30 OFFSET $offset");$stmt->execute(['%'.$q.'%']);
-    $html='<div class="tools"><form method="get" action="/admin"><input type="hidden" name="module" value="'.$module.'"><label>Pretraži<input name="q" value="'.esc($q).'"></label><button>Pretraži</button></form><a class="primary" href="'.$base.'&id=new">Dodaj '.($module==='news'?'novost':'sporazum').'</a></div><section class="records">';
-    foreach($stmt as $row) $html.='<a href="'.$base.'&id='.$row['ID'].'"><span><strong>'.esc(titleText($row[$name])).'</strong><small>#'.$row['ID'].' · '.esc($row['Datum']??'').'</small></span><span>Uredi →</span></a>';
+    $html='<div class="tools"><form method="get" action="/admin" role="search"><input type="hidden" name="module" value="'.$module.'"><label>Pretraži '.($module==='news'?'novosti':'sporazume').'<input type="search" name="q" placeholder="Upišite dio naslova…" value="'.esc($q).'"></label><button>Pretraži</button>'.($q!==''?'<a class="clear-search" href="'.$base.'">Očisti</a>':'').'</form><a class="primary" href="'.$base.'&id=new"><span aria-hidden="true">＋</span> Dodaj '.($module==='news'?'novost':'sporazum').'</a></div><section class="records" aria-label="Popis sadržaja"><div class="records-heading"><span>NASLOV I DATUM</span><span>RADNJA</span></div>';
+    $shown=0;
+    foreach($stmt as $row) {
+        $date=!empty($row['Datum'])?newsDate($row['Datum']):'Bez datuma';
+        $badge=$module==='agreements'?'<span class="record-badge'.(!empty($row['Aktivan'])?'':' is-muted').'">'.(!empty($row['Aktivan'])?'Aktivan':'Neaktivan').'</span>':'';
+        $html.='<a href="'.$base.'&id='.$row['ID'].'"><span><strong>'.esc(titleText($row[$name])).'</strong><small>#'.$row['ID'].' · '.esc($date).'</small></span><span class="record-action">'.$badge.'<span>Uredi <span aria-hidden="true">→</span></span></span></a>';$shown++;
+    }
+    if(!$shown)$html.='<div class="empty-state"><h2>Nema rezultata</h2><p>'.($q!==''?'Pokušajte s kraćim naslovom ili očistite pretragu.':'Dodajte prvi zapis pomoću gumba iznad.').'</p></div>';
     $html.='</section><div class="pagination">';if($page>1)$html.='<a href="'.$base.'&q='.rawurlencode($q).'&page='.($page-1).'">Prethodna</a>';
     $count=$pdo->prepare("SELECT COUNT(*) FROM $table WHERE $name LIKE ?");$count->execute(['%'.$q.'%']);
-    $html.='<span>Stranica '.$page.'</span>';if($offset+30<(int)$count->fetchColumn())$html.='<a href="'.$base.'&q='.rawurlencode($q).'&page='.($page+1).'">Sljedeća</a>';
+    $total=(int)$count->fetchColumn();
+    $html.='<span>Stranica '.$page.' od '.max(1,(int)ceil($total/30)).'<small>'.$total.' '.($module==='news'?'novosti':'sporazuma').'</small></span>';if($offset+30<$total)$html.='<a href="'.$base.'&q='.rawurlencode($q).'&page='.($page+1).'">Sljedeća →</a>';
     adminPage($module==='news'?'Novosti':'Sporazumi',$html.'</div>');
 }
 function adminValidate(string $module,array $input): array {
@@ -167,7 +195,15 @@ function adminEditor(string $module,array $row,string $version,string $base,stri
     $html.='<form class="editor" method="post" action="'.$base.'&id='.esc($id).(isset($_GET['draft'])?'&draft='.esc(adminValue($_GET,'draft')):'').'">'.adminCsrf().'<input type="hidden" name="version" value="'.esc($version).'"><input type="hidden" name="_draft_version" value="'.esc((string)($row['_draft_version']??'')).'"><label>Naslov<input name="'.$key.'" value="'.esc((string)($row[$key]??'')).'" required maxlength="500"></label><label>Datum i vrijeme<input name="Datum" type="datetime-local" required value="'.esc(substr(str_replace(' ','T',(string)($row['Datum']??date('Y-m-d H:i:s'))),0,16)).'"></label>';
     if($module==='news') {
         $html.='<label>Sadržaj<textarea name="Tekst" id="news-html" rows="22" required>'.esc((string)($row['Tekst']??'')).'</textarea></label>'.adminEditorTools($row).'<p class="hint">Koristite vizualni editor ili HTML prikaz. Spremite nacrt dok pripremate objavu.</p><fieldset><legend>Jezici i rubrike</legend><div class="flags">';
-        foreach(adminFlags() as $flag=>$label) $html.='<label><input type="checkbox" name="'.$flag.'" value="1"'.(!empty($row[$flag]) || $id==='new' && !$row && $flag==='Hr'?' checked':'').'>'.esc($label).'</label>';
+        $flags=adminFlags();
+        foreach(['Jezici'=>['Hr','En','De'],'Prikaz na webu'=>['Naslovnica','Istaknuto','Aktivnosti','Konkursi'],'Studiji'=>['PE','Energetika','Zastita','Sigurnost','Promet']] as $group=>$keys){
+            $html.='<div class="flag-group"><h3>'.$group.'</h3>';
+            foreach($keys as $flag)$html.='<label><input type="checkbox" name="'.$flag.'" value="1"'.(!empty($row[$flag]) || $id==='new' && !$row && $flag==='Hr'?' checked':'').'>'.esc($flags[$flag]).'</label>';
+            $html.='</div>';
+        }
+        $html.='<details class="flag-projects"><summary>Povezani projekti</summary><div class="project-options">';
+        foreach($flags as $flag=>$label)if(str_starts_with($flag,'projekt_'))$html.='<label><input type="checkbox" name="'.$flag.'" value="1"'.(!empty($row[$flag])?' checked':'').'>'.esc($label).'</label>';
+        $html.='</div></details>';
         $html.='</div></fieldset><p>Nacrt nije javno dostupan. Objavi promjene ažurira web. SEO adresa nastaje automatski.</p>';
         if($id!=='new') $html.='<a target="_blank" rel="noopener" href="'.esc(seoUrl('/Novost?id='.$id)).'">Otvori javnu novost ↗</a>';
     } else {

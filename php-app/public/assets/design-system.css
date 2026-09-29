@@ -628,3 +628,13 @@ body{font-size:var(--text-body);line-height:1.75}
 .school-footer .footer-accreditation>.ti:last-child{font-size:19px;flex-shrink:0}
 .school-footer .footer-accreditation:hover{background:#ffffff14;border-color:#FFFF00}
 .school-footer .footer-accreditation:focus-visible{outline:2px solid #FFFF00;outline-offset:4px}
+
+/* Accreditation is the primary footer action. */
+.school-footer .footer-intro-actions{width:340px;max-width:100%;flex-shrink:0}
+.school-footer .footer-intro-actions .footer-accreditation{display:flex;flex-direction:row;align-items:center;gap:16px;width:100%;max-width:none;margin:0;padding:22px 24px;border:1px solid #ffffff26;background:#ffffff06;border-radius:16px;text-align:left}
+.school-footer .footer-intro-actions .footer-accreditation>.ti:first-child{display:grid;place-items:center;width:48px;height:48px;border-radius:12px;background:#ffff0012;color:#ffff00;font-size:31px}
+.school-footer .footer-intro-actions .footer-accreditation strong{font-size:18px;line-height:1.35}
+.school-footer .footer-intro-actions .footer-accreditation small{font-size:14px;margin-top:5px}
+.school-footer .footer-intro-actions .footer-accreditation>.ti:last-child{margin-left:auto;color:#ffff00;font-size:22px}
+.school-footer .footer-intro-actions .footer-accreditation:hover{border-color:#ffff00;background:#ffffff0d}
+@media(max-width:700px){.school-footer .footer-intro-actions{width:100%}.school-footer .footer-intro-actions .footer-accreditation{padding:19px;gap:13px}}
