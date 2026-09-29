@@ -34,10 +34,11 @@ function adminPage(string $title, string $content, int $status=200): never {
     header("Content-Security-Policy: default-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self'; img-src 'self' https://ceps.edu.ba https://www.ceps.edu.ba; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'");
     header('X-Content-Type-Options: nosniff');
     $signedIn=!empty($_SESSION['admin_user']);
+    if($signedIn && isset($_GET['deleted']))$content='<p class="success" role="status">Zapis je izbrisan.</p>'.$content;
     $module=adminValue($_GET,'module','news');
     $labels=['news'=>'Novosti','drafts'=>'Nacrti','agreements'=>'Sporazumi','media'=>'Slike i PDF','home'=>'Naslovnica'];
     $description=['news'=>'Objave, događanja i informacije za studente.','drafts'=>'Nastavite pripremu sadržaja prije objave.','agreements'=>'Partneri i dokumenti o suradnji.','media'=>'Sve prenesene slike i dokumenti na jednom mjestu.','home'=>'Uredite slajdove i obavijest na naslovnici.'];
-    echo '<!doctype html><html lang="hr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'.esc($title).' | CEPS administracija</title><link rel="stylesheet" href="/assets/admin.css?v=2"><script src="/assets/admin-editor.js?v=2" defer></script></head><body class="'.($signedIn?'admin-app':'admin-auth').'"><a class="skip-link" href="#admin-main">Preskoči na sadržaj</a>';
+    echo '<!doctype html><html lang="hr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'.esc($title).' | CEPS administracija</title><link rel="stylesheet" href="/assets/admin.css?v=3"><script src="/assets/admin-editor.js?v=2" defer></script></head><body class="'.($signedIn?'admin-app':'admin-auth').'"><a class="skip-link" href="#admin-main">Preskoči na sadržaj</a>';
     if($signedIn){
         echo '<aside class="admin-sidebar"><a class="admin-brand" href="/admin"><span class="brand-mark">C</span><span><strong>CEPS</strong><small>Administracija</small></span></a><p class="nav-caption">UPRAVLJANJE WEBOM</p><nav aria-label="Administracija">';
         foreach($labels as $key=>$label)echo '<a href="/admin?module='.$key.'"'.($module===$key?' aria-current="page"':'').'>'.adminGlyph($key).'<span>'.$label.'</span></a>';
@@ -88,6 +89,7 @@ function adminRun(): never {
     $_SESSION['admin_seen']=time();
     $pdo=database();
     if($pdo->getAttribute(PDO::ATTR_DRIVER_NAME)==='sqlite')$pdo->exec('PRAGMA query_only = OFF');
+    if(isset($_GET['delete']))adminDeletePage($pdo,$post);
     if(adminValue($_GET,'module')==='home')adminHomeSettings($pdo,$post);
     if(adminValue($_GET,'module')==='media')adminMediaPage($pdo,$post);
     if(adminValue($_GET,'module')==='media-list'){header('Content-Type: application/json');header('Cache-Control: no-store');echo json_encode($pdo->query('SELECT Filename,OriginalName,Mime FROM AdminMedia ORDER BY ID DESC LIMIT 100')->fetchAll());exit;}
@@ -189,7 +191,10 @@ function adminValidate(string $module,array $input): array {
 }
 function adminEditor(string $module,array $row,string $version,string $base,string $id,string $error): string {
     $key=$module==='news'?'Naslov':'Naziv';
-    $html='<a href="'.$base.'">← Natrag na popis</a>';
+    $html='<div class="editor-heading-actions"><a href="'.$base.'">← Natrag na popis</a>';
+    if(isset($_GET['draft']))$html.='<a class="danger-link" href="/admin?module=drafts&delete='.esc(adminValue($_GET,'draft')).'">Izbriši nacrt</a>';
+    elseif($module==='news' && $id!=='new')$html.='<a class="danger-link" href="/admin?module=news&delete='.esc($id).'">Izbriši novost</a>';
+    $html.='</div>';
     if(isset($_GET['saved']) && !$error)$html.='<p class="success" role="status">Promjene su spremljene.</p>';
     if($error)$html.='<p class="error" role="alert">'.esc($error).'</p>';
     $html.='<form class="editor" method="post" action="'.$base.'&id='.esc($id).(isset($_GET['draft'])?'&draft='.esc(adminValue($_GET,'draft')):'').'">'.adminCsrf().'<input type="hidden" name="version" value="'.esc($version).'"><input type="hidden" name="_draft_version" value="'.esc((string)($row['_draft_version']??'')).'"><label>Naslov<input name="'.$key.'" value="'.esc((string)($row[$key]??'')).'" required maxlength="500"></label><label>Datum i vrijeme<input name="Datum" type="datetime-local" required value="'.esc(substr(str_replace(' ','T',(string)($row['Datum']??date('Y-m-d H:i:s'))),0,16)).'"></label>';

@@ -45,3 +45,32 @@ function adminEditorTools(array $row): string {
     $safe=articleHtml((string)($row['Tekst']??''));
     return '<div class="visual-editor" hidden><div class="editor-toolbar" role="toolbar" aria-label="Oblikovanje teksta"><button type="button" data-command="bold"><b>B</b></button><button type="button" data-command="italic"><i>I</i></button><button type="button" data-command="formatBlock" data-value="h2">Naslov</button><button type="button" data-command="formatBlock" data-value="p">Odlomak</button><button type="button" data-command="insertUnorderedList">Lista</button><button type="button" data-editor-link>Poveznica</button><button type="button" data-command="undo">Poništi</button><button type="button" data-command="redo">Ponovi</button><button type="button" data-source-toggle>HTML</button></div><div class="editor-canvas" contenteditable="true" role="textbox" aria-label="Sadržaj novosti" aria-multiline="true">'.$safe.'</div><div class="editor-attachments"><label>Dodaj slike ili PDF<input type="file" data-editor-upload multiple accept="image/jpeg,image/png,image/webp,application/pdf"></label><button type="button" data-library>Odaberi iz biblioteke</button><div class="editor-library" hidden></div><p data-upload-status role="status"></p></div></div>';
 }
+
+function adminDeletePage(PDO $pdo, bool $post): never {
+    $module=adminValue($_GET,'module');
+    $id=adminValue($_GET,'delete');
+    if(!in_array($module,['news','drafts'],true) || !preg_match('/^[1-9][0-9]{0,9}$/D',$id))adminPage('Zapis nije pronađen','',404);
+    $table=$module==='news'?'Novosti':'AdminDrafts';
+    $back='/admin?module='.$module;
+    if($post)$pdo->beginTransaction();
+    try {
+        $lock=$post && $pdo->getAttribute(PDO::ATTR_DRIVER_NAME)==='mysql'?' FOR UPDATE':'';
+        $stmt=$pdo->prepare('SELECT * FROM '.$table.' WHERE ID=?'.$lock);$stmt->execute([$id]);$row=$stmt->fetch();
+        if(!$row){if($pdo->inTransaction())$pdo->rollBack();adminPage('Zapis nije pronađen','<p>Zapis je možda već izbrisan.</p><a href="'.$back.'">Natrag na popis</a>',404);}
+        if($post){
+            if(adminValue($_POST,'action')!=='delete' || !hash_equals(adminFingerprint($row),adminValue($_POST,'version'))){
+                $pdo->rollBack();adminPage('Potvrda je istekla','<p>Sadržaj je promijenjen. Ponovno otvorite potvrdu brisanja.</p><a href="'.$back.'&delete='.$id.'">Pregledaj zapis</a>',409);
+            }
+            if($module==='news'){
+                adminRevision($pdo,'news',$id,$row);
+                $pdo->prepare("DELETE FROM AdminDrafts WHERE Module='news' AND RecordID=?")->execute([$id]);
+            }
+            $pdo->prepare('DELETE FROM '.$table.' WHERE ID=?')->execute([$id]);
+            $pdo->commit();header('Location: '.$back.'&deleted=1',true,303);exit;
+        }
+        $data=$module==='drafts'?json_decode($row['Payload'],true,512,JSON_THROW_ON_ERROR):$row;
+        $title=titleText($data['Naslov']??$data['Naziv']??'Nacrt');
+        $html='<section class="delete-confirm"><p class="eyebrow">POTVRDA BRISANJA</p><h2>'.esc($title).'</h2><p>'.($module==='news'?'Novost će biti uklonjena s weba zajedno s pripadajućim nacrtima.':'Izbrisat će se samo ovaj nacrt. Objavljeni sadržaj ostaje nepromijenjen.').'</p><p>Ovu radnju nije moguće poništiti kroz administraciju. Slike i PDF datoteke ostaju u biblioteci.</p><form method="post" action="'.$back.'&delete='.$id.'">'.adminCsrf().'<input type="hidden" name="version" value="'.esc(adminFingerprint($row)).'"><div class="delete-actions"><a class="primary" href="'.$back.'">Odustani</a><button class="danger-button" name="action" value="delete">Da, izbriši '.($module==='news'?'novost':'nacrt').'</button></div></form></section>';
+        adminPage($module==='news'?'Izbriši novost':'Izbriši nacrt',$html);
+    }catch(Throwable $e){if($pdo->inTransaction())$pdo->rollBack();throw $e;}
+}

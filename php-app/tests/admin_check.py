@@ -81,6 +81,25 @@ with tempfile.TemporaryDirectory() as temp:
   homepage=fetch('/')[2];assert 'Novi naslov slajda' in homepage and 'class="home-announcement"' not in homepage
 
   con=sqlite3.connect(db);assert con.execute('select count(*) from Novosti').fetchone()[0]==2;assert con.execute('select count(*) from Sporazumi').fetchone()[0]==1;con.close()
+  # Deletion is confirmed separately, CSRF protected, and draft-only deletion preserves live news.
+  status,h,b=fetch('/admin?module=news&id=1')
+  delete_draft={'csrf':token(b),'version':token(b,'version'),'Naslov':'Nacrt za brisanje','Datum':'2026-09-29T12:00','Tekst':'<p>Test nacrta</p>','Hr':'1','action':'draft'}
+  status,h,_=fetch('/admin?module=news&id=1',delete_draft);assert status==303
+  from urllib.parse import urlparse,parse_qs
+  draft_id=parse_qs(urlparse(h['Location']).query)['draft'][0]
+  delete_url='/admin?module=drafts&delete='+draft_id
+  status,h,b=fetch(delete_url);assert status==200 and 'Da, izbriši nacrt' in b
+  assert fetch(delete_url,{'action':'delete','version':token(b,'version')})[0]==403
+  assert fetch(delete_url,{'csrf':token(b),'action':'delete','version':'stale'})[0]==409
+  assert fetch(delete_url,{'csrf':token(b),'action':'delete','version':token(b,'version')})[0]==303
+  con=sqlite3.connect(db);assert con.execute('select count(*) from Novosti').fetchone()[0]==2;con.close()
+  status,h,b=fetch('/admin?module=news&delete=1');assert status==200 and 'Da, izbriši novost' in b
+  con=sqlite3.connect(db);assert con.execute('select count(*) from Novosti where ID=1').fetchone()[0]==1;con.close()
+  assert fetch('/admin?module=news&delete=1',{'csrf':token(b),'action':'delete','version':token(b,'version')})[0]==303
+  con=sqlite3.connect(db);assert con.execute('select count(*) from Novosti where ID=1').fetchone()[0]==0;con.close()
+  assert fetch('/admin?module=news&delete=1')[0]==404
+  assert fetch('/admin?module=home&delete=1')[0]==404
+  print('PASS: confirmed news/draft deletion, CSRF, stale confirmation, GET safety and draft isolation.')
   assert fetch('/admin',{'csrf':token(b),'action':'logout'})[0]==303
   assert 'Prijava' in fetch('/admin?module=news&id=1')[2]
   status,h,b=fetch();csrf=token(b)
