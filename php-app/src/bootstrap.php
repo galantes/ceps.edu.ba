@@ -125,29 +125,6 @@ function externalLinkTargets(string $html): string {
     foreach ($doc->getElementsByTagName('a') as $link) {
         $href = seoUrl(trim($link->getAttribute('href')));
         $link->setAttribute('href', $href);
-        $navigationContext = false;
-        $dropdownContext = false;
-        for ($parent = $link->parentNode; $parent instanceof DOMElement; $parent = $parent->parentNode) {
-            if (in_array($parent->tagName, ['header', 'footer'], true)) $navigationContext = true;
-            if (in_array('nav-dropdown', preg_split('/\s+/', $parent->getAttribute('class')), true)) $dropdownContext = true;
-        }
-        if ($navigationContext) {
-            $host = strtolower(parse_url($href, PHP_URL_HOST) ?: '');
-            $isPdf = preg_match('~\.pdf$~i', rawurldecode(parse_url($href, PHP_URL_PATH) ?: ''));
-            $isExternal = $host !== '' && !in_array($host, ['ceps.edu.ba', 'www.ceps.edu.ba', explode(':', $currentHost)[0]], true);
-            if ($dropdownContext || $isPdf || $isExternal) {
-                foreach (iterator_to_array($link->getElementsByTagName('i')) as $existingIcon) {
-                    if (str_contains($existingIcon->getAttribute('class'), 'ti-arrow-up-right')) $existingIcon->parentNode->removeChild($existingIcon);
-                }
-            }
-            if ($isPdf || $isExternal) {
-                $typeIcon = $doc->createElement('i');
-                $typeIcon->setAttribute('class', 'ti link-type-icon ' . ($isPdf ? 'ti-file-type-pdf' : 'ti-external-link'));
-                $typeIcon->setAttribute('aria-hidden', 'true');
-                $link->appendChild($typeIcon);
-                $link->setAttribute('aria-label', trim($link->textContent) . ($isPdf ? ' (PDF dokument)' : ' (vanjska poveznica)'));
-            }
-        }
         $documentContext = false;
         for ($parent = $link->parentNode; $parent instanceof DOMElement; $parent = $parent->parentNode) {
             if (in_array($parent->tagName, ['nav', 'header', 'footer'], true)) { $documentContext = false; break; }
