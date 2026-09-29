@@ -31,14 +31,14 @@ function adminPage(string $title, string $content, int $status=200): never {
     header('Content-Type: text/html; charset=utf-8');
     header('Cache-Control: no-store');
     header('X-Robots-Tag: noindex, nofollow');
-    header("Content-Security-Policy: default-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self'; img-src 'self' https://ceps.edu.ba https://www.ceps.edu.ba; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'");
+    header("Content-Security-Policy: default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self'; img-src 'self' data: blob: https:; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'");
     header('X-Content-Type-Options: nosniff');
     $signedIn=!empty($_SESSION['admin_user']);
     if($signedIn && isset($_GET['deleted']))$content='<p class="success" role="status">Zapis je izbrisan.</p>'.$content;
     $module=adminValue($_GET,'module','news');
     $labels=['news'=>'Novosti','drafts'=>'Nacrti','agreements'=>'Sporazumi','media'=>'Slike i PDF','home'=>'Naslovnica'];
     $description=['news'=>'Objave, događanja i informacije za studente.','drafts'=>'Nastavite pripremu sadržaja prije objave.','agreements'=>'Partneri i dokumenti o suradnji.','media'=>'Sve prenesene slike i dokumenti na jednom mjestu.','home'=>'Uredite slajdove i obavijest na naslovnici.'];
-    echo '<!doctype html><html lang="hr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'.esc($title).' | CEPS administracija</title><link rel="stylesheet" href="/assets/admin.css?v=3"><script src="/assets/admin-editor.js?v=2" defer></script></head><body class="'.($signedIn?'admin-app':'admin-auth').'"><a class="skip-link" href="#admin-main">Preskoči na sadržaj</a>';
+    echo '<!doctype html><html lang="hr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'.esc($title).' | CEPS administracija</title><link rel="stylesheet" href="/assets/vendor/jodit/jodit.min.css"><link rel="stylesheet" href="/assets/admin.css?v=4"><script src="/assets/vendor/jodit/jodit.min.js" defer></script><script src="/assets/admin-editor.js?v=4" defer></script></head><body class="'.($signedIn?'admin-app':'admin-auth').'"><a class="skip-link" href="#admin-main">Preskoči na sadržaj</a>';
     if($signedIn){
         echo '<aside class="admin-sidebar"><a class="admin-brand" href="/admin"><span class="brand-mark">C</span><span><strong>CEPS</strong><small>Administracija</small></span></a><p class="nav-caption">UPRAVLJANJE WEBOM</p><nav aria-label="Administracija">';
         foreach($labels as $key=>$label)echo '<a href="/admin?module='.$key.'"'.($module===$key?' aria-current="page"':'').'>'.adminGlyph($key).'<span>'.$label.'</span></a>';
@@ -199,7 +199,7 @@ function adminEditor(string $module,array $row,string $version,string $base,stri
     if($error)$html.='<p class="error" role="alert">'.esc($error).'</p>';
     $html.='<form class="editor" method="post" action="'.$base.'&id='.esc($id).(isset($_GET['draft'])?'&draft='.esc(adminValue($_GET,'draft')):'').'">'.adminCsrf().'<input type="hidden" name="version" value="'.esc($version).'"><input type="hidden" name="_draft_version" value="'.esc((string)($row['_draft_version']??'')).'"><label>Naslov<input name="'.$key.'" value="'.esc((string)($row[$key]??'')).'" required maxlength="500"></label><label>Datum i vrijeme<input name="Datum" type="datetime-local" required value="'.esc(substr(str_replace(' ','T',(string)($row['Datum']??date('Y-m-d H:i:s'))),0,16)).'"></label>';
     if($module==='news') {
-        $html.='<label>Sadržaj<textarea name="Tekst" id="news-html" rows="22" required>'.esc((string)($row['Tekst']??'')).'</textarea></label>'.adminEditorTools($row).'<p class="hint">Koristite vizualni editor ili HTML prikaz. Spremite nacrt dok pripremate objavu.</p><fieldset><legend>Jezici i rubrike</legend><div class="flags">';
+        $html.='<label for="news-html">Sadržaj</label><textarea name="Tekst" id="news-html" rows="22" required>'.esc((string)($row['Tekst']??'')).'</textarea>'.adminEditorTools($row).'<p class="hint">Koristite vizualni editor ili HTML prikaz. Spremite nacrt dok pripremate objavu.</p><fieldset><legend>Jezici i rubrike</legend><div class="flags">';
         $flags=adminFlags();
         foreach(['Jezici'=>['Hr','En','De'],'Prikaz na webu'=>['Naslovnica','Istaknuto','Aktivnosti','Konkursi'],'Studiji'=>['PE','Energetika','Zastita','Sigurnost','Promet']] as $group=>$keys){
             $html.='<div class="flag-group"><h3>'.$group.'</h3>';

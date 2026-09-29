@@ -42,8 +42,7 @@ function adminPreview(string $module,array $data): string {
     return $html.'</section>';
 }
 function adminEditorTools(array $row): string {
-    $safe=articleHtml((string)($row['Tekst']??''));
-    return '<div class="visual-editor" hidden><div class="editor-toolbar" role="toolbar" aria-label="Oblikovanje teksta"><button type="button" data-command="bold"><b>B</b></button><button type="button" data-command="italic"><i>I</i></button><button type="button" data-command="formatBlock" data-value="h2">Naslov</button><button type="button" data-command="formatBlock" data-value="p">Odlomak</button><button type="button" data-command="insertUnorderedList">Lista</button><button type="button" data-editor-link>Poveznica</button><button type="button" data-command="undo">Poništi</button><button type="button" data-command="redo">Ponovi</button><button type="button" data-source-toggle>HTML</button></div><div class="editor-canvas" contenteditable="true" role="textbox" aria-label="Sadržaj novosti" aria-multiline="true">'.$safe.'</div><div class="editor-attachments"><label>Dodaj slike ili PDF<input type="file" data-editor-upload multiple accept="image/jpeg,image/png,image/webp,application/pdf"></label><button type="button" data-library>Odaberi iz biblioteke</button><div class="editor-library" hidden></div><p data-upload-status role="status"></p></div></div>';
+    return '<div class="editor-attachments"><label>Dodaj slike ili PDF<input type="file" data-editor-upload multiple accept="image/jpeg,image/png,image/webp,application/pdf"></label><button type="button" data-library>Odaberi iz biblioteke</button><div class="editor-library" hidden></div><p data-upload-status role="status" aria-live="polite"></p><p class="hint">Zalijepite tekst iz Worda ili sliku s Ctrl+V. Slike možete i povući u editor.</p></div>';
 }
 
 function adminDeletePage(PDO $pdo, bool $post): never {

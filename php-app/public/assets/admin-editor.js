@@ -1,87 +1,143 @@
 (() => {
   const form = document.querySelector('form.editor');
   if (!form) return;
-  let unsaved = false, submitting = false;
-  form.addEventListener('input',()=>{unsaved=true;});
-  form.addEventListener('change',()=>{unsaved=true;});
-  form.addEventListener('submit',()=>{submitting=true;});
-  window.addEventListener('beforeunload',e=>{if(unsaved&&!submitting){e.preventDefault();e.returnValue='';}});
   const csrf = form.querySelector('[name=csrf]').value;
   const source = form.querySelector('[name=Tekst]');
-  const visual = form.querySelector('.visual-editor');
-  const canvas = visual?.querySelector('.editor-canvas');
-  let dirty = false, sourceMode = false, savedRange = null;
+  const original = source?.value || '';
+  const status = form.querySelector('[data-upload-status]');
+  let editor, unsaved = false, submitting = false, richDirty = false, pending = 0;
+  const mark = () => { unsaved = true; };
+  form.addEventListener('input', mark); form.addEventListener('change', mark);
+  window.addEventListener('beforeunload', e => { if (unsaved && !submitting) { e.preventDefault(); e.returnValue = ''; } });
   function sanitize(html) {
     const doc = new DOMParser().parseFromString(html, 'text/html');
-    const allowed = new Set(['P','BR','DIV','SPAN','STRONG','B','EM','I','U','H2','H3','H4','UL','OL','LI','BLOCKQUOTE','A','IMG','TABLE','TBODY','TR','TD','TH']);
+    const tags = new Set('P BR DIV SPAN STRONG B EM I U S H1 H2 H3 H4 H5 H6 UL OL LI BLOCKQUOTE A IMG TABLE THEAD TBODY TFOOT TR TD TH HR SUP SUB FIGURE FIGCAPTION'.split(' '));
+    const rules = {
+      'text-align': /^(left|center|right|justify)$/i, 'font-weight': /^(normal|bold|[1-9]00)$/i,
+      'font-style': /^(normal|italic)$/i, 'text-decoration': /^(none|underline|line-through|underline line-through)$/i,
+      'color': /^(#[a-f0-9]{3,8}|[a-z]{3,20}|rgba?\([0-9.,% ]+\))$/i,
+      'background-color': /^(#[a-f0-9]{3,8}|[a-z]{3,20}|rgba?\([0-9.,% ]+\))$/i,
+      'font-size': /^([1-9]|[1-6][0-9]|7[0-2])(px|pt)$/i,
+      'width': /^(auto|[0-9]{1,4}(px|%))$/i, 'height': /^(auto|[0-9]{1,4}(px|%))$/i,
+      'max-width': /^(auto|[0-9]{1,4}(px|%))$/i, 'margin-left': /^(auto|0|[0-9]{1,3}(px|pt))$/i,
+      'margin-right': /^(auto|0|[0-9]{1,3}(px|pt))$/i, 'border-collapse': /^(collapse|separate)$/i
+    };
     for (const el of [...doc.body.querySelectorAll('*')]) {
-      if (['SCRIPT','STYLE','IFRAME','OBJECT','EMBED','FORM','INPUT','BUTTON','SVG','MATH'].includes(el.tagName)) { el.remove(); continue; }
-      if (!allowed.has(el.tagName)) { el.replaceWith(...el.childNodes); continue; }
-      for (const a of [...el.attributes]) {
-        if (!['href','src','alt','title','colspan','rowspan'].includes(a.name)) el.removeAttribute(a.name);
-        else if (['href','src'].includes(a.name)) {
-          try {const u=new URL(a.value,location.origin); if (!['http:','https:','mailto:','tel:'].includes(u.protocol)) el.removeAttribute(a.name);} catch {el.removeAttribute(a.name);}
+      if (['SCRIPT','STYLE','IFRAME','OBJECT','EMBED','FORM','INPUT','BUTTON','SVG','MATH','LINK','META'].includes(el.tagName)) { el.remove(); continue; }
+      if (!tags.has(el.tagName)) { el.replaceWith(...el.childNodes); continue; }
+      if (el.hasAttribute('align')) el.style.textAlign = el.getAttribute('align');
+      for (const attr of [...el.attributes]) {
+        if (attr.name === 'style') {
+          const safe = [...el.style].filter(key => rules[key]?.test(el.style.getPropertyValue(key).trim())).map(key => key + ':' + el.style.getPropertyValue(key)).join(';');
+          if (safe) el.setAttribute('style', safe); else el.removeAttribute('style');
+        } else if (!['href','src','alt','title','colspan','rowspan'].includes(attr.name)) el.removeAttribute(attr.name);
+        else if (['href','src'].includes(attr.name)) {
+          try { const u = new URL(attr.value, location.origin); if (!['http:','https:','mailto:','tel:'].includes(u.protocol) && !(el.tagName === 'IMG' && /^data:image\/(png|jpeg|webp);base64,/i.test(attr.value))) el.removeAttribute(attr.name); }
+          catch { el.removeAttribute(attr.name); }
         }
       }
     }
     return doc.body.innerHTML;
   }
-  if (visual && document.queryCommandSupported?.('bold')) {
-    visual.hidden = false; source.hidden = true; source.required = false;
-    canvas.addEventListener('input', () => {dirty=true;});
-    canvas.addEventListener('keyup', remember); canvas.addEventListener('mouseup', remember);
-    function remember(){const s=getSelection();if(s.rangeCount && canvas.contains(s.anchorNode))savedRange=s.getRangeAt(0).cloneRange();}
-    canvas.addEventListener('paste', e => {e.preventDefault();document.execCommand('insertText',false,e.clipboardData.getData('text/plain'));dirty=true;});
-    canvas.addEventListener('drop',e=>e.preventDefault());
-    visual.querySelectorAll('[data-command]').forEach(b => {
-      b.addEventListener('mousedown',e=>e.preventDefault());
-      b.addEventListener('click',()=>{canvas.focus();document.execCommand(b.dataset.command,false,b.dataset.value||null);dirty=true;});
-    });
-    visual.querySelector('[data-editor-link]').addEventListener('click',()=>{
-      const url=window.prompt('Poveznica (https://… ili /putanja)');if(!url)return;
-      let parsed;try{parsed=new URL(url,location.origin);}catch{return;}
-      if(!['http:','https:','mailto:','tel:'].includes(parsed.protocol))return;
-      canvas.focus();if(savedRange){const s=getSelection();s.removeAllRanges();s.addRange(savedRange);}
-      document.execCommand('createLink',false,url);dirty=true;
-    });
-    visual.querySelector('[data-source-toggle]').addEventListener('click',e=>{
-      if(!sourceMode){if(dirty)source.value=canvas.innerHTML;source.hidden=false;canvas.hidden=true;e.target.textContent='Vizualni prikaz';}
-      else{canvas.innerHTML=sanitize(source.value);source.hidden=true;canvas.hidden=false;dirty=true;e.target.textContent='HTML';}
-      sourceMode=!sourceMode;
-    });
-    form.addEventListener('submit',()=>{if(!sourceMode&&dirty)source.value=canvas.innerHTML;});
-  }
-  function insert(file) {
-    unsaved = true;
-    const isImage=file.mime.startsWith('image/');
-    const el=document.createElement(isImage?'img':'a');
-    if(isImage){el.src=file.url;el.alt=file.name;}else{el.href=file.url;el.textContent=file.name;}
-    const p=document.createElement('p');p.append(el);
-    if(canvas&&!sourceMode&&!visual.hidden){canvas.append(p);dirty=true;canvas.dispatchEvent(new Event('input'));}
-    else if(source){source.value+='\n'+p.outerHTML;}
-    else form.querySelector('[name=Putanja]').value=file.url;
+  function busy(delta) {
+    pending += delta;
+    form.querySelectorAll('.save button').forEach(b => b.disabled = pending > 0);
   }
   async function upload(file) {
-    const data=new FormData();data.append('csrf',csrf);data.append('file',file);
-    const response=await fetch('/admin?module=upload',{method:'POST',body:data});
-    const result=await response.json();if(!response.ok)throw new Error(result.error||'Prijenos nije uspio.');return result;
+    const data = new FormData(); data.append('csrf', csrf); data.append('file', file);
+    const response = await fetch('/admin?module=upload', {method:'POST', body:data});
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.error || 'Prijenos nije uspio.');
+    return result;
   }
-  form.querySelectorAll('[data-editor-upload],[data-agreement-upload]').forEach(input=>input.addEventListener('change',async()=>{
-    const status=input.closest('.editor-attachments,.agreement-upload').querySelector('[data-upload-status]');
-    input.disabled=true;
-    // Prevent saving while a selected attachment is still uploading.
-    const saves=[...form.querySelectorAll('.save button')];saves.forEach(b=>b.disabled=true);
-    try{for(const file of input.files){status.textContent='Prijenos: '+file.name;insert(await upload(file));}status.textContent='Datoteke su dodane. Spremite nacrt ili objavite promjene.';}
-    catch(e){status.textContent=e.message;}
-    finally{input.disabled=false;input.value='';saves.forEach(b=>b.disabled=false);}
+  function insert(file) {
+    mark();
+    const image = file.mime.startsWith('image/');
+    const el = document.createElement(image ? 'img' : 'a');
+    if (image) { el.src = file.url; el.alt = file.name; } else { el.href = file.url; el.textContent = file.name; }
+    if (editor) { editor.s.insertHTML(el.outerHTML); richDirty = true; }
+    else if (source) source.value += '\n' + el.outerHTML;
+    else form.querySelector('[name=Putanja]').value = file.url;
+  }
+  async function uploadFiles(files) {
+    if (!files.length) return;
+    mark(); busy(1); editor?.s.save();
+    try {
+      for (const file of files) {
+        if (status) status.textContent = 'Prijenos: ' + file.name;
+        const result = await upload(file);
+        editor?.s.restore(); insert(result); editor?.s.save();
+      }
+      if (status) status.textContent = 'Datoteke su dodane. Spremite nacrt ili objavite promjene.';
+    } catch(e) { if (status) status.textContent = e.message; }
+    finally { editor?.s.restore(); busy(-1); }
+  }
+  if (source && window.Jodit) {
+    source.value = sanitize(original);
+    try {
+      editor = Jodit.make(source, {
+        height: 480, minHeight: 320, language: 'en', sourceEditor: 'area',
+        toolbarAdaptive: false, toolbarSticky: false, showXPathInStatusbar: false,
+        askBeforePasteHTML: false, askBeforePasteFromWord: false,
+        disablePlugins: ['paste','paste-from-word','drag-and-drop','drag-and-drop-element','file','image'],
+        buttons: ['undo','redo','|','bold','italic','underline','strikethrough','|','paragraph','fontsize','brush','|','ul','ol','|','align','outdent','indent','|','link','table','|','cepsImage','hr','eraser','|','source','fullsize'],
+        controls: { cepsImage: {name:'Slika / PDF', tooltip:'Dodaj sliku ili PDF', icon:'image', exec: () => form.querySelector('[data-editor-upload]').click()} },
+        cleanHTML: { denyTags: 'script,iframe,object,embed,form,input,button,svg,math', removeOnError: true },
+        placeholder: 'Napišite sadržaj ili zalijepite tekst iz Worda…'
+      });
+      source.required = false;
+      editor.events.on('change', () => { mark(); richDirty = true; });
+      editor.editor.addEventListener('paste', async e => {
+        const transfer = e.clipboardData;
+        if (!transfer) return;
+        e.preventDefault(); e.stopImmediatePropagation();
+        const html = transfer.getData('text/html');
+        const files = [...transfer.files];
+        if (!html && files.length) { await uploadFiles(files); return; }
+        if (!html) { editor.s.insertHTML(transfer.getData('text/plain').split(/\r?\n/).map(t => { const p=document.createElement('p');p.textContent=t;return p.outerHTML; }).join('')); return; }
+        const doc = new DOMParser().parseFromString(sanitize(html), 'text/html');
+        mark(); busy(1); editor.s.save();
+        try {
+          let missing = 0;
+          for (const img of doc.querySelectorAll('img')) {
+            const src = img.getAttribute('src') || '';
+            if (src.startsWith('data:')) {
+              const [head, body] = src.split(','); const mime = head.slice(5).split(';')[0];
+              const bytes = Uint8Array.from(atob(body), c => c.charCodeAt(0));
+              const result = await upload(new File([bytes], 'zalijepljena-slika.' + mime.split('/')[1], {type:mime}));
+              img.src = result.url;
+            } else if (!src) {
+              if (files.length) img.src = (await upload(files.shift())).url;
+              else { img.remove(); missing++; }
+            }
+          }
+          editor.s.restore(); editor.s.insertHTML(doc.body.innerHTML); richDirty = true;
+          if (status) status.textContent = missing ? 'Tekst je zalijepljen. Slike koje Word nije prenio dodajte zasebno putem gumba Slika / PDF.' : '';
+        } catch(e) { if (status) status.textContent = 'Lijepljenje nije dovršeno: ' + e.message; }
+        finally { busy(-1); }
+      }, true);
+      editor.editor.addEventListener('dragover', e => { if (e.dataTransfer?.types.includes('Files')) e.preventDefault(); });
+      editor.editor.addEventListener('drop', e => { if (e.dataTransfer?.files.length) { e.preventDefault(); e.stopImmediatePropagation(); uploadFiles([...e.dataTransfer.files]); } }, true);
+    } catch(e) { source.value = original; if (status) status.textContent = 'Editor nije učitan. Dostupan je HTML prikaz.'; }
+  }
+  form.addEventListener('submit', e => {
+    if (pending) { e.preventDefault(); return; }
+    if (editor) source.value = richDirty ? sanitize(editor.value) : original;
+    if (source && !source.value.trim()) { e.preventDefault(); if (status) status.textContent = 'Unesite sadržaj novosti.'; editor?.s.focus(); return; }
+    submitting = true;
+  });
+  form.querySelectorAll('[data-editor-upload],[data-agreement-upload]').forEach(input => input.addEventListener('change', async () => {
+    const files = [...input.files]; input.disabled = true;
+    await uploadFiles(files); input.disabled = false; input.value = '';
   }));
-  visual?.querySelector('[data-library]').addEventListener('click',async()=>{
-    const box=visual.querySelector('.editor-library');box.hidden=!box.hidden;if(box.hidden)return;
-    box.textContent='Učitavanje…';
-    try{
-      const r=await fetch('/admin?module=media-list');if(!r.ok)throw new Error();const files=await r.json();box.textContent='';
-      files.forEach(f=>{const b=document.createElement('button');b.type='button';b.textContent=f.OriginalName;b.addEventListener('click',()=>{insert({url:'/media/'+f.Filename,name:f.OriginalName,mime:f.Mime});box.hidden=true;});box.append(b);});
-      if(!files.length)box.textContent='Nema prenesenih datoteka.';
-    }catch{box.textContent='Biblioteku nije moguće učitati. Osvježite stranicu i provjerite prijavu.';}
+  form.querySelector('[data-library]')?.addEventListener('click', async () => {
+    const box = form.querySelector('.editor-library'); box.hidden = !box.hidden; if (box.hidden) return;
+    editor?.s.save(); box.textContent = 'Učitavanje…';
+    try {
+      const r = await fetch('/admin?module=media-list'); if (!r.ok) throw new Error();
+      const files = await r.json(); box.textContent = '';
+      for (const file of files) { const b=document.createElement('button'); b.type='button';b.textContent=file.OriginalName;b.addEventListener('click',()=>{editor?.s.restore();insert({url:'/media/'+file.Filename,name:file.OriginalName,mime:file.Mime});box.hidden=true;});box.append(b); }
+      if (!files.length) box.textContent = 'Nema prenesenih datoteka.';
+    } catch { box.textContent = 'Biblioteku nije moguće učitati. Osvježite stranicu i provjerite prijavu.'; }
   });
 })();

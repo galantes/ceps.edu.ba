@@ -61,6 +61,28 @@ function localUrl(string $value): string {
     return $value;
 }
 
+function articleSafeStyle(string $style): string {
+    $safe=[];
+    foreach(explode(';',$style) as $declaration){
+        $pair=explode(':',$declaration,2);if(count($pair)!==2)continue;
+        $key=strtolower(trim($pair[0]));$value=strtolower(trim($pair[1]));
+        $allowed=match($key){
+            'text-align'=>preg_match('/^(left|center|right|justify)$/D',$value),
+            'font-weight'=>preg_match('/^(normal|bold|[1-9]00)$/D',$value),
+            'font-style'=>preg_match('/^(normal|italic)$/D',$value),
+            'text-decoration'=>preg_match('/^(none|underline|line-through|underline line-through)$/D',$value),
+            'color','background-color'=>preg_match('/^(#[a-f0-9]{3,8}|[a-z]{3,20}|rgba?\([0-9.,% ]+\))$/D',$value),
+            'font-size'=>preg_match('/^([1-9]|[1-6][0-9]|7[0-2])(px|pt)$/D',$value),
+            'width','height','max-width'=>preg_match('/^(auto|[0-9]{1,4}(px|%))$/D',$value),
+            'margin-left','margin-right'=>preg_match('/^(auto|0|[0-9]{1,3}(px|pt))$/D',$value),
+            'border-collapse'=>in_array($value,['collapse','separate'],true),
+            default=>false
+        };
+        if($allowed)$safe[]=$key.':'.$value;
+    }
+    return implode(';',$safe);
+}
+
 function articleHtml(string $html): string {
     // Keep source HTML unchanged in the database; sanitize only the rendered view.
     $doc = new DOMDocument('1.0', 'UTF-8');
@@ -94,6 +116,11 @@ function articleHtml(string $html): string {
             continue;
         }
         foreach (iterator_to_array($node->attributes) as $attr) {
+            if(strtolower($attr->name)==='style'){
+                $style=articleSafeStyle($attr->value);
+                if($style!=='')$node->setAttribute('style',$style);else $node->removeAttribute('style');
+                continue;
+            }
             $keep = in_array(strtolower($attr->name), ['href','src','alt','title','colspan','rowspan'], true);
             if (!$keep || (in_array($attr->name, ['href','src'], true) && !safeUrl($attr->value))) {
                 $node->removeAttribute($attr->name);
@@ -186,7 +213,7 @@ function layout(string $title, string $description, string $canonical, string $c
     $origin = rtrim(getenv('CEPS_ORIGIN') ?: 'https://www.ceps.edu.ba', '/');
     $robots = getenv('CEPS_ENV') === 'production' && $status === 200 && strtolower(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?: '') !== '/pretraga' ? 'index,follow' : 'noindex,nofollow';
     header('X-Robots-Tag: ' . $robots);
-    header("Content-Security-Policy: default-src 'self'; script-src 'self' https://www.cognitoforms.com; style-src 'self' https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net; img-src 'self' https:; media-src 'self' https://ceps.edu.ba https://dl.dropboxusercontent.com; object-src 'none'; frame-src https://www.youtube-nocookie.com https://www.google.com https://www.ceps.edu.ba https://www.cognitoforms.com; base-uri 'self'; form-action 'self'; frame-ancestors 'none'");
+    header("Content-Security-Policy: default-src 'self'; script-src 'self' https://www.cognitoforms.com; style-src 'self' https://fonts.googleapis.com https://cdn.jsdelivr.net; style-src-attr 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net; img-src 'self' https:; media-src 'self' https://ceps.edu.ba https://dl.dropboxusercontent.com; object-src 'none'; frame-src https://www.youtube-nocookie.com https://www.google.com https://www.ceps.edu.ba https://www.cognitoforms.com; base-uri 'self'; form-action 'self'; frame-ancestors 'none'");
     header('X-Content-Type-Options: nosniff');
     $pageTitle = esc($title === SCHOOL_NAME ? SCHOOL_NAME : $title . ' | ' . SCHOOL_NAME);
     $canonical = seoUrl($canonical ?: ($_SERVER['REQUEST_URI'] ?? '/'));
