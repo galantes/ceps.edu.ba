@@ -68,3 +68,17 @@ document.querySelectorAll('.related-toc').forEach((toc, index) => {
   });
   toc.replaceWith(form);
 });
+
+// Keep only the navigation visible once the identity header has scrolled away.
+(() => {
+  const header = document.querySelector('.school-header');
+  const navigation = header?.querySelector('.navigation-wrap');
+  if (!navigation) return;
+  const updateOffset = () => {
+    header.style.setProperty('--header-scroll-away', `${navigation.offsetTop}px`);
+  };
+  const observer = new ResizeObserver(updateOffset);
+  observer.observe(header);
+  observer.observe(navigation);
+  updateOffset();
+})();
