@@ -56,6 +56,26 @@ with zipfile.ZipFile(out/'02-public.zip', 'w', zipfile.ZIP_DEFLATED) as z:
     z.writestr('index.php', wrapper)
     z.writestr('.htaccess', htaccess)
 sql = out/'03-database.sql'
+# ZIP entries created by writestr default to 0600. Apache must be able to
+# traverse directories and read the public .htaccess before invoking PHP.
+for archive in ['01-private.zip', '02-public.zip']:
+    path = out/archive
+    with zipfile.ZipFile(path) as z:
+        entries = [(info.filename, z.read(info.filename)) for info in z.infolist()]
+    with zipfile.ZipFile(path, 'w', zipfile.ZIP_DEFLATED) as z:
+        directories = sorted({str(parent).replace('\\', '/')+'/' for name, _ in entries for parent in Path(name).parents if str(parent) != '.'})
+        for name in directories:
+            info = zipfile.ZipInfo(name)
+            info.create_system = 3
+            info.external_attr = (0o40755 << 16) | 0x10
+            z.writestr(info, b'')
+        for name, data in entries:
+            info = zipfile.ZipInfo(name)
+            info.create_system = 3
+            private = name.endswith(('/config.local.php', '/var/admin.json'))
+            info.external_attr = (0o100600 if private else 0o100644) << 16
+            info.compress_type = zipfile.ZIP_DEFLATED
+            z.writestr(info, data)
 if sql.exists():
     with sql.open('rb') as src, gzip.open(out/'03-database.sql.gz', 'wb') as dst:
         shutil.copyfileobj(src, dst)
