@@ -640,4 +640,4 @@ body{font-size:var(--text-body);line-height:1.75}
 @media(max-width:700px){.school-footer .footer-intro-actions{width:100%}.school-footer .footer-intro-actions .footer-accreditation{padding:19px;gap:13px}}
 .article-body table{border-collapse:collapse;max-width:100%}.article-body td,.article-body th{border:1px solid #dce2e7;padding:10px 12px}.article-body img{max-width:100%;height:auto}
 
-@media(min-width:701px){.home .latest-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(min-width:701px){.home .latest-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
