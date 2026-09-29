@@ -201,7 +201,7 @@ function adminEditor(string $module,array $row,string $version,string $base,stri
     if($module==='news') {
         $html.='<label for="news-html">Sadržaj</label><textarea name="Tekst" id="news-html" rows="22" required>'.esc((string)($row['Tekst']??'')).'</textarea>'.adminEditorTools($row).'<p class="hint">Koristite vizualni editor ili HTML prikaz. Spremite nacrt dok pripremate objavu.</p><fieldset><legend>Jezici i rubrike</legend><div class="flags">';
         $flags=adminFlags();
-        foreach(['Jezici'=>['Hr','En','De'],'Prikaz na webu'=>['Naslovnica','Istaknuto','Aktivnosti','Konkursi'],'Studiji'=>['PE','Energetika','Zastita','Sigurnost','Promet']] as $group=>$keys){
+        foreach(['Jezici'=>['Hr','En','De'],'Prikaz na webu'=>['Istaknuto','Aktivnosti','Konkursi'],'Studiji'=>['PE','Energetika','Zastita','Sigurnost','Promet']] as $group=>$keys){
             $html.='<div class="flag-group"><h3>'.$group.'</h3>';
             foreach($keys as $flag)$html.='<label><input type="checkbox" name="'.$flag.'" value="1"'.(!empty($row[$flag]) || $id==='new' && !$row && $flag==='Hr'?' checked':'').'>'.esc($flags[$flag]).'</label>';
             $html.='</div>';

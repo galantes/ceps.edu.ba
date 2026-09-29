@@ -30,7 +30,7 @@ function homePage(): string {
     $studies = array_map(fn($i) => $studies[$i], [3,4,5,6,2,0,1,7,8]);
     $pdo = database();
     $withoutProjects = implode(' AND ', array_map(static fn($i) => 'COALESCE(projekt_'.$i.',0)=0', range(1,15)));
-    $news = $pdo->query('SELECT ID,Naslov,Datum,Tekst,Istaknuto FROM Novosti WHERE Hr=1 AND Naslovnica=1 AND '.$withoutProjects.' ORDER BY Datum DESC,ID DESC LIMIT 4')->fetchAll();
+    $news = $pdo->query('SELECT ID,Naslov,Datum,Tekst,Istaknuto FROM Novosti WHERE Hr=1 AND '.$withoutProjects.' ORDER BY Datum DESC,ID DESC LIMIT 3')->fetchAll();
     require_once __DIR__.'/home-settings.php';
     $settings=homeSettings($pdo);$popup=$settings['popup'];
     $slides=array_values(array_filter($settings['slides'],fn($s)=>$s['enabled']));
