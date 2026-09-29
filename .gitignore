@@ -2,6 +2,7 @@
 /*
 !/.gitignore
 !/.gitattributes
+!/.cpanel.yml
 !/php-app/
 php-app/var/*
 !php-app/var/.gitignore

@@ -1,0 +1,4 @@
+---
+deployment:
+  tasks:
+    - /bin/bash php-app/bin/deploy-cpanel.sh
