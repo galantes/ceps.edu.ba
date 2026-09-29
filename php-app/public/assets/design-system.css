@@ -640,4 +640,49 @@ body{font-size:var(--text-body);line-height:1.75}
 @media(max-width:700px){.school-footer .footer-intro-actions{width:100%}.school-footer .footer-intro-actions .footer-accreditation{padding:19px;gap:13px}}
 .article-body table{border-collapse:collapse;max-width:100%}.article-body td,.article-body th{border:1px solid #dce2e7;padding:10px 12px}.article-body img{max-width:100%;height:auto}
 
-@media(min-width:701px){.home .latest-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(min-width:1201px){.home .latest-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+
+/* Tablet portrait and landscape layouts. */
+@media(min-width:701px) and (max-width:1200px){
+ .home-width,.institution-width,.identity,.utility>.shell-width,.school-footer>.shell-width{width:calc(100% - 48px);margin-left:auto;margin-right:auto}
+ .identity{padding:20px 0;gap:24px}.header-name{display:none}
+ .desktop-navigation{display:none}
+ .mobile-navigation{display:block;margin:0 24px;padding:0}
+ .mobile-navigation>summary{display:flex;align-items:center;gap:12px;min-height:54px;padding:12px 0;font-size:14px;list-style:none;cursor:pointer}
+ .mobile-navigation>summary>.ti:last-child{margin-left:auto}
+ .mobile-navigation>nav{padding-bottom:16px}
+ .mobile-navigation>nav>a,.mobile-navigation .nav-group>summary{display:flex;align-items:center;gap:12px;min-height:48px;padding:12px;font-size:14px;white-space:normal}
+ .mobile-navigation .nav-group>summary>.ti:last-child{margin-left:auto}
+ .mobile-navigation .nav-dropdown{position:static;min-width:0;max-height:none;box-shadow:none;border:0;border-left:2px solid #e0edf5;margin:4px 0 10px 22px;padding:4px 10px}
+ .mobile-navigation .nav-dropdown>a{padding:12px 10px;white-space:normal;font-size:14px}
+ .home .hero-copy{width:80%;min-height:500px;padding:36px 32px 120px}
+ .home .hero-copy #home-title,.home .hero-copy h2{font-size:42px;line-height:1.15;letter-spacing:-1px}
+ .home .hero-actions{flex-wrap:wrap;gap:16px 24px}
+ .home .slider-controls{left:32px;bottom:28px}
+ .home .hero-programme.hero-accreditation{right:24px;bottom:24px;padding:12px;gap:10px;max-width:290px}
+ .home .hero-accreditation .accreditation-label{letter-spacing:0}
+ .home .quick-dock{gap:12px}.home .quick-dock>a{flex-wrap:wrap;align-content:flex-start;padding:20px;gap:12px}
+ .home .quick-dock>a>span:not(.dock-icon){flex-basis:100%;order:2}.home .quick-dock>a>b{margin-left:auto}
+ .home .study-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .home .latest-grid,.cards,.project-catalog{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .home .latest-copy{padding:24px}.home .latest-copy h3{font-size:22px}
+ .section-heading{flex-wrap:wrap;gap:20px}
+ .home .welcome-layout{gap:32px}
+ .home .visit-section{gap:28px;padding:32px}
+ .institution-layout,.study-tabs-ready .institution-layout,.cooperation-ready .institution-layout,.project-with-sidebar{grid-template-columns:minmax(0,1fr)}
+ .institution-menu{position:static}.content-page .contextual-menu{grid-row:2}
+ .institution-content{min-width:0;padding:28px}
+ .study-tabs-ready .study-page-tabs,.cooperation-ready .cooperation-tabs{position:static;display:flex;flex-direction:row;flex-wrap:nowrap;overflow-x:auto;max-height:none;gap:8px;margin:0 0 24px;padding:0 0 14px;border:0;border-bottom:1px solid #e5e9ed;background:transparent;border-radius:0}
+ .study-tabs-ready .study-page-tabs button,.cooperation-ready .cooperation-tabs button{width:auto;flex-shrink:0;white-space:nowrap;padding:12px 16px;min-height:44px;border:1px solid #e5e9ed}
+ .school-footer .footer-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:32px}
+ .school-footer .footer-connect{flex-direction:column;align-items:flex-start;gap:24px}
+ .footer-connect .social-links{flex-wrap:wrap}
+}
+@media(min-width:701px) and (max-width:900px){
+ .home .hero-copy{width:100%}
+ .home .hero-description{max-width:520px}
+ .home .hero-programme.hero-accreditation{max-width:250px}
+ .home .hero-accreditation>.ti:last-child{display:none}
+ .home .welcome-layout,.home .visit-section{grid-template-columns:minmax(0,1fr)}
+ .school-footer .footer-intro{flex-direction:column;align-items:flex-start;gap:24px}
+}

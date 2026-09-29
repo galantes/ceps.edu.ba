@@ -54,7 +54,6 @@ function homePage(): string {
           <button type="button" data-prev aria-label="Prethodni slajd"><?= icon('chevron-left') ?></button>
           <div class="slider-dots"><?php foreach ($slides as $i => $slide): ?><button type="button" data-slide="<?= $i ?>" aria-label="Slajd <?= $i + 1 ?>: <?= esc($slide['title']) ?>" <?= $i === 0 ? 'aria-current="true"' : '' ?>></button><?php endforeach; ?></div>
           <button type="button" data-next aria-label="Sljedeći slajd"><?= icon('chevron-right') ?></button>
-          <button type="button" data-pause aria-label="Pauziraj izmjenu slajdova"><?= icon('player-pause') ?></button>
         </div>
       </section>
       <div class="home-width quick-dock"><a href="/Novost?id=1473"><span class="dock-icon"><?= icon('arrow-up-right') ?></span><span><strong>Upisi na CEPS</strong>Informacije za buduće studente</span><b><?= icon('arrow-right') ?></b></a><a href="<?= esc(schoolLink('/Placanje-u-ratama')) ?>"><span class="dock-icon"><?= icon('credit-card') ?></span><span><strong>Plaćanje u ratama</strong>Planirajte svoje školovanje</span><b><?= icon('arrow-right') ?></b></a><a href="<?= esc(schoolLink('/360-virtual-tour')) ?>"><span class="dock-icon"><?= icon('view-360') ?></span><span><strong>Upoznajte CEPS</strong>360° virtualna šetnja</span><b><?= icon('arrow-right') ?></b></a></div>

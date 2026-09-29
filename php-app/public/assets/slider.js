@@ -1,7 +1,6 @@
 document.querySelectorAll('[data-slider]').forEach(slider => {
   const slides = [...slider.querySelectorAll('.hero-slide')];
   const dots = [...slider.querySelectorAll('[data-slide]')];
-  const pause = slider.querySelector('[data-pause]');
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
   let current = 0, paused = motion.matches, timer;
   let transition = [];
@@ -59,8 +58,6 @@ document.querySelectorAll('[data-slider]').forEach(slider => {
     syncVideos();
   }
   function updatePause() {
-    pause.setAttribute('aria-label', paused ? 'Pokreni izmjenu slajdova' : 'Pauziraj izmjenu slajdova');
-    pause.firstElementChild.className = `ti ti-player-${paused ? 'play' : 'pause'}`;
     schedule();
     syncVideos();
   }
@@ -68,7 +65,6 @@ document.querySelectorAll('[data-slider]').forEach(slider => {
   slider.querySelector('[data-prev]').addEventListener('click', () => { show(current - 1); schedule(); });
   slider.querySelector('[data-next]').addEventListener('click', () => { show(current + 1); schedule(); });
   dots.forEach((dot, i) => dot.addEventListener('click', () => { show(i); schedule(); }));
-  pause.addEventListener('click', () => { paused = !paused; updatePause(); });
   slider.addEventListener('mouseenter', schedule);
   slider.addEventListener('mouseleave', schedule);
   slider.addEventListener('focusin', schedule);
