@@ -8,7 +8,7 @@ function aboutPage(): string {
     <div class="institution-page">
       <div class="institution-width breadcrumbs"><a href="/">Naslovnica</a><?= icon('chevron-right') ?><span>O nama</span></div>
       <section class="institution-hero institution-width">
-        <div><p class="home-kicker"><?= esc(SCHOOL_NAME) ?></p><h1>O nama.<br><span>Znanje za budućnost.</span></h1><p class="institution-lead"><?= esc($copy['paragraphs'][0]) ?></p><a class="pill pill-yellow" href="#o-ustanovi">Upoznajte ustanovu <?= icon('arrow-down') ?></a></div>
+        <div><h1>O nama.<br><span>Znanje za budućnost.</span></h1><p class="institution-lead"><?= esc($copy['paragraphs'][0]) ?></p><a class="pill pill-yellow" href="#o-ustanovi">Upoznajte ustanovu <?= icon('arrow-down') ?></a></div>
         <img src="https://ceps.edu.ba/Files/Images/Onama/001.jpg?1" alt="<?= esc(SCHOOL_NAME) ?>" width="800" height="600">
       </section>
       <div class="institution-layout institution-width">

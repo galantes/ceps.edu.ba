@@ -15,7 +15,7 @@ body{font-size:var(--text-body);line-height:1.75}
 .home-kicker,.eyebrow,.news-intro .eyebrow,.hero-copy>.home-kicker,.latest-news .home-kicker,.study-news-layout .home-kicker{font-size:var(--text-label);line-height:1.5}
 .latest-copy time,.card time,.breadcrumbs,.archive-label>span,.utility>.shell-width,.school-contact small,.school-footer .footer-bottom{font-size:var(--text-label)}
 .school-footer .footer-grid,.school-footer h3,.school-footer .footer-connect p,.footer-connect .social-links a{font-size:var(--text-small)}
-.desktop-navigation{gap:3px}.desktop-navigation>a,.desktop-navigation>.nav-group>summary{padding:10px 8px;gap:6px}.nav-dropdown>a{font-size:14px}
+.desktop-navigation{justify-content:flex-start;gap:20px}.desktop-navigation>a,.desktop-navigation>.nav-group>summary{padding:10px 8px;gap:6px}.nav-dropdown>a{font-size:14px}
 .study-page-actions{display:flex;align-items:center;flex-wrap:wrap;gap:20px;margin-top:25px}
 .study-tabs-ready .institution-layout{display:block}.study-tabs-ready .institution-menu{display:none}
 .study-page-tabs{display:flex;flex-wrap:wrap;gap:10px;border-bottom:1px solid #e2e8ed;padding-bottom:22px;margin-bottom:28px}
