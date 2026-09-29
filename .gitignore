@@ -1,0 +1,18 @@
+# Only the new application is versioned; the legacy backup stays local.
+/*
+!/.gitignore
+!/.gitattributes
+!/php-app/
+php-app/var/*
+!php-app/var/.gitignore
+php-app/*-preview.png
+php-app/.env*
+php-app/config.local.php
+*.log
+*.sqlite
+*.sqlite-*
+*.sql
+*.sql.gz
+*.pem
+*.key
+__pycache__/

@@ -1,0 +1,283 @@
+{
+    "programmes": [
+        {
+            "title": "Cisco akademija",
+            "paragraphs": [
+                "Cisco akademija mrežnih tehnologija (Cisco Networking Academy) je globalni edukacijski program koji polaznicima omogućava stjecanje osnovnih ICT znanja i vještina u oblasti dizajna, izgradnje i upravljanja računalnim mrežama."
+            ],
+            "url": "Cisco.aspx",
+            "video": "https://dl.dropboxusercontent.com/s/ppquor18fruh4z4/cisco.mp4"
+        },
+        {
+            "title": "Zdravstvene studije",
+            "paragraphs": [
+                "Savladavanjem nastavnog plana i programa zdravstvenih studija studenti stiču ne samo odgovarajuća znanja vezana za teorijsko razumijevanje predmeta, već takođe i specifične vještine odnosno sposobnosti i kompetencije vezane za praktičnu i operativnu primjenu tih znanja, te vještine neophodne za sticanje odgovarajućih profesionalnih kvalifikacija studenata."
+            ],
+            "url": "StudijZdravstvo.aspx",
+            "video": "https://ceps.edu.ba/Files/video/zdravstvo.mp4"
+        },
+        {
+            "title": "Nova zgrada CEPS-a",
+            "paragraphs": [
+                "Nove namjenski građene prostorije omogućit će da studenti imaju bolji pristup amfiteatrima, laboratorijima, informatičkim učionicama, knjižnici kao mjestu gdje mogu birati između nekoliko tisuća naslova i upijati znanje koje će koristiti kroz život, a da tako postižu još bolje rezultate rada i veći stepen zadovoljstva, što nam je i primarni cilj kako i sam naš slogan kaže."
+            ],
+            "url": "Zgrada.aspx",
+            "video": "https://ceps.edu.ba/Files/video/zgrada_slider.mp4"
+        },
+        {
+            "title": "Studij na engleskom jeziku",
+            "paragraphs": [
+                "Studij na engleskom jeziku priprema studente da po završetku studija budu još spremniji za tržište rada, a znanje i kompetencije stečene po završetku im otvaraju vrata, ne samo Europe nego i ostatka svijeta, uzimajući u obzir da se većina poslovne komunikacije u svijetu odvija na engleskom jeziku."
+            ],
+            "url": "StudijEng.aspx",
+            "video": "https://ceps.edu.ba/Files/video/engleski.mp4"
+        },
+        {
+            "title": "Informacijske tehnologije",
+            "paragraphs": [
+                "Temeljni cilj ovog studija je kvalitetna edukacija studenata koji će moći uspješno raditi na planiranju, projektiranju, izgradnji i održavanju informacijskih sistema u privatnom i javnom sektoru."
+            ],
+            "url": "StudijIT.aspx",
+            "video": "https://ceps.edu.ba/Files/video/it.mp4"
+        },
+        {
+            "title": "Poslovna ekonomija",
+            "paragraphs": [
+                "Visoka škola \"CEPS - Centar za poslovne studije\" Kiseljak ima ambiciju da školovanjem kadrova za ovaj obrazovni profil doprinese dinamici privrednog života regije, Federacije Bosne i Hercegovine i šireg područja te da se adekvatnom brzinom usvoje neophodna znanja iz svih oblasti poslovne ekonomije, koja su potreba poslovnih ljudi."
+            ],
+            "url": "StudijPE.aspx",
+            "video": "https://ceps.edu.ba/Files/video/ekonomija.mp4"
+        },
+        {
+            "title": "Energetika",
+            "paragraphs": [
+                "Energetika je privredna djelatnost koja se bavi proučavanjem i iskorištavanjem različitih izvora energije te proizvodnjom električne energije.",
+                "Suvremeni gospodarski razvoj neke zemlje u potpunosti ovisi od raspoloživih izvora energije, njihove iskorištenosti i primjene u proizvodnji i potrošnji."
+            ],
+            "url": "StudijEnergetika.aspx",
+            "video": "https://ceps.edu.ba/Files/video/Energetika.mp4"
+        },
+        {
+            "title": "Promet",
+            "paragraphs": [
+                "Imajući na umu potrebe za prometnim kadrovima u različitim prometnim sustavima u BiH, kao i dinamiku i intenzitet razvitka prometnih sustava u budućnosti, potrebe za prometnim kadrovima su dugoročne i realne te proizlaze iz strateških opredjeljenja Bosne i Hercegovine da se funkcioniranje i razvitak prometa temelji na visokoj svjetskoj razini."
+            ],
+            "url": "StudijPromet.aspx",
+            "video": "https://ceps.edu.ba/Files/video/promet.mp4"
+        },
+        {
+            "title": "Studij sigurnosti",
+            "paragraphs": [
+                "Da bi se jedno društvo moglo uspješno boriti protiv svih negativnih sigurnosnih pojava, mora imati odgovarajući stručno osposobljeni kadar iz područja sigurnosti koji će se moći uspješno nositi s problemima s kojima se Bosna i Hercegovina susreće."
+            ],
+            "url": "StudijSigurnost.aspx",
+            "video": "https://ceps.edu.ba/Files/video/sigurnost.mp4"
+        },
+        {
+            "title": "Zaštita na radu i zaštita od požara",
+            "paragraphs": [
+                "Prilagođivanjem radne okoline čovjeku i prilagođivanjem čovjeka radnoj okolini inženjeri zaštite na radu nastoje smanjiti neugodne opasnosti pri radu i ublažiti njihove posljedice."
+            ],
+            "url": "StudijZastita.aspx",
+            "video": "https://ceps.edu.ba/Files/video/zastita.mp4"
+        }
+    ],
+    "welcome": [
+        "Visoka škola \"CEPS - Centar za poslovne studije\" Kiseljak je suvremena institucija, koja svoj program permanentno usklađuje sa zahtjevima tržišta rada i procesima u nacionalnoj, europskoj i globalnoj ekonomiji, prepoznavajući potrebe i trendove te izgrađujući studente u besprijekorno obrazovane, sadašnjim i budućim izazovima dorasle stručnjake, u oblastima za koje je akreditirana.",
+        "Vlastito obrazovanje najbolji je, a često i jedini mogući put koji nam jamči uspjeh i zadovoljstvo u poslovnom životu, odnosno znanje kojeg stječemo čini nas bogatijim i ujedno je naša najbolja investicija. Studiranjem i stalnim usavršavanjem razvijamo se, dostižemo ciljeve koje smo sami sebi zadali i postavljamo nove.",
+        "Zbog svega ranije navedenog, ljestvicu kriterija smo podigli visoko, to je ujedno ljestvica dostojanstva i pravičnosti, kojom ćemo braniti znanje i izvrsnost svakog našeg studenta."
+    ],
+    "features": [
+        {
+            "title": "Preuzmite znanje koje ćete uspješno koristiti",
+            "paragraphs": [
+                "Školovanjem na CEPS-u imate priliku da istražujete i učite od vrhunskih stručnjaka iz područja ekonomije, prometa, energetike, informacijskih tehnologija, zaštite na radu, zaštite od požara, kriminalistike i zdravstvenih studija. Naši nastavnici, saradnici i stručnjaci svoja znanja dijele sa Vama, svakodnevno."
+            ]
+        },
+        {
+            "title": "Tehnički uslovi za učenje u učionici po standardu grupacije pet vodećih svjetskih univerziteta",
+            "paragraphs": [
+                "Na CEPS-u se možete školovati tradicionalno u učionici – \"face to face\" kontakt sa nastavnikom i drugim polaznicima. Za predavanja se koriste projektori i moderni alati za vođenje nastave. Učionice su dizajnirane, sa ciljem da omoguće atmosferu za lakše učenje. Vodimo računa o detaljima."
+            ]
+        },
+        {
+            "title": "Dobijate pristup resursima za napredovanje u karijeri",
+            "paragraphs": [
+                "Ne želimo da Vam samo predamo vještine. Naš cilj je da Vaše novo znanje dobro iskoristite u životu i na poslu. To je jedini način da uživate u njihovoj upotrebi.",
+                "Da bismo Vam u tome pomogli, školovanjem na CEPS-u dobijate pristup našim profesionalnim resursima.",
+                "Šteta je da bude drugačije i da neko sa manje znanja i sposobnosti prođe bolje od Vas, samo zato što je glasniji."
+            ]
+        },
+        {
+            "title": "Vjerujemo da sebi postavljamo pravo pitanje",
+            "paragraphs": [
+                "Imamo pitanje koje koristimo za izbor nastavnika, kreiranje plana i programa, povezivanje sa privredom. To pitanje je: \"Šta je potrebno da uradimo kako bi polaznici ostvarili najveću profesionalnu korist školovanjem na CEPS-u?\"",
+                "Primijetili smo da nam ovo jednostavno pitanje otklanja razne nedoumice, dileme. Utiče na način vođenja predavanja i rada sa polaznicima, također. Zato nastavno osoblje na CEPS-u, osim velikog iskustva u svojim oblastima, koristi moderne načine predavanja i rada sa polaznicima. Svjesni smo da se znanje teško stiče kada učenje nije zabavno i uzbudljivo.",
+                "Ili, ako pogledamo plan i program nastave, prioritet na osnovu kojeg određujemo predmete koje treba savladati je da moraju biti praktično upotrebljivi.",
+                "Sve to ne bi bilo moguće da se redovno ne pitamo: \"Šta je potrebno da uradimo kako bi polaznici ostvarili najveću profesionalnu korist školovanjem na CEPS-u?\""
+            ]
+        },
+        {
+            "title": "Predavači, stručnjaci i konsultanti sa realnim uspjesima u svojim oblastima, spremni da ih podijele i sa Vama",
+            "paragraphs": [
+                "Među predavačima se nalaze doktori nauka, magistri, specijalisti.",
+                "Rezultat je dokazano i profitabilno iskustvo koje dijelimo i sa Vama. Ako pogledate početke karijere mnogih uspješnih profesionalaca, vidjeti ćete da su najčešće imali privilegiju rada sa ljudima koji su već uspješni u istoj oblasti.",
+                "Iskoristite mogućnost da od ovakvih ljudi naučite puno."
+            ]
+        },
+        {
+            "title": "Praksa",
+            "paragraphs": [
+                "Danas svaki poslodavac koji drži do sebe, od kandidata na konkursu za posao, pored stručnih znanja, zahtijeva i praktično iskustvo. Sa druge strane, ispostavlja se da je za većinu upravo to najveći problem.",
+                "Mnogi završavaju sa edukacijom bez dana praktičnog rada. Mi smo mislili i na to. Želimo da naši polaznici odmah po sticanju CEPS–ove diplome bez problema pronađu posao te izgrade uspješnu karijeru. Inzistiramo na radu u manjim grupama, obavljanju praktičnih zadataka, studijskim posjetama vodećim javnim i privatnim institucijama i sl."
+            ]
+        },
+        {
+            "title": "Kako steći diplomu za visoko plaćene poslove?",
+            "paragraphs": [
+                "Svako od stručnih zvanja koje dobijate na CEPS-u priznato je na svjetskom nivou.",
+                "Zvanja koja dobijate imaju istu težinu kao da ste ih stekli na jakim visokoškolskim institucijama u Evropi ili Americi. Iz našeg iskustva, sa diplomom CEPS-a u ruci stičete priznat autoritet u zemlji. Osim realnih vještina koje dobijate, rang Vaših novih zvanja otvara Vam vrata institucija koja nude odlično plaćene poslove. To je zbog toga što CEPS radi na najvišem nivou partnerstava sa vodećim visokoškolskim institucijama i kompanijama.",
+                "Dva od mnogih razloga zašto imamo tu privilegiju jesu kvalitet projekata koje su naši timovi izvršili i metodologija (\"arhitektura saznanja\") koju koristimo za izvođenje nastave, čime obezbjeđujemo visok nivo stručnosti polaznika."
+            ]
+        },
+        {
+            "title": "Šta Vam donosi posjedovanje diplome CEPS-a?",
+            "paragraphs": [
+                "Sticanje zvanične diplome govori da imate realne, profitabilne vještine i znanja. U odnosu na kolege koje nemaju ovakav dokaz svoje stručnosti, prednost pri zaposlenju ili vođenju sopstvenog posla je velika. Pri tom, vještine koje dobijate sticanjem zvanja veoma su realne. Nije stvar u papiru, već u činjenici da sticanje akademskih zvanja podrazumijeva da imate realnu sposobnost koja je visoko profitabilna."
+            ]
+        },
+        {
+            "title": "Diploma CEPS-a je siguran dokaz Vašeg znanja",
+            "paragraphs": [
+                "Diploma CEPS-a predstavlja zvaničnu potvrdu Vašeg znanja i međunarodno priznati dokument kojim unapređujete svoju poziciju na tržištu rada, povećavate šanse za napredovanje u karijeri i ujedno stvarate osnovu za dalje usavršavanje."
+            ]
+        },
+        {
+            "title": "Dodatak diplomi – sve Vaše kompetencije na jednom mjestu",
+            "paragraphs": [
+                "Uz diplomu CEPS-a, koju možete steći nakon uspješno završenog školovanja, dobiti ćete i dodatak diplomi koji detaljno navodi sve predmete koje ste položili na CEPS-u. A ukoliko želite, uz ovaj dodatak možete dobiti i učinak koji ste ostvarili na svakom predmetu, izražen u procentima.",
+                "Ovaj važan dokument predstavlja dokaz svih znanja i vještina koje ste preuzeli tokom školovanja i odličnu kvalifikaciju za potencijalne poslodavce koja će im ukazati na sve što znate da radite.",
+                ""
+            ]
+        }
+    ],
+    "documents": [
+        {
+            "title": "Rješenje o akreditaciji",
+            "url": "Files/PDF/Rjesenje_o_akreditaciji_2021.pdf?v=2"
+        },
+        {
+            "title": "Nostrifikacija diplome u Sloveniji (IT) - 2023",
+            "url": "Files/PDF/Nostrifikacija/nostrifikacija_slovenija_it_2023.pdf"
+        },
+        {
+            "title": "Nostrifikacija diplome u Njemačkoj (Cestovni promet) - 2023",
+            "url": "Files/PDF/Nostrifikacija/nostrifikacija_njemacka_promet_2023.pdf"
+        },
+        {
+            "title": "Nostrifikacija diplome u Njemačkoj (Energetika) - 2022",
+            "url": "Files/PDF/Nostrifikacija/Nostrifikacija_diplome_njemacka_energetika_2022.pdf"
+        },
+        {
+            "title": "Nostrifikacija diplome u Njemačkoj - 2022",
+            "url": "Files/PDF/Nostrifikacija/Nostrifikacija_Njemacka_2022a.pdf"
+        },
+        {
+            "title": "Nostrifikacija diplome u Njemačkoj - 2022",
+            "url": "Files/PDF/Nostrifikacija/Nostrifikacija_Njemacka_2022.pdf"
+        },
+        {
+            "title": "Nostrifikacija diplome u Hrvatskoj - 2022",
+            "url": "Files/PDF/Nostrifikacija/Nostrifikacija_Hrvatska_2022.pdf"
+        },
+        {
+            "title": "Nostrifikacija diplome u Hrvatskoj - 2021",
+            "url": "Files/PDF/Nostrifikacija/Nostrifikacija-Hrvatska-2021.pdf"
+        },
+        {
+            "title": "Nostrifikacija diplome u Srbiji - 2021",
+            "url": "Files/PDF/Nostrifikacija/Nostrifikacija-Srbija-2021.pdf"
+        },
+        {
+            "title": "Nostrifikacija diplome u Njemačkoj - 2021",
+            "url": "Files/PDF/Nostrifikacija_diplome_u_Njemackoj_2021.pdf"
+        },
+        {
+            "title": "Nostrifikacija diplome u Hrvatskoj - 2020",
+            "url": "https://www.ceps.edu.ba/Files/PDF/Nostrifikacija/Nostrifikacija_HR_2020.pdf"
+        },
+        {
+            "title": "Nostrifikacija diplome u Njemačkoj - 2020",
+            "url": "https://www.ceps.edu.ba/Files/PDF/Nostrifikacija/Nostrifikacija_diplome_njemacka_2020.pdf"
+        },
+        {
+            "title": "Nostrifikacija diplome u Srbiji - 2019",
+            "url": "https://www.ceps.edu.ba/Files/PDF/Nostrifikacija/Nostrifikacija_diplome_srbija_2020.pdf"
+        },
+        {
+            "title": "Nostrifikacija diplome u Crnoj Gori - 2015",
+            "url": "https://www.ceps.edu.ba/Files/PDF/Nostrifikacija/Nostrifikacija_diplome_Crna%20Gora_2015.pdf"
+        },
+        {
+            "title": "Nostrifikacija diplome u Hrvatskoj - 2013",
+            "url": "https://www.ceps.edu.ba/Files/PDF/Nostrifikacija/Nostrifikacija_diplome_HRV_2014.pdf"
+        },
+        {
+            "title": "Nostrifikacija diplome u Hrvatskoj - 2015",
+            "url": "https://www.ceps.edu.ba/Files/PDF/Nostrifikacija/Nostrifikacija_diplome_HRV_2015.pdf"
+        },
+        {
+            "title": "Nostrifikacija diplome u Hrvatskoj - 2018",
+            "url": "https://www.ceps.edu.ba/Files/PDF/Nostrifikacija/Nostrifikacija_diplome_HRV_2018.pdf"
+        },
+        {
+            "title": "Nostrifikacija diplome u Hrvatskoj - 2019",
+            "url": "https://www.ceps.edu.ba/Files/PDF/Nostrifikacija/Nostrifikacija_diplome_HRV_2019.pdf"
+        },
+        {
+            "title": "Nostrifikacija diplome u Njemačkoj - 2016",
+            "url": "https://www.ceps.edu.ba/Files/PDF/Nostrifikacija/Nostrifikacija_diplome_Njemacka_2016.pdf"
+        },
+        {
+            "title": "Nostrifikacija diplome u Sloveniji - 2014",
+            "url": "https://www.ceps.edu.ba/Files/PDF/Nostrifikacija/Nostrifikacija_diplome_Slovenija_2014.pdf"
+        },
+        {
+            "title": "Škoda Erasmus+ praksa",
+            "url": "Files/Erasmus/Skoda_Erasmus_1.pdf"
+        },
+        {
+            "title": "Škoda Erasmus+ praksa",
+            "url": "Files/Erasmus/Skoda_Erasmus_2.pdf"
+        },
+        {
+            "title": "Certifikat - Anida Kamenčić",
+            "url": "Files/Erasmus/Certifikat%20-%20Anida%20Kamencic.pdf"
+        },
+        {
+            "title": "Certifikat - Sakib Turković",
+            "url": "Files/Erasmus/Certifikat%20-%20Sakib%20Turkovic.pdf"
+        },
+        {
+            "title": "Erasmus povelja u visokom obrazovanju 2021-2027",
+            "url": "https://www.ceps.edu.ba/Files/PDF/ceps_povelja_2023.pdf?v=1"
+        },
+        {
+            "title": "Natječaj/Konkurs za upis studenata u akademsku 2024/2025. godinu – drugi upisni rok",
+            "url": "https://www.ceps.edu.ba/Files/PDF/Natjecaj_studenti_2024_5a.pdf"
+        },
+        {
+            "title": "Certifikat - Sistem menadžmenta ISO 45001:2018",
+            "url": "Files/PDF/21122022/ceps_c_bos_45001_22e.pdf"
+        },
+        {
+            "title": "Certifikat - Sistem menadžmenta EN ISO 9001:2015",
+            "url": "Files/PDF/21122022/ceps_c_bos_qm_22.pdf"
+        }
+    ],
+    "videos": [
+        "https://www.youtube.com/embed/AM6UpDzgen8",
+        "https://www.youtube.com/embed/y923Acd7-88"
+    ],
+    "virtual_tour": "https://www.google.com/maps/embed?pb=!4v1651766483535!6m8!1m7!1sCAoSLEFGMVFpcFBFNllOaHVQWjkzZ1U5MUJ4SWxfQTJiS0VaY0NqeDcwQmZWZkIt!2m2!1d43.94143869857759!2d18.07901229840135!3f101.75688730141343!4f-12.641715164374844!5f0.4000000000000002"
+}
