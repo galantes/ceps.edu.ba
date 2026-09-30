@@ -37,8 +37,8 @@ function adminPage(string $title, string $content, int $status=200): never {
     if($signedIn && isset($_GET['deleted']))$content='<p class="success" role="status">Zapis je izbrisan.</p>'.$content;
     $module=adminValue($_GET,'module','news');
     $labels=['news'=>'Novosti','drafts'=>'Nacrti','agreements'=>'Sporazumi','media'=>'Slike i PDF','home'=>'Naslovnica'];
-    $description=['news'=>'Objave, događanja i informacije za studente.','drafts'=>'Nastavite pripremu sadržaja prije objave.','agreements'=>'Partneri i dokumenti o suradnji.','media'=>'Sve prenesene slike i dokumenti na jednom mjestu.','home'=>'Uredite slajdove i obavijest na naslovnici.'];
-    echo '<!doctype html><html lang="hr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'.esc($title).' | CEPS administracija</title><link rel="stylesheet" href="/assets/vendor/jodit/jodit.min.css"><link rel="stylesheet" href="/assets/admin.css?v=4"><script src="/assets/vendor/jodit/jodit.min.js" defer></script><script src="/assets/admin-editor.js?v=4" defer></script></head><body class="'.($signedIn?'admin-app':'admin-auth').'"><a class="skip-link" href="#admin-main">Preskoči na sadržaj</a>';
+    $description=['news'=>'Objave, događaji i informacije za studente.','drafts'=>'Nastavite pripremu sadržaja prije objave.','agreements'=>'Partneri i dokumenti o saradnji.','media'=>'Sve prenesene slike i dokumenti na jednom mjestu.','home'=>'Uredite slajdove i obavijest na naslovnici.'];
+    echo '<!doctype html><html lang="bs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'.esc($title).' | CEPS administracija</title><link rel="stylesheet" href="/assets/vendor/jodit/jodit.min.css"><link rel="stylesheet" href="/assets/admin.css?v=4"><script src="/assets/vendor/jodit/jodit.min.js" defer></script><script src="/assets/admin-editor.js?v=4" defer></script></head><body class="'.($signedIn?'admin-app':'admin-auth').'"><a class="skip-link" href="#admin-main">Preskoči na sadržaj</a>';
     if($signedIn){
         echo '<aside class="admin-sidebar"><a class="admin-brand" href="/admin"><span class="brand-mark">C</span><span><strong>CEPS</strong><small>Administracija</small></span></a><p class="nav-caption">UPRAVLJANJE WEBOM</p><nav aria-label="Administracija">';
         foreach($labels as $key=>$label)echo '<a href="/admin?module='.$key.'"'.($module===$key?' aria-current="page"':'').'>'.adminGlyph($key).'<span>'.$label.'</span></a>';
@@ -49,7 +49,7 @@ function adminPage(string $title, string $content, int $status=200): never {
 function mbSafeInitial(string $name): string { preg_match('/^./us',$name,$match); return strtoupper($match[0]??'A'); }
 function adminFingerprint(array $row): string { ksort($row); return hash('sha256',serialize($row)); }
 function adminFlags(): array {
-    $flags=['Hr'=>'Hrvatski','En'=>'Engleski','De'=>'Njemački','Aktivnosti'=>'Aktivnosti','Konkursi'=>'Natječaji','Naslovnica'=>'Naslovnica','Istaknuto'=>'Istaknuto','PE'=>'Poslovna ekonomija','Energetika'=>'Energetika','Zastita'=>'Zaštita','Sigurnost'=>'Sigurnost','Promet'=>'Promet'];
+    $flags=['Hr'=>'Bosanski','En'=>'Engleski','De'=>'Njemački','Aktivnosti'=>'Aktivnosti','Konkursi'=>'Konkursi','Naslovnica'=>'Naslovnica','Istaknuto'=>'Istaknuto','PE'=>'Poslovna ekonomija','Energetika'=>'Energetika','Zastita'=>'Zaštita','Sigurnost'=>'Sigurnost','Promet'=>'Promet'];
     foreach (['Obnovljivi izvori energije','Energetski efikasnija BiH','GROWTH','1FUTURE','Model alternativnog napajanja','IMPACT','RES-UNI','SEE-GL','Skill 2 sustain','Core-ed academy','Prodigy','Projekt 12','Projekt 13','Projekt 14','Projekt 15'] as $index=>$label) $flags['projekt_'.($index+1)]=$label;
     return $flags;
 }
@@ -182,7 +182,7 @@ function adminValidate(string $module,array $input): array {
     } else {
         $path=trim(adminValue($input,'Putanja'));
         $parts=parse_url($path);
-        if(!$parts || !preg_match('~\.pdf$~i',$parts['path']??'') || !(((str_starts_with($path,'/Files/') || preg_match('~^/media/[a-f0-9]{32}\.pdf$~D',$path)) && !str_starts_with($path,'//')) || (($parts['scheme']??'')==='https' && in_array(strtolower($parts['host']??''),['ceps.edu.ba','www.ceps.edu.ba'],true)))) throw new InvalidArgumentException('Unesite PDF poveznicu iz CEPS mape Files.');
+        if(!$parts || !preg_match('~\.pdf$~i',$parts['path']??'') || !(((str_starts_with($path,'/Files/') || preg_match('~^/media/[a-f0-9]{32}\.pdf$~D',$path)) && !str_starts_with($path,'//')) || (($parts['scheme']??'')==='https' && in_array(strtolower($parts['host']??''),['ceps.edu.ba','www.ceps.edu.ba'],true)))) throw new InvalidArgumentException('Unesite PDF link iz CEPS mape Files.');
         if(!in_array(adminValue($input,'Kategorija'),['privreda','skolstvo'],true)) throw new InvalidArgumentException('Odaberite kategoriju.');
         $sort=filter_var(adminValue($input,'Sort','0'),FILTER_VALIDATE_INT);if($sort===false || abs($sort)>1000000)throw new InvalidArgumentException('Neispravan redoslijed.');
         $data+=['Putanja'=>$path,'Kategorija'=>$input['Kategorija'],'Sort'=>$sort,'Aktivan'=>isset($input['Aktivan'])?1:0];
@@ -212,7 +212,7 @@ function adminEditor(string $module,array $row,string $version,string $base,stri
         $html.='</div></fieldset><p>Nacrt nije javno dostupan. Objavi promjene ažurira web. SEO adresa nastaje automatski.</p>';
         if($id!=='new') $html.='<a target="_blank" rel="noopener" href="'.esc(seoUrl('/Novost?id='.$id)).'">Otvori javnu novost ↗</a>';
     } else {
-        $html.='<div class="agreement-upload"><label>Prenesi PDF<input type="file" data-agreement-upload accept="application/pdf"></label><p data-upload-status role="status"></p><a href="/admin?module=media" target="_blank">Biblioteka dokumenata ↗</a></div><label>PDF poveznica<input name="Putanja" value="'.esc((string)($row['Putanja']??'')).'" placeholder="/Files/2026/sporazum.pdf" required></label><label>Kategorija<select name="Kategorija">';
+        $html.='<div class="agreement-upload"><label>Prenesi PDF<input type="file" data-agreement-upload accept="application/pdf"></label><p data-upload-status role="status"></p><a href="/admin?module=media" target="_blank">Biblioteka dokumenata ↗</a></div><label>PDF link<input name="Putanja" value="'.esc((string)($row['Putanja']??'')).'" placeholder="/Files/2026/sporazum.pdf" required></label><label>Kategorija<select name="Kategorija">';
         foreach(['privreda'=>'Partneri iz privrede','skolstvo'=>'Visokoškolski partneri'] as $value=>$label)$html.='<option value="'.$value.'"'.(($row['Kategorija']??'')===$value?' selected':'').'>'.$label.'</option>';
         $html.='</select></label><label>Redoslijed<input type="number" name="Sort" value="'.esc((string)($row['Sort']??0)).'"></label><label class="check"><input type="checkbox" name="Aktivan" value="1"'.(!empty($row['Aktivan'])?' checked':'').'>Aktivan sporazum</label><p class="hint">Odaberite postojeći PDF u biblioteci ili prenesite novi dokument.</p>';
     }

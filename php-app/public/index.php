@@ -84,7 +84,9 @@ if ($route === '/robots.txt') {
         require_once dirname(__DIR__) . '/src/news-footer.php';
         $title = titleText($row['Naslov']);
         $content = '<article data-news-id="' . $row['ID'] . '"><div class="article-heading"><a class="back" href="/Novosti">' . icon('arrow-left') . ' <span>Sve novosti</span></a><p class="eyebrow">CEPS / NOVOSTI</p><h1>' . esc($title) . '</h1><time datetime="' . esc(str_replace(' ', 'T', $row['Datum'] ?? '')) . '">' . esc(newsDate($row['Datum'])) . '</time></div><div class="article-body">' . articleHtml($row['Tekst'] ?? '') . '</div>' . newsFooter($row) . '</article>';
-        layout($title, excerpt($row['Tekst'] ?? ''), $canonical, $content);
+        require_once dirname(__DIR__) . '/src/news-image.php';
+        $shareImage = newsImage($row['Tekst'] ?? '');
+        layout($title, excerpt($row['Tekst'] ?? ''), $canonical, $content, 200, ['type'=>'article', 'image'=>$shareImage === NEWS_DEFAULT_IMAGE ? null : $shareImage, 'published'=>$row['Datum'] ?? null]);
     }
     if (in_array($route, ['/', '/default', '/default.aspx', '/novosti', '/novosti.aspx'], true)) {
         $page = $_GET['page'] ?? '1';
@@ -106,7 +108,7 @@ if ($route === '/robots.txt') {
         $stmt = $pdo->prepare('SELECT ID, Naslov, Tekst, Datum FROM Novosti WHERE Hr=1 ORDER BY Datum DESC, ID DESC LIMIT 12 OFFSET ?');
         $stmt->bindValue(1, ($page - 1) * 12, PDO::PARAM_INT);
         $stmt->execute();
-        $content = '<section class="intro news-intro"><h1>Novosti i objave</h1><span class="heading-rule" aria-hidden="true"></span><p>Novosti, događanja i obavijesti CEPS-a.</p></section><section class="archive" aria-label="Arhiva novosti"><div class="archive-label"><h2>Najnovije s CEPS-a</h2><span>' . $count . ' objava u arhivi</span></div><div class="cards">';
+        $content = '<section class="intro news-intro"><h1>Novosti i objave</h1><span class="heading-rule" aria-hidden="true"></span><p>Novosti, događaji i obavijesti CEPS-a.</p></section><section class="archive" aria-label="Arhiva novosti"><div class="archive-label"><h2>Najnovije s CEPS-a</h2><span>' . $count . ' objava u arhivi</span></div><div class="cards">';
         foreach ($stmt as $row) {
             $content .= '<article class="card"><a class="archive-picture" href="/Novost?id=' . $row['ID'] . '" tabindex="-1" aria-hidden="true"><img class="news-cover" src="' . esc(newsImage($row['Tekst'] ?? '')) . '" data-fallback="' . NEWS_DEFAULT_IMAGE . '" alt="" loading="lazy" width="640" height="400"></a><div class="archive-card-copy"><time>' . esc(newsDate($row['Datum'])) . '</time><h3><a href="/Novost?id=' . $row['ID'] . '">' . esc(titleText($row['Naslov'])) . '</a></h3><p>' . esc(excerpt($row['Tekst'] ?? '')) . '</p><a class="read" href="/Novost?id=' . $row['ID'] . '" aria-label="' . esc('Pročitaj: ' . titleText($row['Naslov'])) . '">Pročitaj objavu ' . icon('arrow-up-right') . '</a></div></article>';
         }

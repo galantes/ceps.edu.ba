@@ -25,7 +25,7 @@ function projectPage(array $page): string {
         <article class="institution-content legacy-content" id="project-about"><?= $html ?></article>
         <?php if($catalog): ?><section class="project-catalog" aria-label="Projekti CEPS-a"><?php foreach($projects as $project): ?><a class="project-card" href="/<?= esc($project['slug']) ?>"><span class="project-card-icon"><?= icon($project['projectColumn']?'briefcase':'users-group') ?></span><h2><?= esc($project['title']) ?></h2><span class="project-card-more"><?= $project['projectColumn']?'O projektu':'Upoznajte tim' ?> <?= icon('arrow-up-right') ?></span></a><?php endforeach; ?></section>
         <?php else: ?>
-          <?php if($page['resources']): ?><aside class="institution-content legacy-content project-resources" id="project-resources" aria-label="Poveznice i dokumenti projekta"><h2>Poveznice i dokumenti</h2><?= $page['resources'] ?></aside><?php endif; ?>
+          <?php if($page['resources']): ?><aside class="institution-content legacy-content project-resources" id="project-resources" aria-label="Linkovi i dokumenti projekta"><h2>Linkovi i dokumenti</h2><?= $page['resources'] ?></aside><?php endif; ?>
           <?php if($rows): ?><section class="institution-content project-news" id="project-news"><h2>Objave projekta</h2>
             <?php $firstLanguage = true; foreach(['Hr'=>'Objave – Bosna i Hercegovina', 'En'=>'Posts in English'] as $language=>$label):
                 $posts = array_values(array_filter($rows, fn($row) => (bool)$row[$language]));

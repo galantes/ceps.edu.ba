@@ -39,17 +39,17 @@ function adminHomeSettings(PDO $pdo,bool $post): never {
         $pdo->prepare("UPDATE AdminSettings SET Payload=? WHERE SettingKey='home'")->execute([json_encode($next,JSON_UNESCAPED_UNICODE|JSON_THROW_ON_ERROR)]);
         $pdo->commit();header('Location: /admin?module=home&saved=1',true,303);exit;
     }catch(Throwable $e){if($pdo->inTransaction())$pdo->rollBack();$error=$e instanceof InvalidArgumentException?$e->getMessage():'Spremanje nije uspjelo.';}
-    $html='<p>Uredite naslovnicu. Slike birajte iz biblioteke i kopirajte njihovu poveznicu. Popup se automatski zatvara nakon 15 sekundi.</p><a href="/admin?module=media" target="_blank">Otvori biblioteku ↗</a><p role="status">'.esc($error?: (isset($_GET['saved'])?'Postavke su spremljene.':'')).'</p><form class="editor" method="post" action="/admin?module=home">'.adminCsrf().'<input type="hidden" name="version" value="'.$version.'"><h2>Popup</h2><label class="check"><input type="checkbox" name="popup_enabled"'.($data['popup']['enabled']?' checked':'').'>Prikazuj popup</label>';
-    foreach(['image'=>'Slika','url'=>'Poveznica na novost','alt'=>'Opis slike'] as $key=>$label)$html.='<label>'.$label.'<input name="popup_'.$key.'" value="'.esc($data['popup'][$key]).'" required></label>';
+    $html='<p>Uredite naslovnicu. Slike birajte iz biblioteke i kopirajte njihov link. Popup se automatski zatvara nakon 15 sekundi.</p><a href="/admin?module=media" target="_blank">Otvori biblioteku ↗</a><p role="status">'.esc($error?: (isset($_GET['saved'])?'Postavke su spremljene.':'')).'</p><form class="editor" method="post" action="/admin?module=home">'.adminCsrf().'<input type="hidden" name="version" value="'.$version.'"><h2>Popup</h2><label class="check"><input type="checkbox" name="popup_enabled"'.($data['popup']['enabled']?' checked':'').'>Prikazuj popup</label>';
+    foreach(['image'=>'Slika','url'=>'Link na novost','alt'=>'Opis slike'] as $key=>$label)$html.='<label>'.$label.'<input name="popup_'.$key.'" value="'.esc($data['popup'][$key]).'" required></label>';
     $html.='<h2>Slajder</h2>';
     foreach($data['slides'] as $i=>$slide){$html.='<details class="slide-settings"><summary>'.esc($slide['title']).'</summary><label class="check"><input type="checkbox" name="enabled_'.$i.'"'.($slide['enabled']?' checked':'').'>Prikaži slajd</label><label>Redoslijed<input type="number" name="order_'.$i.'" value="'.$slide['order'].'"></label>';
-        foreach(['title'=>'Naslov','description'=>'Opis','url'=>'Poveznica','image'=>'Slika','video'=>'Video (opcionalno)'] as $key=>$label)$html.='<label>'.$label.'<input name="'.$key.'_'.$i.'" value="'.esc($slide[$key]).'"></label>';
+        foreach(['title'=>'Naslov','description'=>'Opis','url'=>'Link','image'=>'Slika','video'=>'Video (opcionalno)'] as $key=>$label)$html.='<label>'.$label.'<input name="'.$key.'_'.$i.'" value="'.esc($slide[$key]).'"></label>';
         $html.='</details>';
     }
     adminPage('Naslovnica — slajder i popup',$html.'<div class="save"><button class="primary">Objavi postavke</button></div></form>'.adminRevisionList($pdo,'home','1'));
 }
 function adminSettingUrl(string $url): void {
-    if(strlen($url)>2000 || preg_match('/[\x00-\x20]/',$url))throw new InvalidArgumentException('Neispravna poveznica.');
+    if(strlen($url)>2000 || preg_match('/[\x00-\x20]/',$url))throw new InvalidArgumentException('Neispravan link.');
     if(str_starts_with($url,'/')&&!str_starts_with($url,'//')&&!str_contains($url,'\\'))return;
-    $p=parse_url($url);if(!$p||($p['scheme']??'')!=='https'||!in_array(strtolower($p['host']??''),['ceps.edu.ba','www.ceps.edu.ba','dl.dropboxusercontent.com'],true))throw new InvalidArgumentException('Koristite lokalnu poveznicu ili HTTPS poveznicu CEPS-a.');
+    $p=parse_url($url);if(!$p||($p['scheme']??'')!=='https'||!in_array(strtolower($p['host']??''),['ceps.edu.ba','www.ceps.edu.ba','dl.dropboxusercontent.com'],true))throw new InvalidArgumentException('Koristite lokalni link ili HTTPS link CEPS-a.');
 }

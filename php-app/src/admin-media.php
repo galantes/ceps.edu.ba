@@ -33,10 +33,10 @@ function adminUpload(PDO $pdo): array {
 function adminMediaPage(PDO $pdo,bool $post): never {
     $message='';
     if($post)try { $file=adminUpload($pdo);$message='Datoteka je prenesena: '.$file['url']; }catch(Throwable $e){$message=$e instanceof InvalidArgumentException?$e->getMessage():'Prijenos nije uspio. Provjerite postavke servera.';}
-    $html='<p role="status">'.esc($message).'</p><form class="upload-form" method="post" action="/admin?module=media" enctype="multipart/form-data">'.adminCsrf().'<label>Slika ili PDF<input type="file" name="file" accept="image/jpeg,image/png,image/webp,application/pdf" required></label><button class="primary">Prenesi datoteku</button></form><p>Prenesene datoteke dostupne su putem poveznice. Slike do 12 MB, PDF do 25 MB.</p><section class="media-library">';
+    $html='<p role="status">'.esc($message).'</p><form class="upload-form" method="post" action="/admin?module=media" enctype="multipart/form-data">'.adminCsrf().'<label>Slika ili PDF<input type="file" name="file" accept="image/jpeg,image/png,image/webp,application/pdf" required></label><button class="primary">Prenesi datoteku</button></form><p>Prenesene datoteke dostupne su putem linka. Slike do 12 MB, PDF do 25 MB.</p><section class="media-library">';
     foreach($pdo->query('SELECT * FROM AdminMedia ORDER BY ID DESC LIMIT 100') as $file) {
         $url='/media/'.$file['Filename'];
-        $html.='<article>'.(str_starts_with($file['Mime'],'image/')?'<img src="'.$url.'" alt="'.esc($file['OriginalName']).'" loading="lazy">':'<strong>PDF</strong>').'<p>'.esc($file['OriginalName']).'</p><input aria-label="Poveznica datoteke" readonly value="'.$url.'"><a href="'.$url.'" target="_blank" rel="noopener">Otvori ↗</a></article>';
+        $html.='<article>'.(str_starts_with($file['Mime'],'image/')?'<img src="'.$url.'" alt="'.esc($file['OriginalName']).'" loading="lazy">':'<strong>PDF</strong>').'<p>'.esc($file['OriginalName']).'</p><input aria-label="Link datoteke" readonly value="'.$url.'"><a href="'.$url.'" target="_blank" rel="noopener">Otvori ↗</a></article>';
     }
     adminPage('Slike i dokumenti',$html.'</section>');
 }

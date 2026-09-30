@@ -84,7 +84,7 @@ function homePage(): string {
 
       </div>
 
-      <section class="home-width latest-news" aria-labelledby="latest-news-title"><div class="section-heading"><div><p class="home-kicker">AKTUELNOSTI</p><h2 id="latest-news-title">Novosti i događanja.</h2></div><a class="pill news-archive" href="/Novosti">Arhiva novosti <?= icon('arrow-up-right') ?></a></div>
+      <section class="home-width latest-news" aria-labelledby="latest-news-title"><div class="section-heading"><div><p class="home-kicker">AKTUELNOSTI</p><h2 id="latest-news-title">Novosti i događaji.</h2></div><a class="pill news-archive" href="/Novosti">Arhiva novosti <?= icon('arrow-up-right') ?></a></div>
         <div class="latest-grid"><?php foreach ($news as $row): ?><article class="latest-card"><a class="news-picture" href="/Novost?id=<?= $row['ID'] ?>" tabindex="-1" aria-hidden="true"><img class="news-cover" src="<?= esc(newsImage($row['Tekst'])) ?>" data-fallback="<?= NEWS_DEFAULT_IMAGE ?>" alt="" loading="lazy" width="640" height="400"></a><div class="latest-copy"><time><?= icon('calendar-event') ?> <?= esc(newsDate($row['Datum'])) ?></time><h3><a href="/Novost?id=<?= $row['ID'] ?>"><?= esc(titleText($row['Naslov'])) ?></a></h3><p class="latest-excerpt" hidden><?= esc(excerpt($row['Tekst'])) ?></p><a class="text-link" href="/Novost?id=<?= $row['ID'] ?>">Pročitaj više <?= icon('arrow-up-right') ?></a></div></article><?php endforeach; ?><a class="latest-card latest-archive-card" href="/Novosti"><span class="archive-card-icon"><?= icon('news') ?></span><strong>Arhiva novosti</strong><span>Pregledajte sve novosti i događanja s CEPS-a.</span><span class="archive-card-action">Sve novosti <?= icon('arrow-up-right') ?></span></a></div>
       </section>
 
@@ -100,12 +100,12 @@ function homePage(): string {
 
       <section class="home-section home-width"><div class="section-heading"><div><h2>Važni dokumenti</h2></div></div>
         <div class="documents-grid"><?php
-        $groups = ['Akreditacija i certifikati'=>[], 'Nostrifikacija diplome'=>[], 'Studentske Erasmus+ prakse'=>[], 'Natječaji / Konkursi'=>[]];
+        $groups = ['Akreditacija i certifikati'=>[], 'Nostrifikacija diplome'=>[], 'Studentske Erasmus+ prakse'=>[], 'Konkursi'=>[]];
         foreach ($copy['documents'] as $d) {
-            $category = stripos($d['title'],'Nostrifikacija') !== false ? 'Nostrifikacija diplome' : (stripos($d['url'],'/Erasmus/') !== false || stripos($d['title'],'Erasmus povelja') !== false ? 'Studentske Erasmus+ prakse' : (stripos($d['title'],'Natječaj') !== false ? 'Natječaji / Konkursi' : 'Akreditacija i certifikati'));
+            $category = stripos($d['title'],'Nostrifikacija') !== false ? 'Nostrifikacija diplome' : (stripos($d['url'],'/Erasmus/') !== false || stripos($d['title'],'Erasmus povelja') !== false ? 'Studentske Erasmus+ prakse' : (stripos($d['title'],'Natječaj') !== false ? 'Konkursi' : 'Akreditacija i certifikati'));
             $groups[$category][] = $d;
         }
-        $documentIcons = ['Akreditacija i certifikati'=>'certificate', 'Nostrifikacija diplome'=>'school', 'Studentske Erasmus+ prakse'=>'world', 'Natječaji / Konkursi'=>'clipboard-list'];
+        $documentIcons = ['Akreditacija i certifikati'=>'certificate', 'Nostrifikacija diplome'=>'school', 'Studentske Erasmus+ prakse'=>'world', 'Konkursi'=>'clipboard-list'];
         foreach ($groups as $label=>$documents): ?><details class="document-group" name="home-documents"><summary><span class="document-symbol"><?= icon($documentIcons[$label]) ?></span><span class="document-label"><?= esc($label) ?></span><span class="document-count"><?= count($documents) ?></span><span class="document-toggle"><?= icon('plus') ?></span></summary><ul><?php foreach ($documents as $d): ?><li><a href="<?= esc(homeAsset($d['url'])) ?>"><?= esc($d['title']) ?> <?= icon('arrow-up-right') ?></a></li><?php endforeach; ?></ul></details><?php endforeach; ?></div>
       </section>
 

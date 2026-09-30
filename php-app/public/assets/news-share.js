@@ -8,12 +8,12 @@ document.querySelectorAll('.news-share').forEach(section => {
   copy.addEventListener('click', async () => {
     try {
       await navigator.clipboard.writeText(section.dataset.shareUrl);
-      status.textContent = 'Poveznica je kopirana.';
+      status.textContent = 'Link je kopiran.';
       window.setTimeout(() => { status.textContent = ''; }, 4000);
     } catch {
       status.textContent = '';
       const label = document.createElement('label');
-      label.textContent = 'Kopirajte poveznicu: ';
+      label.textContent = 'Kopirajte link: ';
       const input = document.createElement('input');
       input.type = 'text';
       input.readOnly = true;

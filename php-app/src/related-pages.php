@@ -8,7 +8,7 @@ function relatedPagesSidebar(array $page, array $toc): string {
         [['Studiji','Upisi','Placanje-u-ratama','Maturanti'], 'Planirajte svoj studij', ['Studiji','Upisi','Placanje-u-ratama','Maturanti']],
         [['Knjiznica','DIT','istrazivacki-centar','Projekti','centar-za-klimu-i-odrzivost'], 'Znanje i istraživanje', ['istrazivacki-centar','Projekti','DIT','Knjiznica']],
         [['Cisco','Cjelozivotno_ucenje','prijava-andragoska-obuka','Alumni'], 'Učenje i razvoj', ['Cjelozivotno_ucenje','Cisco','prijava-andragoska-obuka','Alumni']],
-        [['Medunarodna_suradnja','Alerrt','Crase'], 'Suradnja i projekti', ['Medunarodna_suradnja','Alerrt','Crase','Projekti']],
+        [['Medunarodna_suradnja','Alerrt','Crase'], 'Saradnja i projekti', ['Medunarodna_suradnja','Alerrt','Crase','Projekti']],
         [['Zgrada','Galerija','360-virtual-tour','Kontakt'], 'Istražite CEPS', ['Zgrada','360-virtual-tour','Galerija','Kontakt']],
     ];
     $info = [
