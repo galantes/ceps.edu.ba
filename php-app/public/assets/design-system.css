@@ -703,7 +703,25 @@ body{font-size:var(--text-body);line-height:1.75}
 .utility .utility-languages a{width:34px;padding:6px}
 .utility-languages img{display:block;width:22px;height:22px;object-fit:cover;border-radius:50%;box-shadow:0 0 0 1px #ffffff35}
 @media(max-width:1200px){.utility>.shell-width{width:100%;padding:0 24px}.utility .utility-links{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:thin}.utility .utility-links a{flex-shrink:0}}
-@media(max-width:700px){.utility>.shell-width{padding:0 10px;gap:8px}.utility nav a{min-height:40px;padding:8px;font-size:12px}.utility .utility-languages a{width:32px;padding:5px}}
+.utility-mobile{display:none}
+@media(max-width:700px){
+ .utility>.shell-width{position:relative;padding:0 14px;gap:8px;align-items:flex-start}
+ .utility>.shell-width>.utility-links{display:none}
+ .utility-mobile{display:block;flex:1;min-width:0}
+ .utility-mobile>summary{display:flex;align-items:center;gap:8px;min-height:44px;width:max-content;max-width:100%;padding:8px 0;color:#e2e4e6;font-size:12px;list-style:none;cursor:pointer}
+ .utility-mobile>summary::-webkit-details-marker{display:none}
+ .utility-mobile>summary>.ti:last-child{font-size:12px;transition:transform .15s}
+ .utility-mobile[open]>summary>.ti:last-child{transform:rotate(180deg)}
+ .utility-mobile>summary:focus-visible{outline:2px solid #fff;outline-offset:-2px;border-radius:6px}
+ .utility-mobile[open]{padding-top:44px}
+ .utility-mobile[open]>summary{position:absolute;top:0;left:14px}
+ .utility-mobile[open]>.utility-links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 8px;overflow:visible;padding:8px 0 12px;border-top:1px solid #ffffff20}
+ .utility-mobile[open]{flex-basis:100%}
+ .utility-mobile .utility-links a{justify-content:flex-start;min-height:44px;padding:10px 8px;font-size:12px;white-space:normal;line-height:1.4}
+ .utility-mobile .utility-links a span{min-width:0}
+ .utility .utility-languages{position:absolute;right:14px;top:0;gap:2px}
+ .utility .utility-languages a{width:40px;min-height:44px;padding:8px}
+}
 
 /* Desktop search sits at the far edge; mobile keeps its text label. */
 .desktop-navigation>.nav-search{margin-left:auto;justify-content:center;min-width:44px;min-height:44px}
