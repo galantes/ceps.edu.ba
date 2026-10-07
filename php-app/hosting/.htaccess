@@ -1,0 +1,12 @@
+Options -Indexes -MultiViews
+DirectoryIndex index.php
+RewriteEngine On
+RewriteCond %{HTTPS} !=on [OR]
+RewriteCond %{HTTP_HOST} ^www\.ceps\.edu\.ba$ [NC]
+RewriteRule ^ https://ceps.edu.ba%{REQUEST_URI} [R=302,L]
+# Serve copied Files directly; do not redirect to the old server.
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^[Ff]iles/ - [R=404,L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [QSA,L]

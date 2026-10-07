@@ -34,7 +34,9 @@ if (!in_array($_SERVER['REQUEST_METHOD'], ['GET', 'HEAD'], true) && !($_SERVER['
 }
 if ($route === '/robots.txt') {
     header('Content-Type: text/plain; charset=utf-8');
-    echo "User-agent: *\nDisallow: /\n"; // Preview only; release checklist must replace this.
+    echo getenv('CEPS_ENV') === 'production'
+        ? "User-agent: *\nDisallow: /admin\nDisallow: /pretraga\n"
+        : "User-agent: *\nDisallow: /\n";
     exit;
 }
     if ($route === '/pretraga') {
