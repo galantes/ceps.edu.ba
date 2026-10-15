@@ -1,0 +1,11 @@
+{
+  "Cisco.aspx": "/assets/hero/cisco.webp",
+  "StudijZdravstvo.aspx": "/assets/hero/health.webp",
+  "StudijEng.aspx": "/assets/hero/english.webp",
+  "StudijIT.aspx": "/assets/hero/it-v2.webp",
+  "StudijPE.aspx": "/assets/hero/business.webp",
+  "StudijEnergetika.aspx": "/assets/hero/energy-v2.webp",
+  "StudijPromet.aspx": "/assets/hero/transport-v2.webp",
+  "StudijSigurnost.aspx": "/assets/hero/security.webp",
+  "StudijZastita.aspx": "/assets/hero/safety.webp"
+}

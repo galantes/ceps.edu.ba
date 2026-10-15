@@ -3,7 +3,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/shell.php';
 
 function aboutPage(): string {
-    $copy = json_decode(file_get_contents(dirname(__DIR__) . '/content/about.json'), true, 512, JSON_THROW_ON_ERROR);
+    $copy = siteLanguage() !== 'bs' ? localizedCopy('about') : json_decode(file_get_contents(dirname(__DIR__) . '/content/about.json'), true, 512, JSON_THROW_ON_ERROR);
     ob_start(); ?>
     <div class="institution-page">
       <div class="institution-width breadcrumbs"><a href="/">Naslovnica</a><?= icon('chevron-right') ?><span>O nama</span></div>

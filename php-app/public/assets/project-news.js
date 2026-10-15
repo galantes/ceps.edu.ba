@@ -6,7 +6,7 @@
   const tabs = document.createElement('div');
   tabs.className = 'project-language-tabs';
   tabs.setAttribute('role', 'tablist');
-  tabs.setAttribute('aria-label', 'Jezik objava');
+  tabs.setAttribute('aria-label', document.documentElement.lang === 'en' ? 'Post language' : 'Jezik objava');
   languages[0].before(tabs);
   const buttons = [], panels = [];
   languages.forEach((language, index) => {

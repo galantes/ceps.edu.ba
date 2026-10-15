@@ -27,15 +27,15 @@ function projectPage(array $page): string {
         <?php else: ?>
           <?php if($page['resources']): ?><aside class="institution-content legacy-content project-resources" id="project-resources" aria-label="Linkovi i dokumenti projekta"><h2>Linkovi i dokumenti</h2><?= $page['resources'] ?></aside><?php endif; ?>
           <?php if($rows): ?><section class="institution-content project-news" id="project-news"><h2>Objave projekta</h2>
-            <?php $firstLanguage = true; foreach(['Hr'=>'Objave – Bosna i Hercegovina', 'En'=>'Posts in English'] as $language=>$label):
+            <?php $firstLanguage = true; foreach((isEnglish()?['En'=>'Posts in English', 'Hr'=>'Objave – Bosna i Hercegovina']:['Hr'=>'Objave – Bosna i Hercegovina', 'En'=>'Posts in English']) as $language=>$label):
                 $posts = array_values(array_filter($rows, fn($row) => (bool)$row[$language]));
                 if (!$posts) continue;
             ?>
-            <details class="project-news-language" name="project-news-language" <?= $firstLanguage?'open':'' ?> lang="<?= $language === 'En'?'en':'hr' ?>">
+            <details class="project-news-language" name="project-news-language" <?= $firstLanguage?'open':'' ?> lang="<?= $language === 'En'?'en':'bs' ?>">
               <summary aria-label="<?= esc($label) ?>"><span><img class="project-language-flag" src="/assets/flag-<?= $language==='En'?'gb':'ba' ?>.svg" alt="<?= $language==='En'?'Ujedinjeno Kraljevstvo':'Bosna i Hercegovina' ?>" width="32" height="20"></span><span class="project-news-count"><?= count($posts) ?></span><?= icon('chevron-down') ?></summary>
               <ul class="project-news-list"><?php foreach($posts as $n=>$row): ?>
                 <?php if($n===5): ?></ul><details class="project-news-more"><summary><?= $language==='En'?'Show older posts':'Prikaži ranije objave' ?> (<?= count($posts)-5 ?>) <?= icon('chevron-down') ?></summary><ul class="project-news-list"><?php endif; ?>
-                <li><time><?= esc(newsDate($row['Datum'])) ?></time><a href="/Novost?id=<?= (int)$row['ID'] ?>"><?= esc(titleText($row['Naslov'])) ?></a><?= icon('arrow-up-right') ?></li>
+                <li><time><?= esc(newsDate($row['Datum'])) ?></time><a href="<?= esc(seoUrl('/Novost?id='.(int)$row['ID'], $language === 'En')) ?>" data-language-link><?= esc(titleText($row['Naslov'])) ?></a><?= icon('arrow-up-right') ?></li>
               <?php endforeach; ?></ul><?php if(count($posts)>5): ?></details><?php endif; ?>
             </details>
             <?php $firstLanguage=false; endforeach; ?>

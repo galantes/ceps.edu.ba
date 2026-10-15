@@ -10,13 +10,13 @@ function searchPage(): string {
     $matches = []; $rows = []; $count = 0;
     if ($query !== '') {
         $pages = contentPages();
-        $about = json_decode(file_get_contents(dirname(__DIR__) . '/content/about.json'), true);
-        $pages['onama'] = ['title'=>'O nama','slug'=>'Onama','html'=>implode(' ', $about['paragraphs'])];
+        $about = siteLanguage() !== 'bs' ? localizedCopy('about') : json_decode(file_get_contents(dirname(__DIR__) . '/content/about.json'), true);
+        $pages['onama'] = ['title'=>translate('O nama'),'slug'=>'Onama','html'=>implode(' ', $about['paragraphs'])];
         foreach ($pages as $item) {
             if (preg_match('/' . preg_quote($query, '/') . '/iu', $item['title'] . ' ' . titleText($item['html']))) $matches[] = $item;
         }
         $pattern = '%' . str_replace(['!','%','_'], ['!!','!%','!_'], $query) . '%';
-        $where = "Hr=1 AND (Naslov LIKE ? ESCAPE '!' OR Tekst LIKE ? ESCAPE '!')";
+        $where = newsLanguageColumn()."=1 AND (Naslov LIKE ? ESCAPE '!' OR Tekst LIKE ? ESCAPE '!')";
         $pdo = database();
         $stmt = $pdo->prepare('SELECT COUNT(*) FROM Novosti WHERE ' . $where);
         $stmt->execute([$pattern, $pattern]); $count = (int)$stmt->fetchColumn();
@@ -28,7 +28,7 @@ function searchPage(): string {
       <form class="site-search" action="/Pretraga" method="get" role="search"><label for="search-query">Pretražite novosti i podstranice</label><div><input id="search-query" name="q" type="search" value="<?= esc($query) ?>" placeholder="Studiji, upisi, Erasmus…" maxlength="200" required><button type="submit" aria-label="Pretraži"><?= icon('search') ?><span>Pretraži</span></button></div></form>
     </section><section class="search-results institution-width" aria-label="Rezultati pretrage">
     <?php if($query === ''): ?><p>Unesite pojam koji želite pronaći.</p><?php else: ?>
-      <p class="search-summary">Za „<?= esc($query) ?>”: <?= count($matches) ?> podstranica i <?= $count ?> objava.</p>
+      <p class="search-summary"><?= isGerman()?'Für „':(isEnglish()?'For “':'Za „') ?><?= esc($query) ?>”: <?= count($matches) ?> <?= isGerman()?'Seiten und':(isEnglish()?'pages and':'podstranica i') ?> <?= $count ?> <?= isGerman()?'Beiträge.':(isEnglish()?'posts.':'objava.') ?></p>
       <?php if($matches && $page === 1): ?><h2>Podstranice</h2><div class="search-list"><?php foreach($matches as $item): ?><article><h3><a href="/<?= esc($item['slug']) ?>"><?= esc($item['title']) ?> <?= icon('arrow-up-right') ?></a></h3><p><?= esc(excerpt($item['html'])) ?></p></article><?php endforeach; ?></div><?php endif; ?>
       <?php if($rows): ?><h2>Novosti i objave</h2><div class="search-list"><?php foreach($rows as $row): ?><article><time><?= esc(newsDate($row['Datum'])) ?></time><h3><a href="/Novost?id=<?= (int)$row['ID'] ?>"><?= esc(titleText($row['Naslov'])) ?></a></h3><p><?= esc(excerpt($row['Tekst'])) ?></p></article><?php endforeach; ?></div><?php endif; ?>
       <?php if(!$matches && !$count): ?><p>Nema rezultata. Pokušajte s kraćim ili drugim pojmom.</p><?php endif; ?>

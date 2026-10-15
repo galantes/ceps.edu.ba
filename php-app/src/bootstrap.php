@@ -1,13 +1,16 @@
 <?php
 declare(strict_types=1);
 
-const SCHOOL_NAME = 'Visoka škola "CEPS - Centar za poslovne studije" Kiseljak';
+require_once __DIR__.'/language.php';
+define('SCHOOL_NAME', isGerman() ? 'Fachhochschule „CEPS - Zentrum für Betriebswirtschaftslehre“ Kiseljak' : (isEnglish() ? 'College "CEPS – Center for Business Studies" in Kiseljak' : 'Visoka škola "CEPS - Centar za poslovne studije" Kiseljak'));
 
 function esc(string $value): string {
     return htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 }
 
 function database(): PDO {
+    static $pdo;
+    if ($pdo instanceof PDO) return $pdo;
     $dsn = getenv('CEPS_DSN');
     if (!$dsn) {
         // Local preview only. Production must explicitly configure MySQL.
@@ -57,6 +60,7 @@ function localUrl(string $value): string {
     if (is_array($parts) && in_array(strtolower($parts['host'] ?? ''), ['www.ceps.edu.ba', 'ceps.edu.ba'], true)) {
         $value = ($parts['path'] ?? '/') . (isset($parts['query']) ? '?' . $parts['query'] : '') . (isset($parts['fragment']) ? '#' . $parts['fragment'] : '');
     }
+    if (englishExtraFile(parse_url($value, PHP_URL_PATH) ?: '')) return seoUrl($value);
     if (preg_match('#^(?:/|(?:\.?\./)*)(Files/.*)$#i', $value, $asset)) return 'https://ceps.edu.ba/' . $asset[1];
     return $value;
 }
@@ -150,7 +154,7 @@ function externalLinkTargets(string $html): string {
     foreach ($doc->getElementsByTagName('form') as $form) $form->setAttribute('action', seoUrl($form->getAttribute('action')));
     $currentHost = strtolower($_SERVER['HTTP_HOST'] ?? '');
     foreach ($doc->getElementsByTagName('a') as $link) {
-        $href = seoUrl(trim($link->getAttribute('href')));
+        $href = $link->hasAttribute('data-language-link') ? trim($link->getAttribute('href')) : seoUrl(trim($link->getAttribute('href')));
         $link->setAttribute('href', $href);
         $documentContext = false;
         for ($parent = $link->parentNode; $parent instanceof DOMElement; $parent = $parent->parentNode) {
@@ -209,9 +213,11 @@ function externalLinkTargets(string $html): string {
 
 function layout(string $title, string $description, string $canonical, string $content, int $status = 200, array $social = []): never {
     http_response_code($status);
+    $title = translate($title);
+    $description = translate($description);
     header('Content-Type: text/html; charset=utf-8');
-    $origin = rtrim(getenv('CEPS_ORIGIN') ?: 'https://www.ceps.edu.ba', '/');
-    $robots = getenv('CEPS_ENV') === 'production' && $status === 200 && strtolower(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?: '') !== '/pretraga' ? 'index,follow' : 'noindex,nofollow';
+    $origin = siteOrigin();
+    $robots = getenv('CEPS_ENV') === 'production' && $status === 200 && !in_array(strtolower(languagePath(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?: '')), ['/pretraga','/search','/suche'], true) ? 'index,follow' : 'noindex,nofollow';
     header('X-Robots-Tag: ' . $robots);
     $trackingEnabled = getenv('CEPS_ENV') === 'production';
     $trackingScripts = $trackingEnabled ? ' https://www.googletagmanager.com https://www.google-analytics.com https://connect.facebook.net https://www.googleadservices.com https://googleads.g.doubleclick.net https://www.google.com' : '';
@@ -227,7 +233,7 @@ function layout(string $title, string $description, string $canonical, string $c
     $socialTags = socialMeta($title, $description, $origin . $canonical, $origin, $social);
     $canonicalTag = $status === 200 ? '<link rel="canonical" href="' . esc($origin . $canonical) . '">' : '';
     require_once __DIR__ . '/shell.php';
-    $html = '<!doctype html><html lang="bs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>' . $pageTitle . '</title><meta name="description" content="' . esc($description) . '"><meta name="robots" content="' . $robots . '">' . $canonicalTag . '' . $socialTags . '<link rel="icon" href="https://ceps.edu.ba/App_Themes/Standard/favicon.png?v=ceps" type="image/png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.48.0/dist/tabler-icons.min.css"><script src="/assets/news-images.js"></script><link rel="stylesheet" href="/assets/site.css?v=20260930-1"><link rel="stylesheet" href="/assets/home.css?v=20260930-1"><link rel="stylesheet" href="/assets/design-system.css?v=20260930-1">' . $trackingHead . '</head><body>' . $trackingBody . '<a class="skip" href="#content">Preskoči na sadržaj</a>' . schoolHeader() . '<main id="content">' . $content . '</main>' . schoolFooter() . contactWidget() . '<script src="/assets/news-share.js?v=20260930-bs1" defer></script><script src="/assets/contact.js" defer></script><script src="/assets/virtual-tour.js" defer></script><script src="/assets/slider.js" defer></script><script src="/assets/announcement.js" defer></script><script src="/assets/navigation.js" defer></script><script src="/assets/mobile-home.js" defer></script><script src="/assets/cooperation.js?v=20260930-bs1" defer></script><script src="/assets/study-tabs.js" defer></script><script src="/assets/gallery.js" defer></script><script src="/assets/project-news.js" defer></script></body></html>';
-    echo externalLinkTargets($html);
+    $html = '<!doctype html><html lang="' . siteLanguage() . '"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>' . $pageTitle . '</title><meta name="description" content="' . esc($description) . '"><meta name="robots" content="' . $robots . '">' . $canonicalTag . ($status === 200 ? languageAlternateTags($canonical) : '') . $socialTags . '<link rel="icon" href="https://ceps.edu.ba/App_Themes/Standard/favicon.png?v=ceps" type="image/png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.48.0/dist/tabler-icons.min.css"><script src="/assets/news-images.js"></script><link rel="stylesheet" href="/assets/site.css?v=20260930-1"><link rel="stylesheet" href="/assets/home.css?v=20261014-1"><link rel="stylesheet" href="/assets/design-system.css?v=20261015-de1">' . $trackingHead . '</head><body>' . $trackingBody . '<a class="skip" href="#content">Preskoči na sadržaj</a>' . schoolHeader() . '<main id="content">' . $content . '</main>' . schoolFooter() . contactWidget() . '<script src="/assets/news-share.js?v=20261015-de1" defer></script><script src="/assets/contact.js" defer></script><script src="/assets/virtual-tour.js?v=20261014-en1" defer></script><script src="/assets/slider.js?v=20261014-1" defer></script><script src="/assets/announcement.js" defer></script><script src="/assets/navigation.js" defer></script><script src="/assets/study-carousel.js?v=20261015-de1" defer></script><script src="/assets/mobile-home.js?v=20261015-de1" defer></script><script src="/assets/cooperation.js?v=20261015-de1" defer></script><script src="/assets/study-tabs.js?v=20261015-de1" defer></script><script src="/assets/gallery.js?v=20261015-de1" defer></script><script src="/assets/project-news.js?v=20261014-en1" defer></script></body></html>';
+    echo externalLinkTargets(englishInterface($html));
     exit;
 }

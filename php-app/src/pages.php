@@ -4,7 +4,11 @@ require_once __DIR__ . '/shell.php';
 require_once __DIR__ . '/related-pages.php';
 function contentPages(): array {
     static $pages;
-    return $pages ??= array_merge(json_decode(file_get_contents(dirname(__DIR__) . '/content/pages.json'), true, 512, JSON_THROW_ON_ERROR), json_decode(file_get_contents(dirname(__DIR__) . '/content/projects.json'), true, 512, JSON_THROW_ON_ERROR));
+    if ($pages !== null) return $pages;
+    $pages = array_merge(json_decode(file_get_contents(dirname(__DIR__) . '/content/pages.json'), true, 512, JSON_THROW_ON_ERROR), json_decode(file_get_contents(dirname(__DIR__) . '/content/projects.json'), true, 512, JSON_THROW_ON_ERROR));
+    if (siteLanguage() !== 'bs') foreach (localizedCopy('pages') as $key=>$translation) if(isset($pages[$key])) $pages[$key] = array_replace($pages[$key], $translation);
+    if (isGerman()) $pages=array_intersect_key($pages,germanCopy('pages'));
+    return $pages;
 }
 function contentPage(array $page): string {
     if ($page['slug'] === 'Kontakt') { require_once __DIR__.'/contact-page.php'; return contactPage(); }
@@ -22,7 +26,7 @@ function contentPage(array $page): string {
         $doc->loadHTML('<?xml encoding="UTF-8">'.$html, LIBXML_NONET);
         libxml_clear_errors(); libxml_use_internal_errors($previous);
         $xpath = new DOMXPath($doc);
-        $heading = $xpath->query('//h2[normalize-space(.)="Ugovori i sporazumi"]')->item(0);
+        $heading = $xpath->query('//h2[normalize-space(.)="Ugovori i sporazumi" or normalize-space(.)="Agreements and contracts"]')->item(0);
         if ($heading) {
             $source = '';
             for ($node = $heading->nextSibling; $node; $node = $node->nextSibling) $source .= $doc->saveHTML($node);
@@ -53,7 +57,7 @@ function contentPage(array $page): string {
             $html = ''; foreach ($doc->getElementsByTagName('body')->item(0)->childNodes as $node) $html .= $doc->saveHTML($node);
         }
 
-        $html = preg_replace_callback('~(<h2>Projekti i konferencije</h2>)\s*<p>(.*?)</p>~s', function ($section) {
+        $html = preg_replace_callback('~(<h2>(?:Projekti i konferencije|Projects and conferences)</h2>)\s*<p>(.*?)</p>~s', function ($section) {
             preg_match_all('~<a\s+href="([^"]*)"[^>]*>(.*?)</a>~s', $section[2], $links, PREG_SET_ORDER);
             $list = '<ul class="cooperation-resource-list">';
             foreach ($links as $link) {
@@ -95,7 +99,7 @@ function contentPage(array $page): string {
         $doc->loadHTML('<?xml encoding="UTF-8">'.$html, LIBXML_NONET);
         libxml_clear_errors(); libxml_use_internal_errors($previous);
         foreach ($doc->getElementsByTagName('h2') as $heading) {
-            if (trim($heading->textContent) !== 'Dokumenti') continue;
+            if (trim($heading->textContent) !== (isEnglish()?'Documents':'Dokumenti')) continue;
             $container = $heading->parentNode;
             $list = $doc->createElement('ul');
             $list->setAttribute('class', 'quality-documents');
@@ -118,7 +122,7 @@ function contentPage(array $page): string {
         $html = ''; foreach ($doc->getElementsByTagName('body')->item(0)->childNodes as $child) $html .= $doc->saveHTML($child);
     }
     if (in_array($page['slug'], ['Kontakt','360-virtual-tour'], true)) {
-        $html = preg_replace_callback('~<a href="([^"]+)">Otvori galeriju, video ili prilog</a>~', function($m) {
+        $html = preg_replace_callback('~<a href="([^"]+)">(?:Otvori galeriju, video ili prilog|Open gallery, video or attachment)</a>~', function($m) {
             $url = html_entity_decode($m[1], ENT_QUOTES, 'UTF-8');
             $map = str_starts_with($url, 'https://www.google.com/maps/embed?');
             $form = in_array($url, ['https://www.ceps.edu.ba/Mail/form.php','/Mail/form.php'], true);
@@ -134,7 +138,7 @@ function contentPage(array $page): string {
     }
     foreach (['Konkursi','Aktivnosti','projekt_15'] as $column) {
         if (!str_contains($html, '{{'.$column.'}}')) continue;
-        $rows = database()->query('SELECT ID,Naslov,Datum,Tekst FROM Novosti WHERE Hr=1 AND '.$column.'=1 ORDER BY Datum DESC,ID DESC')->fetchAll();
+        $rows = database()->query('SELECT ID,Naslov,Datum,Tekst FROM Novosti WHERE '.newsLanguageColumn().'=1 AND '.$column.'=1 ORDER BY Datum DESC,ID DESC')->fetchAll();
         $notices = $page['slug'] === 'Medunarodna_suradnja' && $column === 'Konkursi';
         $cards = $page['slug'] === 'Medunarodna_suradnja' && !$notices;
         $listClass = $notices ? 'programme-news cooperation-notices' : ($cards ? 'programme-news cooperation-news-grid' : 'programme-news');
@@ -166,7 +170,7 @@ function contentPage(array $page): string {
     }
     $isStudy = preg_match('/^Studij(?!i$)/', $page['slug']) || $page['slug'] === 'pravne-nauke';
     if ($isStudy) {
-        $html = preg_replace('~<h[1-6]\b[^>]*>\s*Novosti\s*</h[1-6]>~iu', '', $html);
+        $html = preg_replace('~<h[1-6]\b[^>]*>\s*(?:Novosti|News)\s*</h[1-6]>~iu', '', $html);
     }
     $pages = contentPages();
     $html = preg_replace_callback('~href="https?://(?:www\.)?ceps\.edu\.ba/([^"?#]+)([^" ]*)"~i', function($m) use($pages) {
@@ -195,13 +199,20 @@ function contentPage(array $page): string {
         $toc[] = ['id'=>$id,'title'=>$title];
         return '<h2 id="'.$id.'"'.($number === 1 ? ' class="content-first-heading"' : '').'>'.$m[2].'</h2>';
     }, $html);
-    $studyImages = ['StudijPE'=>'ekonomija_1.jpg','StudijIT'=>'Informacijske_tehnologije.jpg','StudijZdravstvo'=>'zdravstvo.jpg','StudijPromet'=>'promet_1.jpg','StudijEnergetika'=>'energetika_1.jpg','StudijSigurnost'=>'sigurnost_1.jpg','StudijZastita'=>'zastita_1.jpg','StudijEng'=>'studij_eng.jpg','pravne-nauke'=>'novazgrada.jpg'];
-    $studyImage = (['Cisco'=>'cisco.jpg', 'Placanje-u-ratama'=>'2492020.jpg', 'Studiji'=>'studiji.jpg', 'Upisi'=>'2492020.jpg', 'Maturanti'=>'studiji.jpg'][$page['slug']] ?? $studyImages[$page['slug']] ?? null);
+    $heroImages = json_decode(file_get_contents(dirname(__DIR__) . '/content/hero-images.json'), true, 512, JSON_THROW_ON_ERROR);
+    $studyImages = [];
+    foreach ($heroImages as $url => $image) {
+        $slug = pathinfo($url, PATHINFO_FILENAME);
+        if ($slug !== 'Cisco') $studyImages[$slug] = $image;
+    }
+    $studyImages['pravne-nauke'] = '/assets/hero/law.webp';
+    $otherImages = ['Cisco'=>'cisco.jpg', 'Placanje-u-ratama'=>'2492020.jpg', 'Studiji'=>'studiji.jpg', 'Upisi'=>'2492020.jpg', 'Maturanti'=>'studiji.jpg'];
+    $studyImage = $studyImages[$page['slug']] ?? (isset($otherImages[$page['slug']]) ? 'https://ceps.edu.ba/Files/Images/' . $otherImages[$page['slug']] : null);
     $studyIcons = ['StudijPE'=>'chart-bar','StudijIT'=>'device-desktop-code','StudijZdravstvo'=>'medical-cross','StudijPromet'=>'road','StudijEnergetika'=>'bolt','StudijSigurnost'=>'shield-check','StudijZastita'=>'tools','StudijEng'=>'world','pravne-nauke'=>'scale'];
     ob_start(); ?>
     <div class="institution-page content-page" data-page="<?= esc($page['slug']) ?>" <?= $isStudy ? 'data-study' : '' ?> <?= $page['slug'] === 'Medunarodna_suradnja' ? 'data-cooperation' : '' ?>>
       <div class="institution-width breadcrumbs"><a href="/">Naslovnica</a><?= icon('chevron-right') ?><span><?= esc($page['title']) ?></span></div>
-      <section class="content-page-heading institution-width<?= $studyImage ? ' study-photo-heading' : '' ?>"><?php if($studyImage): ?><img class="study-heading-image" src="https://ceps.edu.ba/Files/Images/<?= esc($studyImage) ?>" alt="" fetchpriority="high"><?php endif; ?><h1<?= $isStudy ? ' class="study-title"' : '' ?>><?php if ($isStudy): ?><?= icon($studyIcons[$page['slug']] ?? 'school') ?><?php endif; ?><span><?= esc($page['title']) ?></span></h1><?php if (!$isStudy): ?><span class="heading-rule"></span><?php endif; ?><?php if ($isStudy): ?><div class="study-page-actions"><a class="pill study-enrol-outline" href="/Upisi"><?= icon('school') ?><span>Informacije o upisu</span></a><a class="text-link" href="/Kontakt"><?= icon('message-circle') ?><span>Pitajte studentsku službu</span></a><a class="text-link" href="/Studiji"><?= icon('arrow-left') ?><span>Svi studiji</span></a></div><?php endif; ?></section>
+      <section class="content-page-heading institution-width<?= $studyImage ? ' study-photo-heading' : '' ?>"><?php if($studyImage): ?><img class="study-heading-image" src="<?= esc($studyImage) ?>" alt="" fetchpriority="high"><?php endif; ?><h1<?= $isStudy ? ' class="study-title"' : '' ?>><?php if ($isStudy): ?><?= icon($studyIcons[$page['slug']] ?? 'school') ?><?php endif; ?><span><?= esc($page['title']) ?></span></h1><?php if (!$isStudy): ?><span class="heading-rule"></span><?php endif; ?><?php if ($isStudy): ?><div class="study-page-actions"><a class="pill study-enrol-outline" href="/Upisi"><?= icon('school') ?><span>Informacije o upisu</span></a><a class="text-link" href="/Kontakt"><?= icon('message-circle') ?><span>Pitajte studentsku službu</span></a><a class="text-link" href="/Studiji"><?= icon('arrow-left') ?><span>Svi studiji</span></a></div><?php endif; ?></section>
       <div class="institution-layout institution-width"><?= relatedPagesSidebar($page, $toc) ?>
       <article class="institution-content legacy-content" id="page-content"><?= $html ?></article></div>
     </div>

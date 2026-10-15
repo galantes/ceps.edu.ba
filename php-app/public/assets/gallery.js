@@ -1,4 +1,6 @@
 (() => {
+  const english = document.documentElement.lang === 'en';
+  const german = document.documentElement.lang === 'de';
   const article = document.querySelector('[data-news-id] .article-body');
   if (article) {
     const photos = [...article.querySelectorAll('img')].filter(img => {
@@ -8,9 +10,9 @@
     if (photos.length > 3) {
       const gallery = document.createElement('section');
       gallery.className = 'news-photo-gallery';
-      gallery.setAttribute('aria-label', 'Galerija fotografija');
+      gallery.setAttribute('aria-label', german ? 'Fotogalerie' : (english ? 'Photo gallery' : 'Galerija fotografija'));
       const heading = document.createElement('h2');
-      heading.textContent = `Galerija fotografija (${photos.length})`;
+      heading.textContent = `${german ? 'Fotogalerie' : (english ? 'Photo gallery' : 'Galerija fotografija')} (${photos.length})`;
       const grid = document.createElement('div');
       grid.className = 'news-photo-grid';
       gallery.append(heading, grid);
@@ -20,7 +22,7 @@
         const parent = img.parentElement;
         const link = document.createElement('a');
         link.href = original ? original.href : img.src;
-        link.setAttribute('aria-label', `Otvori fotografiju ${i + 1} od ${photos.length}`);
+        link.setAttribute('aria-label', german ? `Foto ${i + 1} von ${photos.length} öffnen` : (english ? `Open photo ${i + 1} of ${photos.length}` : `Otvori fotografiju ${i + 1} od ${photos.length}`));
         img.removeAttribute('width'); img.removeAttribute('height');
         const thumbnail = img.cloneNode(true);
         if (i < 3) thumbnail.loading = 'eager';
@@ -30,7 +32,7 @@
         if (i === 2 && photos.length > 3) {
           const badge = document.createElement('span');
           badge.className = 'news-photo-more';
-          badge.textContent = `+${photos.length - 3} fotografija`;
+          badge.textContent = german ? `+${photos.length - 3} Fotos` : (english ? `+${photos.length - 3} photos` : `+${photos.length - 3} fotografija`);
           link.append(badge);
         }
         grid.append(link);
@@ -47,8 +49,10 @@
   if (!links.length) return;
   const dialog = document.createElement('dialog');
   dialog.className = 'gallery-viewer';
-  dialog.setAttribute('aria-label', 'Pregled fotografija');
+  dialog.setAttribute('aria-label', german ? 'Fotoansicht' : (english ? 'Photo viewer' : 'Pregled fotografija'));
   dialog.innerHTML = '<div class="gallery-toolbar"><span role="status"></span><button type="button" data-close aria-label="Zatvori fotografiju"><i class="ti ti-x" aria-hidden="true"></i></button></div><div class="gallery-stage"><button type="button" data-prev aria-label="Prethodna fotografija"><i class="ti ti-chevron-left" aria-hidden="true"></i></button><img alt=""><button type="button" data-next aria-label="Sljedeća fotografija"><i class="ti ti-chevron-right" aria-hidden="true"></i></button></div>';
+  if (english) { const labels = ['Close photo', 'Previous photo', 'Next photo']; dialog.querySelectorAll('button').forEach((button, i) => button.setAttribute('aria-label', labels[i])); }
+  if (german) { const labels = ['Foto schließen', 'Vorheriges Foto', 'Nächstes Foto']; dialog.querySelectorAll('button').forEach((button, i) => button.setAttribute('aria-label', labels[i])); }
   document.body.append(dialog);
   let index = 0;
   let trigger = null;
@@ -56,7 +60,7 @@
     index = (next + links.length) % links.length;
     const img = dialog.querySelector('img');
     img.src = links[index].href;
-    img.alt = links[index].querySelector('img').alt || 'Fotografija CEPS-a';
+    img.alt = links[index].querySelector('img').alt || (german ? 'Foto der FH CEPS' : (english ? 'CEPS photo' : 'Fotografija CEPS-a'));
     dialog.querySelector('[role="status"]').textContent = `${index + 1} / ${links.length}`;
   }
   links.forEach((link, i) => link.addEventListener('click', event => {

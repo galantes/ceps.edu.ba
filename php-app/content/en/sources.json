@@ -1,0 +1,156 @@
+{
+  "misija": {
+    "source": "https://en.ceps.edu.ba/Misija.aspx"
+  },
+  "akreditacija": {
+    "source": "https://en.ceps.edu.ba/Akreditacija.aspx"
+  },
+  "akademska_organizacija": {
+    "source": "https://en.ceps.edu.ba/Akademska_organizacija.aspx"
+  },
+  "akti": {
+    "source": "https://en.ceps.edu.ba/Akti.aspx"
+  },
+  "bolonjski_proces": {
+    "source": "https://en.ceps.edu.ba/Bolonjski_proces.aspx"
+  },
+  "kvaliteta": {
+    "source": "https://en.ceps.edu.ba/Kvaliteta.aspx"
+  },
+  "maticni_podaci": {
+    "source": "https://en.ceps.edu.ba/Maticni_podaci.aspx"
+  },
+  "knjiznica": {
+    "source": "https://en.ceps.edu.ba/Knjiznica.aspx"
+  },
+  "cjelozivotno_ucenje": {
+    "source": "translated from current Bosnian page"
+  },
+  "studiji": {
+    "source": "https://en.ceps.edu.ba/Studiji.aspx"
+  },
+  "studijit": {
+    "source": "https://en.ceps.edu.ba/StudijIT.aspx"
+  },
+  "studijpe": {
+    "source": "https://en.ceps.edu.ba/StudijPE.aspx"
+  },
+  "studijpromet": {
+    "source": "https://en.ceps.edu.ba/StudijPromet.aspx"
+  },
+  "studijenergetika": {
+    "source": "https://en.ceps.edu.ba/StudijEnergetika.aspx"
+  },
+  "studijsigurnost": {
+    "source": "https://en.ceps.edu.ba/StudijSigurnost.aspx"
+  },
+  "studijzdravstvo": {
+    "source": "https://en.ceps.edu.ba/StudijZdravstvo.aspx"
+  },
+  "studijzastita": {
+    "source": "https://en.ceps.edu.ba/StudijZastita.aspx"
+  },
+  "studijeng": {
+    "source": "https://en.ceps.edu.ba/StudijEng.aspx",
+    "translation_note": "The English source contained German text; translated from the current Bosnian page, preserving the ministry decision and original documents."
+  },
+  "pravne-nauke": {
+    "source": "https://en.ceps.edu.ba/pravne-nauke.aspx"
+  },
+  "upisi": {
+    "source": "https://en.ceps.edu.ba/Upisi.aspx"
+  },
+  "placanje-u-ratama": {
+    "source": "translated from current Bosnian page"
+  },
+  "cisco": {
+    "source": "translated from current Bosnian page"
+  },
+  "zgrada": {
+    "source": "translated from current Bosnian page"
+  },
+  "projekti": {
+    "source": "https://en.ceps.edu.ba/Projekti.aspx"
+  },
+  "dit": {
+    "source": "https://en.ceps.edu.ba/DIT.aspx"
+  },
+  "centar-za-klimu-i-odrzivost": {
+    "source": "https://en.ceps.edu.ba/knowledge-hub-for-climate-and-sustainability.aspx"
+  },
+  "alumni": {
+    "source": "translated from current Bosnian page"
+  },
+  "maturanti": {
+    "source": "translated from current Bosnian page"
+  },
+  "prijava-andragoska-obuka": {
+    "source": "translated from current Bosnian page"
+  },
+  "galerija": {
+    "source": "https://en.ceps.edu.ba/Galerija.aspx",
+    "shared_content": "Current shared content; English interface and descriptions; original names and documents retained."
+  },
+  "medunarodna_suradnja": {
+    "source": "https://en.ceps.edu.ba/Medunarodna_suradnja.aspx",
+    "shared_partner_source": "current Bosnian page and Sporazumi database",
+    "shared_content": "Current shared content; English interface and descriptions; original names and documents retained."
+  },
+  "istrazivacki-centar": {
+    "source": "https://en.ceps.edu.ba/istrazivacki-centar.aspx"
+  },
+  "kontakt": {
+    "source": "https://en.ceps.edu.ba/Kontakt.aspx",
+    "shared_content": "Current shared content; English interface and descriptions; original names and documents retained."
+  },
+  "alerrt": {
+    "source": "https://en.ceps.edu.ba/Alerrt.aspx",
+    "shared_content": "Current shared content; English interface and descriptions; original names and documents retained."
+  },
+  "crase": {
+    "source": "https://en.ceps.edu.ba/Crase.aspx",
+    "shared_content": "Current shared content; English interface and descriptions; original names and documents retained."
+  },
+  "360-virtual-tour": {
+    "source": "translated from current Bosnian page"
+  },
+  "projekt/core-ed-academy": {
+    "source": "https://en.ceps.edu.ba/Projekt/core-ed-academy.aspx"
+  },
+  "projekt/energetski-efikasnija-bosna-i-hercegovina": {
+    "source": "https://en.ceps.edu.ba/Projekt/energetski-efikasnija-bosna-i-hercegovina.aspx"
+  },
+  "projekt/greening-relevance-in-operations-in-western-balkans-tertiary": {
+    "source": "https://en.ceps.edu.ba/Projekt/greening-relevance-in-operations-in-western-balkans-tertiary.aspx"
+  },
+  "projekt/impact-campus-knowledge-valorization": {
+    "source": "https://en.ceps.edu.ba/Projekt/impact-campus-knowledge-valorization.aspx"
+  },
+  "projekt/izrada-modela-alternativnog-napajanja-za-istrazivacke-projekte-iz-oblasti-energetike-ciljano-na-obnovljive-izvore-energije-u-bih": {
+    "source": "https://en.ceps.edu.ba/Projekt/izrada-modela-alternativnog-napajanja-za-istrazivacke-projekte-iz-oblasti-energetike-ciljano-na-obnovljive-izvore-energije-u-bih.aspx"
+  },
+  "projekt/joined-for-sustainability-building-climate-resilient-communities-in-wb-and-eu": {
+    "source": "https://en.ceps.edu.ba/Projekt/joined-for-sustainability-building-climate-resilient-communities-in-wb-and-eu.aspx"
+  },
+  "projekt/ncp_widera_net": {
+    "source": "https://en.ceps.edu.ba/Projekt/ncp_widera_net.aspx"
+  },
+  "projekt/obnovljivi-izvori-energije-odrzivi-opstanak-i-ulog-za-buducnost": {
+    "source": "https://en.ceps.edu.ba/Projekt/obnovljivi-izvori-energije-odrzivi-opstanak-i-ulog-za-buducnost.aspx"
+  },
+  "projekt/prodigy": {
+    "source": "translated from current Bosnian page"
+  },
+  "projekt/projektni-tim": {
+    "source": "translated from current Bosnian page"
+  },
+  "projekt/res-uni-research-universities": {
+    "source": "https://en.ceps.edu.ba/Projekt/res-uni-research-universities.aspx"
+  },
+  "projekt/skill-2-sustain": {
+    "source": "https://en.ceps.edu.ba/Projekt/skill-2-sustain.aspx"
+  },
+  "projekt/skills-and-employment-enhancement-in-green-logistics": {
+    "source": "https://en.ceps.edu.ba/Projekt/skills-and-employment-enhancement-in-green-logistics.aspx"
+  }
+}

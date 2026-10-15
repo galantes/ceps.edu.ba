@@ -3,7 +3,19 @@ declare(strict_types=1);
 
 function serveLegacyFile(string $path): never {
     $root = dirname(__DIR__, 2);
-    $handle = fopen($root . '/migration/output/files.csv', 'r');
+    if ($extra = englishExtraFile($path)) {
+        if (!is_file($extra['file'])) throw new RuntimeException('Missing English source document');
+        $canonical = '/'.implode('/', array_map('rawurlencode', explode('/', ltrim($extra['path'],'/'))));
+        if ($path !== $extra['path']) { header('Location: '.$canonical,true,301);exit; }
+        header('Content-Type: application/pdf');
+        header('X-Content-Type-Options: nosniff');
+        header('Content-Length: '.filesize($extra['file']));
+        header('Cache-Control: public, max-age=3600');
+        if ($_SERVER['REQUEST_METHOD'] !== 'HEAD') readfile($extra['file']);
+        exit;
+    }
+
+    $handle = fopen(getenv('CEPS_FILES_MANIFEST') ?: $root . '/migration/output/files.csv', 'r');
     if (!$handle) throw new RuntimeException('Missing file manifest');
     fgetcsv($handle, escape: '');
     $found = null;
@@ -16,7 +28,7 @@ function serveLegacyFile(string $path): never {
     fclose($handle);
     $types = ['jpg'=>'image/jpeg','jpeg'=>'image/jpeg','png'=>'image/png','gif'=>'image/gif','webp'=>'image/webp','ico'=>'image/x-icon','pdf'=>'application/pdf','doc'=>'application/msword','docx'=>'application/vnd.openxmlformats-officedocument.wordprocessingml.document','xls'=>'application/vnd.ms-excel','xlsx'=>'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet','ppt'=>'application/vnd.ms-powerpoint','pptx'=>'application/vnd.openxmlformats-officedocument.presentationml.presentation','zip'=>'application/zip','rar'=>'application/vnd.rar','mp4'=>'video/mp4','mp3'=>'audio/mpeg'];
     $extension = strtolower(pathinfo($found ?? '', PATHINFO_EXTENSION));
-    $legacyRoot = is_dir($root . '/stari-web/Files') ? $root . '/stari-web' : $root;
+    $legacyRoot = getenv('CEPS_FILES_ROOT') ?: (is_dir($root . '/stari-web/Files') ? $root . '/stari-web' : $root);
     $file = $found ? realpath($legacyRoot . '/' . $found) : false;
     $base = realpath($legacyRoot . '/Files');
     if (!$found || !$file || !str_starts_with($file, $base . DIRECTORY_SEPARATOR) || !isset($types[$extension])) {

@@ -1,5 +1,7 @@
 Options -Indexes -MultiViews
 DirectoryIndex index.php
 RewriteEngine On
+RewriteCond %{HTTP_HOST} ^(?:en|de)\.ceps\.edu\.ba$ [NC]
+RewriteRule ^ index.php [L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^ index.php [QSA,L]

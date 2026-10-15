@@ -38,9 +38,10 @@ function schoolNavigation(): string {
     $menuIcons = ['O nama'=>'building-bank', 'Studiji'=>'school', 'Međunarodna saradnja'=>'world', 'Projekti'=>'briefcase', 'Galerija'=>'photo', 'Novosti'=>'news', 'Kontakt'=>'mail'];
     $normalize = static fn(string $url): string => strtolower(rtrim(preg_replace('/\.aspx$/i', '', parse_url($url, PHP_URL_PATH) ?: '/'), '/')) ?: '/';
     $current = $normalize(seoInternalPath(parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/'));
-    if (preg_match('~^/novosti/[0-9]+~', $current)) $current = '/novost';
+    if (preg_match('~^/(?:novosti|news|nachrichten)/[0-9]+~', $current)) $current = '/novost';
     $html = '<a href="' . schoolLink('/') . '"' . ($current === '/' ? ' aria-current="page"' : '') . '>' . icon('home') . 'Naslovnica</a>';
     foreach ($groups as $label => $links) {
+        if(isGerman()) $links=array_filter($links,fn($path)=>germanPageAvailable($path),ARRAY_FILTER_USE_KEY);
         $active = in_array($current, array_map($normalize, array_keys($links)), true);
         if ($label === 'Studiji' && in_array($current, ['/upisi','/placanje-u-ratama','/maturanti','/cisco'], true)) $active = true;
         if ($label === 'O nama' && in_array($current, ['/zgrada','/360-virtual-tour','/prijava-andragoska-obuka'], true)) $active = true;
@@ -49,6 +50,7 @@ function schoolNavigation(): string {
         $html .= '</div></details>';
     }
     foreach (['/Projekti'=>'Projekti', '/Galerija'=>'Galerija', '/Novosti'=>'Novosti', '/Kontakt'=>'Kontakt'] as $path => $label) {
+        if(isGerman() && !germanPageAvailable($path))continue;
         $exact = $current === $normalize($path);
         $active = $exact || ($path === '/Projekti' && str_starts_with($current, '/projekt/')) || ($path === '/Novosti' && $current === '/novost');
         $html .= '<a href="' . esc(schoolLink($path)) . '"' . ($active ? ' aria-current="'.($exact ? 'page' : 'true').'"' : '') . '>' . icon($menuIcons[$label]) . esc($label) . '</a>';
@@ -57,13 +59,24 @@ function schoolNavigation(): string {
     return $html;
 }
 
+function languageLinks(): string {
+    $html='';
+    foreach(['bs'=>['Bosanski','ba'],'en'=>['English','gb'],'de'=>['Deutsch','de']] as $language=>[$label,$flag]) {
+        if($language===siteLanguage())continue;
+        $html.='<a href="'.esc(languageSwitchUrl($language)).'" data-language-link lang="'.$language.'" aria-label="'.$label.'" title="'.$label.'"><img src="/assets/flag-'.$flag.'.svg" alt="" width="22" height="22"></a>';
+    }
+    return $html;
+}
 function schoolHeader(): string {
     $nav = schoolNavigation();
-    return '<header class="school-header">
-      <div class="utility"><div class="shell-width"><nav class="utility-links" aria-label="Brzi linkovi"><a class="utility-university" href="https://euniversity.ba">' . icon('school') . '<span>eUniversity</span></a><a class="utility-cisco" href="' . schoolLink('/Cisco') . '">' . icon('network') . '<span>Cisco akademija</span></a><a class="utility-webmail" href="https://outlook.com/ceps.edu.ba">' . icon('mail') . '<span>Webmail</span></a><a class="utility-summer" href="https://ceps-summerschool.com/">' . icon('sun') . '<span>Summer School</span></a><a href="https://ceps.edu.ba/Files/2026/04/vodic_2026.pdf?v=1">' . icon('book-2') . '<span>eVodič</span></a><a href="https://www.ceps.edu.ba/Files/2026/04/letak_2026_web.pdf">' . icon('file-text') . '<span>eBrošura</span></a><a href="' . schoolLink('/Upisi') . '">' . icon('pencil') . '<span>Upisi</span></a><a href="' . schoolLink('/360-virtual-tour') . '">' . icon('view-360') . '<span>360° Virtual tour</span></a></nav><details class="utility-mobile"><summary>' . icon('apps') . '<span>Brzi linkovi</span>' . icon('chevron-down') . '</summary><nav class="utility-links" aria-label="Brzi linkovi"><a class="utility-university" href="https://euniversity.ba">' . icon('school') . '<span>eUniversity</span></a><a class="utility-cisco" href="' . schoolLink('/Cisco') . '">' . icon('network') . '<span>Cisco akademija</span></a><a class="utility-webmail" href="https://outlook.com/ceps.edu.ba">' . icon('mail') . '<span>Webmail</span></a><a class="utility-summer" href="https://ceps-summerschool.com/">' . icon('sun') . '<span>Summer School</span></a><a href="https://ceps.edu.ba/Files/2026/04/vodic_2026.pdf?v=1">' . icon('book-2') . '<span>eVodič</span></a><a href="https://www.ceps.edu.ba/Files/2026/04/letak_2026_web.pdf">' . icon('file-text') . '<span>eBrošura</span></a><a href="' . schoolLink('/Upisi') . '">' . icon('pencil') . '<span>Upisi</span></a><a href="' . schoolLink('/360-virtual-tour') . '">' . icon('view-360') . '<span>360° Virtual tour</span></a></nav></details><nav class="utility-languages" aria-label="Jezici"><a href="http://en.ceps.edu.ba" lang="en" aria-label="English" title="English"><img src="/assets/flag-gb.svg" alt="" width="22" height="22"></a><a href="http://de.ceps.edu.ba" lang="de" aria-label="Deutsch" title="Deutsch"><img src="/assets/flag-de.svg" alt="" width="22" height="22"></a></nav></div></div>
+    $header = '<header class="school-header">
+      <div class="utility"><div class="shell-width"><nav class="utility-links" aria-label="Brzi linkovi"><a class="utility-university" href="https://euniversity.ba">' . icon('school') . '<span>eUniversity</span></a><a class="utility-cisco" href="' . schoolLink('/Cisco') . '">' . icon('network') . '<span>Cisco akademija</span></a><a class="utility-webmail" href="https://outlook.com/ceps.edu.ba">' . icon('mail') . '<span>Webmail</span></a><a class="utility-summer" href="https://ceps-summerschool.com/">' . icon('sun') . '<span>Summer School</span></a><a href="' . (isEnglish()?'https://ceps.edu.ba/Files/PDF/EN_2017.pdf':'https://ceps.edu.ba/Files/2026/04/vodic_2026.pdf?v=1') . '">' . icon('book-2') . '<span>eVodič</span></a><a href="https://www.ceps.edu.ba/Files/2026/04/letak_2026_web.pdf">' . icon('file-text') . '<span>eBrošura</span></a><a href="' . schoolLink('/Upisi') . '">' . icon('pencil') . '<span>Upisi</span></a><a href="' . schoolLink('/360-virtual-tour') . '">' . icon('view-360') . '<span>360° Virtual tour</span></a></nav><details class="utility-mobile"><summary>' . icon('apps') . '<span>Brzi linkovi</span>' . icon('chevron-down') . '</summary><nav class="utility-links" aria-label="Brzi linkovi"><a class="utility-university" href="https://euniversity.ba">' . icon('school') . '<span>eUniversity</span></a><a class="utility-cisco" href="' . schoolLink('/Cisco') . '">' . icon('network') . '<span>Cisco akademija</span></a><a class="utility-webmail" href="https://outlook.com/ceps.edu.ba">' . icon('mail') . '<span>Webmail</span></a><a class="utility-summer" href="https://ceps-summerschool.com/">' . icon('sun') . '<span>Summer School</span></a><a href="' . (isEnglish()?'https://ceps.edu.ba/Files/PDF/EN_2017.pdf':'https://ceps.edu.ba/Files/2026/04/vodic_2026.pdf?v=1') . '">' . icon('book-2') . '<span>eVodič</span></a><a href="https://www.ceps.edu.ba/Files/2026/04/letak_2026_web.pdf">' . icon('file-text') . '<span>eBrošura</span></a><a href="' . schoolLink('/Upisi') . '">' . icon('pencil') . '<span>Upisi</span></a><a href="' . schoolLink('/360-virtual-tour') . '">' . icon('view-360') . '<span>360° Virtual tour</span></a></nav></details><nav class="utility-languages" aria-label="Jezici"><a href="' . esc(languageSwitchUrl(!isEnglish())) . '" data-language-link lang="' . (isEnglish()?'bs':'en') . '" aria-label="' . (isEnglish()?'Bosanski':'English') . '" title="' . (isEnglish()?'Bosanski':'English') . '"><img src="/assets/flag-' . (isEnglish()?'ba':'gb') . '.svg" alt="" width="22" height="22"></a><a href="http://de.ceps.edu.ba" lang="de" aria-label="Deutsch" title="Deutsch"><img src="/assets/flag-de.svg" alt="" width="22" height="22"></a></nav></div></div>
       <div class="identity shell-width"><a class="school-logo" href="' . schoolLink('/') . '"><img src="https://ceps.edu.ba/Files/2026/logo_2026_17.png" width="396" height="100" alt="' . esc(SCHOOL_NAME) . ' – Za one koji žele više!"></a><div class="header-name">' . esc(SCHOOL_NAME) . '</div><div class="identity-actions"><a class="enrol" href="' . schoolLink('/Upisi') . '"><span class="button-label">Upisi na CEPS</span> ' . icon('arrow-up-right') . '</a></div></div>
       <div class="navigation-wrap"><nav class="desktop-navigation shell-width" aria-label="Glavna navigacija">' . $nav . '</nav><details class="mobile-navigation"><summary>' . icon('menu-2') . ' Meni ' . icon('chevron-down') . '</summary><nav aria-label="Mobilna navigacija">' . $nav . '</nav></details></div>
     </header>';
+    $header=preg_replace('~<nav class="utility-languages"[^>]*>.*?</nav>~s','<nav class="utility-languages" aria-label="Jezici">'.languageLinks().'</nav>',$header);
+    if(isGerman())$header=str_replace(['https://ceps.edu.ba/Files/2026/04/vodic_2026.pdf?v=1','https://www.ceps.edu.ba/Files/2026/04/letak_2026_web.pdf'],['https://ceps.edu.ba/Files/PDF/CEPS_vodic_de.pdf','https://ceps.edu.ba/Files/PDF/Letak_de.pdf'],$header);
+    return $header;
 }
 
 function contactWidget(): string {
@@ -71,12 +84,11 @@ function contactWidget(): string {
     foreach (['+387 30 875 208', '+387 30 875 221', '+387 63 653 111', '+387 63 473 333', '+387 62 408 322'] as $index => $phone) {
         $html .= '<li><a href="tel:' . str_replace(' ', '', $phone) . '">' . icon($index < 2 ? 'phone' : 'device-mobile') . '<span>' . $phone . '</span>' . icon('arrow-up-right') . '</a></li>';
     }
-    return $html . '</ul></div><button class="contact-launcher" type="button" aria-label="Otvori telefonske brojeve" aria-controls="contact-panel" aria-expanded="false">' . icon('phone') . '<span>Pozovite nas</span></button></aside>';
+    return $html . '</ul></div><button class="contact-launcher" type="button" aria-label="Otvori telefonske brojeve" aria-controls="contact-panel" aria-expanded="false">' . icon('phone') . '</button></aside>';
 }
 
 function schoolFooter(): string {
     return '<footer class="school-footer">
-      <div class="footer-intro shell-width"><div><p class="footer-label">VAŠ SLJEDEĆI KORAK</p><h2 class="ceps-slogan">Za one koji žele <span>više.</span></h2><p>Upoznajte CEPS i pronađite svoj studijski program.</p></div><div class="footer-intro-actions"><a class="footer-accreditation" href="' . schoolLink('/Akreditacija') . '">' . icon('certificate') . '<span><strong>Akreditirani studiji</strong><small>Diplome priznate u EU</small></span>' . icon('arrow-up-right') . '</a></div></div>
       <div class="footer-grid shell-width">
         <div class="footer-school"><a class="footer-logo" href="' . schoolLink('/') . '"><img src="https://ceps.edu.ba/Files/2026/logo_2026_17.png" width="396" height="100" alt="' . esc(SCHOOL_NAME) . ' – Za one koji žele više!" loading="lazy"></a><p>' . esc(SCHOOL_NAME) . '</p><p>Ul. Josipa bana Jelačića bb<br>71250 Kiseljak, Bosna i Hercegovina</p><a class="footer-contact" href="mailto:info@ceps.edu.ba">info@ceps.edu.ba</a><br><a href="tel:+38730875208">+387 30 875 208</a></div>
         <div><h3>Studiranje na CEPS-u</h3><a href="' . schoolLink('/Studiji') . '">Studijski programi</a><a href="' . schoolLink('/Upisi') . '">Informacije o upisu</a><a href="' . schoolLink('/Placanje-u-ratama') . '">Plaćanje u ratama</a><a href="https://euniversity.ba">eUniversity</a><a href="https://www.ceps.edu.ba/Files/2026/04/letak_2026_web.pdf">Preuzmi eBrošuru</a><a href="' . schoolLink('/360-virtual-tour') . '">Virtualna šetnja</a></div>

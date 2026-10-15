@@ -1,0 +1,278 @@
+{
+    "programmes": [
+        {
+            "title": "Cisco Networking Academy",
+            "paragraphs": [
+                "Die Cisco Networking Academy vermittelt Kenntnisse für die Planung, den Aufbau und die Verwaltung von Computernetzwerken."
+            ],
+            "url": "Cisco.aspx",
+            "video": "https://dl.dropboxusercontent.com/s/ppquor18fruh4z4/cisco.mp4"
+        },
+        {
+            "title": "Zdravstvene studije",
+            "paragraphs": [
+                "Savladavanjem nastavnog plana i programa zdravstvenih studija studenti stiču ne samo odgovarajuća znanja vezana za teorijsko razumijevanje predmeta, već takođe i specifične vještine odnosno sposobnosti i kompetencije vezane za praktičnu i operativnu primjenu tih znanja, te vještine neophodne za sticanje odgovarajućih profesionalnih kvalifikacija studenata."
+            ],
+            "url": "StudijZdravstvo.aspx",
+            "video": "https://ceps.edu.ba/Files/video/zdravstvo.mp4"
+        },
+        {
+            "title": "CEPS-Campus",
+            "paragraphs": [
+                "Besuchen Sie die Fachhochschule CEPS in Kiseljak und lernen Sie die Räumlichkeiten kennen."
+            ],
+            "url": "Zgrada.aspx",
+            "video": "https://ceps.edu.ba/Files/video/zgrada_slider.mp4"
+        },
+        {
+            "title": "Studium in Englisch",
+            "paragraphs": [
+                "Gemäß dem Beschluss des Ministeriums für Bildung, Wissenschaft, Kultur und Sport des Kantons Zentralbosnien Nr.: 03-38-20/16 vom 04.Juli 2016 wird in das Hochschulregister des Ministeriums der Studiengang Betriebswirtschaftslehre, Fachrichtung \"Management\", der in englischer Sprache durchgeführt wird, eingetragen."
+            ],
+            "url": "StudijEng.aspx",
+            "video": "https://ceps.edu.ba/Files/video/engleski.mp4"
+        },
+        {
+            "title": "Informationstechnologie",
+            "paragraphs": [
+                "Das Bachelorstudium Informationstechnologie hat als das grundlegende Ziel die hochwertige Ausbildung der Studierenden, die in der Lage sein werden, erfolgreich in den privaten und öffentlichen Sektor an der Planung, Projektierung, Bau und Wartung von Informationssystemen zu arbeiten."
+            ],
+            "url": "StudijIT.aspx",
+            "video": "https://ceps.edu.ba/Files/video/it.mp4"
+        },
+        {
+            "title": "Betriebswirtschaft",
+            "paragraphs": [
+                "Das Profil der Mitarbeiter, die in dem Studiengang \"Betriebswirtschaft\" ausgebildet werden, soll von dem Profil der klassischen Ökonomen unterschiedlich sein."
+            ],
+            "url": "StudijPE.aspx",
+            "video": "https://ceps.edu.ba/Files/video/ekonomija.mp4"
+        },
+        {
+            "title": "Energiewirtschaft",
+            "paragraphs": [
+                "Energiewirtschaft ist eine wirtschaftliche Disziplin die sich mit der Erzeugung, Lagerung, Lieferung und Nutzung von Energie in den Gesellschaften beschäftigt. Sie ist wichtig für die Entwicklung der gesamten Gesellschaft. Moderne wirtschaftliche Entwicklung eines Landes hängt ganz von der Verfügbarkeit von Energieressourcen, deren Nutzung und Anwendung in Produktion und Verbrauch ab."
+            ],
+            "url": "StudijEnergetika.aspx",
+            "video": "https://ceps.edu.ba/Files/video/Energetika.mp4"
+        },
+        {
+            "title": "Verkehrswesen",
+            "paragraphs": [
+                "Der Bedarf am ausgebildeten Verkehrspersonal ergibt sich in erster Linie aus der strategischen Auswahl von Bosnien und Herzegowina, sein Verkehrsentwicklung auf hohem internationalem Niveau zu gründen. Dies ist nötig für die Aufnahme von Bosnien und Herzegowina in die internationalen Integrationen als auch für die Nutzung der komparativen Vorteile der geographischen Lage. In dieser Hinsicht wurden in den letzten Jahren mehrere Gesetze und Verordnungen beschlossen, und eine Reihe von bilateralen und multilateralen Abkommen, die sich mit Fragen des Verkehrs befassen, wurde unterzeichnet."
+            ],
+            "url": "StudijPromet.aspx",
+            "video": "https://ceps.edu.ba/Files/video/promet.mp4"
+        },
+        {
+            "title": "Sicherheitsstudien",
+            "paragraphs": [
+                "Die wissenschaftlichen Ziele des Bachelorstudiums Sicherheit sind, den Studenten auf neue theoretische und praktische Leistungen zu verweisen, zusammen mit Leistungen aus anderen Wissenschaften und Disziplinen, auf denen der Lehrplan beruht und eine theoretische und methodische Entsprechung vorstellt, sowie einen relevanten Beitrag zum Verständnis der Ätiologie und der Definition der Kategorie und Probleme, die den wissenschaftlichen Rahmen dieses Studiengangs beeinflussen und erfüllen."
+            ],
+            "url": "StudijSigurnost.aspx",
+            "video": "https://ceps.edu.ba/Files/video/sigurnost.mp4"
+        },
+        {
+            "title": "Arbeitsschutz und Brandschutz",
+            "paragraphs": [
+                "Arbeitsschutz umfasst eine Reihe von technischen, medizinischen, juristischen, psychologischen, pädagogischen und anderen Tätigkeiten, deren Ziel ist, solche Gefahren zu erkennen und zu beseitigen, die das Leben und die Gesundheit der Menschen bei der Arbeit gefährden, sowie deren Risiken zu reduzieren."
+            ],
+            "url": "StudijZastita.aspx",
+            "video": "https://ceps.edu.ba/Files/video/zastita.mp4"
+        }
+    ],
+    "welcome": [
+        "Die Fachhochschule \"CEPS - Zentrum für Betriebswirtschaftslehre\" ist eine moderne Institution, die ihr Programm permanent mit den Arbeitsmarktanforderungen und Prozessen in der nationalen, europäischen und globalen Wirtschaft harmoniert. Unter Berücksichtigung der Bedürfnisse und Trends macht die FH CEPS ihre Studierenden zu den tadellos ausgebildeten Experten, die den aktuellen und zukünftigen Herausforderungen gewachsen sind.",
+        "Ausbildung ist die beste und oft die einzige Möglichkeit, die den Erfolg und die Zufriedenheit im Geschäftsleben gewährleisten kann, und das Wissen, das wir erwerben, macht uns reicher und ist zugleich unsere beste Investition. Durch das Studium und die kontinuierliche Verbesserung entwickeln wir uns, wir erreichen die Ziele, die wir uns gesetzt haben, und setzen uns die neuen.",
+        "Aufgrund der vorgenannten sind unsere Erwartungen hoch gesetzt. Mit Würde und Gerechtigkeit verteidigen wir das Wissen und die herausragenden Leistungen unserer Studenten."
+    ],
+    "features": [
+        {
+            "title": "Erwerben Sie die Kenntnisse, die Sie erfolgreich anwenden werden",
+            "paragraphs": [
+                "Bei uns haben Sie die Möglichkeit, von Top-Experten aus dem Bereich der Wirtschaft, Verkehrs, Energie, Arbeitsschutzes, Brandschutzes, Sicherheit und Kriminologie, und Informationstechnologie zu lernen. Unsere Lehrer, Mitarbeiter und Experten teilen ihr Wissen mit Ihnen täglich."
+            ]
+        },
+        {
+            "title": "Technische Ausstattung nach dem Vorbild der fünf führenden Universitäten in der Welt",
+            "paragraphs": [
+                "An der Fachhochschule CEPS werden Sie im traditionellen Unterricht ausgebildet - direkter Kontakt mit dem Lehrer und anderen Studierenden \"Auge in Auge\" (\"face to face\"). Einsatz von Overhead-Projektoren und modernen Lehr- und Präsentationstechnologie. Die Klassenräume sind gestaltet, um eine Atmosphäre für das leichtere Lernen zu schaffen. Wir kümmern uns um die Details."
+            ]
+        },
+        {
+            "title": "Sie erhalten Zugang zu den Ressourcen für den beruflichen Aufstieg",
+            "paragraphs": [
+                "Wir möchten nicht, dass Sie nur die Fähigkeiten erwerben. Unser Ziel ist, dass Sie Ihre neuen Kenntnisse im Leben und bei der Arbeit verwenden. Dies ist der einzige Weg, um ihre Verwendung zu genießen.",
+                "Um Ihnen dabei zu helfen, wir an der FH CEPS bieten Ihnen den Zugang zu unseren professionellen Ressourcen.",
+                "Es würde uns Leid tun, wenn jemand mit weniger Wissen und Fähigkeiten, mehr erfolgreich als Sie werden würde, nur weil er lauter ist."
+            ]
+        },
+        {
+            "title": "Wir glauben, dass wir uns die richtigen Fragen stellen",
+            "paragraphs": [
+                "Wir haben eine Frage, die wir bei der Auswahl der Lehrer und Gestaltung der Lehrpläne stellen. Diese Frage lautet: \"Was müssen wir tun, damit unsere Studierenden den größtmöglichen professionellen Nutzen mit der Ausbildung an der FH CEPS gewinnen?\"",
+                "Wir haben bemerkt, dass diese einfache Frage viele Zweifel, Dilemmas beseitigt. Sie beeinflusst auch die Vorlesungen und die Arbeit mit Studenten. Daher verwenden unsere Lehrer nicht nur ihre Erfahrung in gegebenen Bereichen sondern auch moderne Unterrichtsmethoden. Wir sind uns bewusst, dass das Wissen schwierig zu erwerben ist, wenn das Lernen nicht lustig und spannend ist.",
+                "All dies wäre nicht möglich, wenn wir uns nicht regelmäßig fragen würden: “Was müssen wir tun, damit unsere Studierenden den größtmöglichen professionellen Nutzen mit der Ausbildung an der FH CEPS gewinnen?\""
+            ]
+        },
+        {
+            "title": "Die Lehrer, Fachleute und Berater mit realen Leistungen in ihren Bereichen, sind bereit, ihre Kenntnisse mit Ihnen zu teilen",
+            "paragraphs": [
+                "Unser Lehrpersonal besteht aus Doktoren der Philosophie, Magistern, Sachverständigen. Das Ergebnis ist eine bewährte und profitable Erfahrung die wir mit Ihnen teilen. Wenn man die Anfänge der Karriere von vielen erfolgreichen Experten betrachtet, so sieht man, dass die meisten von ihnen oft das Privileg gehabt haben, mit den erfolgreichen Menschen aus demselben Bereich zu arbeiten. Nutzen Sie die Gelegenheit, von solchen Menschen vieles zu lernen."
+            ]
+        },
+        {
+            "title": "Berufspraktikum",
+            "paragraphs": [
+                "Heutzutage erwartet jeder Arbeitgeber, außer Fachkompetenz, auch praktische Erfahrungen. Auf anderer Seite stellt sich heraus, dass das für die meisten Leute das größte Problem ist.",
+                "Viele Leute beenden ihre Ausbildung ohne praktische Arbeit. Wir haben darüber nachgedacht. Wir möchten, dass sich unsere Absolventen gleich nach dem Erwerb des Diploms ohne Probleme einen Job finden, eine erfolgreiche Karriere machen und gut verdienen. Deswegen setzen wir den Schwerpunkt auf Arbeit in kleinen Gruppen, praktische Aufgaben, Studienbesuche bei den führenden öffentlichen und privaten Einrichtungen usw."
+            ]
+        },
+        {
+            "title": "Wie soll man ein Diplom für gut bezahlte Arbeitsplätze erwerben?",
+            "paragraphs": [
+                "Jede der Berufsbezeichnungen, die Sie an der FH CEPS erwerben, ist weltweit anerkannt, in Kroatien, Slowenien und Montenegro im Besonderen.",
+                "Akademische Grade, die Sie hier erwerben, haben das gleiche Gewicht, als ob Sie die auf einer der renommierten Universitäten in Europa oder Amerika erworben hätten. Aus unserer Erfahrung, mit dem Abschluss von der FH CEPS gewinnen Sie eine anerkannte Autorität im Land. Neben realen Fähigkeiten, die Sie erwerben, ermöglicht Ihnen Ihre neue Berufsbezeichnung ausgezeichnete und gut bezahlte Arbeitsplätze zu finden. Dies liegt daran, dass die FH CEPS eine enge Zusammenarbeit mit führenden akademischen Institutionen und renommierten Unternehmen pflegt.",
+                "Zwei der vielen Gründe, warum wir dieses Privileg haben, sind die Qualität der Projekte, die unsere Teams durchführen und die Methodik (“Architektur des Wissens\"), die wir im Unterricht anwenden."
+            ]
+        },
+        {
+            "title": "Was bedeutet ein CEPS-Diplom für Sie?",
+            "paragraphs": [
+                "Der Erwerb des offiziellen Zertifikats beweist, dass Sie echte, profitable Fähigkeiten und Kenntnisse besitzen. Im Vergleich zu den Kollegen, die keinen solchen Beweis ihrer Kompetenz haben, ist der Vorteil bei der Beschäftigung echt groß. Dabei erwerben Sie die realen Fähigkeiten. Es handelt sich hier nicht um das Papier, sondern um die Tatsache, dass der Erwerb vom akademischen Grad impliziert, dass Sie echte und profitable Fähigkeiten besitzen."
+            ]
+        },
+        {
+            "title": "Das Diplom der FH CEPS ist sicherlich ein Nachweis Ihres Wissens",
+            "paragraphs": [
+                "Das Diplom der FH CEPS ist die offizielle Bestätigung Ihres Wissens und ein international anerkanntes Dokument mit dem Sie Ihre Position auf dem Arbeitsmarkt verbessern, die Chancen für den beruflichen Aufstieg erhöhen und eine Grundlage für die Weiterbildung schaffen."
+            ]
+        },
+        {
+            "title": "Diploma Supplement - alle Ihre Kompetenzen an einem Ort",
+            "paragraphs": [
+                "Nach dem erfolgreichen Abschluss der Ausbildung an der FH CEPS erwerben Sie ein Diploma Supplement mit der Auflistung aller besuchter (und bestandener) Veranstaltungen.",
+                "Dieses wichtige Dokument stellt einen Nachweis Ihrer Kenntnisse und Fähigkeiten vor, die Sie während der Ausbildung erworben haben, und ist eine hervorragende Qualifikation für potenzielle Arbeitgeber, da sie ihnen zeigt, wofür Sie qualifiziert sind."
+            ]
+        }
+    ],
+    "documents": [
+        {
+            "title": "Rješenje o akreditaciji",
+            "url": "Files/PDF/Rjesenje_o_akreditaciji_2021.pdf?v=2"
+        },
+        {
+            "title": "Nostrifikacija diplome u Sloveniji (IT) - 2023",
+            "url": "Files/PDF/Nostrifikacija/nostrifikacija_slovenija_it_2023.pdf"
+        },
+        {
+            "title": "Nostrifikacija diplome u Njemačkoj (Cestovni promet) - 2023",
+            "url": "Files/PDF/Nostrifikacija/nostrifikacija_njemacka_promet_2023.pdf"
+        },
+        {
+            "title": "Nostrifikacija diplome u Njemačkoj (Energetika) - 2022",
+            "url": "Files/PDF/Nostrifikacija/Nostrifikacija_diplome_njemacka_energetika_2022.pdf"
+        },
+        {
+            "title": "Nostrifikacija diplome u Njemačkoj - 2022",
+            "url": "Files/PDF/Nostrifikacija/Nostrifikacija_Njemacka_2022a.pdf"
+        },
+        {
+            "title": "Nostrifikacija diplome u Njemačkoj - 2022",
+            "url": "Files/PDF/Nostrifikacija/Nostrifikacija_Njemacka_2022.pdf"
+        },
+        {
+            "title": "Nostrifikacija diplome u Hrvatskoj - 2022",
+            "url": "Files/PDF/Nostrifikacija/Nostrifikacija_Hrvatska_2022.pdf"
+        },
+        {
+            "title": "Nostrifikacija diplome u Hrvatskoj - 2021",
+            "url": "Files/PDF/Nostrifikacija/Nostrifikacija-Hrvatska-2021.pdf"
+        },
+        {
+            "title": "Nostrifikacija diplome u Srbiji - 2021",
+            "url": "Files/PDF/Nostrifikacija/Nostrifikacija-Srbija-2021.pdf"
+        },
+        {
+            "title": "Nostrifikacija diplome u Njemačkoj - 2021",
+            "url": "Files/PDF/Nostrifikacija_diplome_u_Njemackoj_2021.pdf"
+        },
+        {
+            "title": "Nostrifikacija diplome u Hrvatskoj - 2020",
+            "url": "https://www.ceps.edu.ba/Files/PDF/Nostrifikacija/Nostrifikacija_HR_2020.pdf"
+        },
+        {
+            "title": "Nostrifikacija diplome u Njemačkoj - 2020",
+            "url": "https://www.ceps.edu.ba/Files/PDF/Nostrifikacija/Nostrifikacija_diplome_njemacka_2020.pdf"
+        },
+        {
+            "title": "Nostrifikacija diplome u Srbiji - 2019",
+            "url": "https://www.ceps.edu.ba/Files/PDF/Nostrifikacija/Nostrifikacija_diplome_srbija_2020.pdf"
+        },
+        {
+            "title": "Nostrifikacija diplome u Crnoj Gori - 2015",
+            "url": "https://www.ceps.edu.ba/Files/PDF/Nostrifikacija/Nostrifikacija_diplome_Crna%20Gora_2015.pdf"
+        },
+        {
+            "title": "Nostrifikacija diplome u Hrvatskoj - 2013",
+            "url": "https://www.ceps.edu.ba/Files/PDF/Nostrifikacija/Nostrifikacija_diplome_HRV_2014.pdf"
+        },
+        {
+            "title": "Nostrifikacija diplome u Hrvatskoj - 2015",
+            "url": "https://www.ceps.edu.ba/Files/PDF/Nostrifikacija/Nostrifikacija_diplome_HRV_2015.pdf"
+        },
+        {
+            "title": "Nostrifikacija diplome u Hrvatskoj - 2018",
+            "url": "https://www.ceps.edu.ba/Files/PDF/Nostrifikacija/Nostrifikacija_diplome_HRV_2018.pdf"
+        },
+        {
+            "title": "Nostrifikacija diplome u Hrvatskoj - 2019",
+            "url": "https://www.ceps.edu.ba/Files/PDF/Nostrifikacija/Nostrifikacija_diplome_HRV_2019.pdf"
+        },
+        {
+            "title": "Nostrifikacija diplome u Njemačkoj - 2016",
+            "url": "https://www.ceps.edu.ba/Files/PDF/Nostrifikacija/Nostrifikacija_diplome_Njemacka_2016.pdf"
+        },
+        {
+            "title": "Nostrifikacija diplome u Sloveniji - 2014",
+            "url": "https://www.ceps.edu.ba/Files/PDF/Nostrifikacija/Nostrifikacija_diplome_Slovenija_2014.pdf"
+        },
+        {
+            "title": "Škoda Erasmus+ praksa",
+            "url": "Files/Erasmus/Skoda_Erasmus_1.pdf"
+        },
+        {
+            "title": "Škoda Erasmus+ praksa",
+            "url": "Files/Erasmus/Skoda_Erasmus_2.pdf"
+        },
+        {
+            "title": "Certifikat - Anida Kamenčić",
+            "url": "Files/Erasmus/Certifikat%20-%20Anida%20Kamencic.pdf"
+        },
+        {
+            "title": "Certifikat - Sakib Turković",
+            "url": "Files/Erasmus/Certifikat%20-%20Sakib%20Turkovic.pdf"
+        },
+        {
+            "title": "Erasmus povelja u visokom obrazovanju 2021-2027",
+            "url": "https://www.ceps.edu.ba/Files/PDF/ceps_povelja_2023.pdf?v=1"
+        },
+        {
+            "title": "Natječaj/Konkurs za upis studenata u akademsku 2024/2025. godinu – drugi upisni rok",
+            "url": "https://www.ceps.edu.ba/Files/PDF/Natjecaj_studenti_2024_5a.pdf"
+        },
+        {
+            "title": "Certifikat - Sistem menadžmenta ISO 45001:2018",
+            "url": "Files/PDF/21122022/ceps_c_bos_45001_22e.pdf"
+        },
+        {
+            "title": "Certifikat - Sistem menadžmenta EN ISO 9001:2015",
+            "url": "Files/PDF/21122022/ceps_c_bos_qm_22.pdf"
+        }
+    ],
+    "videos": [
+        "https://www.youtube.com/embed/AM6UpDzgen8",
+        "https://www.youtube.com/embed/y923Acd7-88"
+    ],
+    "virtual_tour": "https://www.google.com/maps/embed?pb=!4v1651766483535!6m8!1m7!1sCAoSLEFGMVFpcFBFNllOaHVQWjkzZ1U5MUJ4SWxfQTJiS0VaY0NqeDcwQmZWZkIt!2m2!1d43.94143869857759!2d18.07901229840135!3f101.75688730141343!4f-12.641715164374844!5f0.4000000000000002"
+}

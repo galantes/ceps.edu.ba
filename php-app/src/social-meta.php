@@ -8,7 +8,7 @@ function socialMeta(string $title, string $description, string $url, string $ori
     if (!filter_var($image, FILTER_VALIDATE_URL) || !in_array(strtolower(parse_url($image, PHP_URL_SCHEME) ?: ''), ['http', 'https'], true)) $image = $fallback;
     $type = ($options['type'] ?? '') === 'article' ? 'article' : 'website';
     $alt = $image === $fallback ? 'Visoka škola CEPS — Centar za poslovne studije Kiseljak' : ($options['image_alt'] ?? $title);
-    $properties = ['og:title'=>$title, 'og:description'=>$description, 'og:type'=>$type, 'og:url'=>$url, 'og:site_name'=>SCHOOL_NAME, 'og:locale'=>'bs_BA', 'og:image'=>$image, 'og:image:alt'=>$alt];
+    $properties = ['og:title'=>$title, 'og:description'=>$description, 'og:type'=>$type, 'og:url'=>$url, 'og:site_name'=>SCHOOL_NAME, 'og:locale'=>isGerman()?'de_DE':(isEnglish()?'en_GB':'bs_BA'), 'og:image'=>$image, 'og:image:alt'=>$alt];
     if ($image === $fallback) {
         $properties['og:image:width'] = '968';
         $properties['og:image:height'] = '504';

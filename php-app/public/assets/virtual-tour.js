@@ -2,7 +2,7 @@ document.querySelectorAll('.virtual-tour').forEach(tour => {
   const button = tour.querySelector('.tour-fullscreen');
   function update() {
     const expanded = document.fullscreenElement === tour || tour.classList.contains('tour-expanded');
-    button.querySelector('span').textContent = expanded ? 'Zatvori cijeli ekran' : 'Cijeli ekran';
+    button.querySelector('span').textContent = expanded ? (document.documentElement.lang === 'en' ? 'Exit full screen' : 'Zatvori cijeli ekran') : (document.documentElement.lang === 'en' ? 'Full screen' : 'Cijeli ekran');
     button.querySelector('i').className = `ti ti-${expanded ? 'minimize' : 'maximize'}`;
     button.setAttribute('aria-pressed', String(expanded));
   }

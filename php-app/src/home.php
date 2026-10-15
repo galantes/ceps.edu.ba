@@ -14,6 +14,7 @@ function studyIcon(string $url): string {
 
 function homePage(): string {
     $copy = json_decode(file_get_contents(dirname(__DIR__) . '/content/home.json'), true, 512, JSON_THROW_ON_ERROR);
+    if (siteLanguage() !== 'bs') $copy = localizedCopy('home');
     $programmes = [];
     foreach ($copy['programmes'] as $programme) $programmes[$programme['url']] = $programme;
     $studies = [
@@ -27,22 +28,33 @@ function homePage(): string {
         ['StudijZastita.aspx','Zaštita na radu i zaštita od požara',null,'08'],
         ['StudijEng.aspx','Studij na engleskom jeziku',null,'09'],
     ];
+    $studyImages = json_decode(file_get_contents(dirname(__DIR__) . '/content/hero-images.json'), true, 512, JSON_THROW_ON_ERROR);
+    $studyImages['pravne-nauke.aspx'] = '/assets/hero/law.webp';
     $studies = array_map(fn($i) => $studies[$i], [3,4,5,6,2,0,1,7,8]);
+    if(isGerman()) $studies=array_values(array_filter($studies,fn($study)=>germanPageAvailable('/'.$study[0])));
     $pdo = database();
     $withoutProjects = implode(' AND ', array_map(static fn($i) => 'COALESCE(projekt_'.$i.',0)=0', range(1,15)));
-    $news = $pdo->query('SELECT ID,Naslov,Datum,Tekst,Istaknuto FROM Novosti WHERE Hr=1 AND '.$withoutProjects.' ORDER BY Datum DESC,ID DESC LIMIT 4')->fetchAll();
+    $news = $pdo->query('SELECT ID,Naslov,Datum,Tekst,Istaknuto FROM Novosti WHERE '.newsLanguageColumn().'=1 AND '.$withoutProjects.' ORDER BY Datum DESC,ID DESC LIMIT 4')->fetchAll();
     require_once __DIR__.'/home-settings.php';
-    $settings=homeSettings($pdo);$popup=$settings['popup'];
-    $slides=array_values(array_filter($settings['slides'],fn($s)=>$s['enabled']));
+    $settings=homeSettings($pdo);
+    if (siteLanguage() !== 'bs') {
+        foreach ($settings['slides'] as &$slide) {
+            $key=basename(parse_url($slide['url'], PHP_URL_PATH) ?: '');
+            if(isset($programmes[$key])) { $slide['title']=$programmes[$key]['title']; $slide['description']=implode(' ', $programmes[$key]['paragraphs']); }
+        } unset($slide);
+        $settings['popup']['enabled']=false;
+    }
+    $popup=$settings['popup'];
+    $slides=array_values(array_filter($settings['slides'],fn($s)=>$s['enabled'] && (!isGerman() || germanPageAvailable(parse_url($s['url'],PHP_URL_PATH) ?: '/'))));
     usort($slides,fn($a,$b)=>$a['order']<=>$b['order']);
     ob_start(); ?>
     <?php if($popup['enabled']): ?><dialog class="home-announcement" aria-label="Obavijest o upisima"><button class="announcement-close" type="button" aria-label="Zatvori obavijest" autofocus><?= icon('x') ?></button><a href="<?= esc($popup['url']) ?>"><img src="<?= esc($popup['image']) ?>" alt="<?= esc($popup['alt']) ?>" fetchpriority="high"></a></dialog><?php endif ?>
 
     <div class="home">
-      <section class="home-hero home-width" aria-label="Upoznajte CEPS" aria-roledescription="vrtuljak" data-slider>
+      <section class="home-hero" aria-label="Upoznajte CEPS" aria-roledescription="vrtuljak" data-slider>
         <?php foreach ($slides as $i => $slide): ?>
         <div class="hero-slide" role="group" aria-roledescription="slajd" aria-label="<?= $i + 1 ?> od <?= count($slides) ?>" <?= $i ? 'hidden' : '' ?>>
-          <div class="hero-film"><img src="<?= esc($slide['image']) ?>" alt="" <?= $i ? 'loading="lazy"' : 'fetchpriority="high"' ?>><?php if (!empty($slide['video'])): ?><video disablepictureinpicture disableremoteplayback muted loop playsinline preload="none" data-src="<?= esc($slide['video']) ?>" aria-hidden="true" tabindex="-1"></video><?php endif; ?></div>
+          <div class="hero-film"><img src="<?= esc($slide['image']) ?>" alt="" <?= $i ? 'loading="lazy"' : 'fetchpriority="high"' ?>></div>
           <div class="hero-copy">
             <?php if ($i === 0): ?><h1 id="home-title"><?= esc($slide['title']) ?></h1><?php else: ?><h2><?= esc($slide['title']) ?></h2><?php endif; ?>
             <p class="hero-description"><?= esc($slide['description']) ?></p>
@@ -56,10 +68,10 @@ function homePage(): string {
           <button type="button" data-next aria-label="Sljedeći slajd"><?= icon('chevron-right') ?></button>
         </div>
       </section>
-      <div class="home-width quick-dock"><a href="/Novost?id=1473"><span class="dock-icon"><?= icon('arrow-up-right') ?></span><span><strong>Upisi na CEPS</strong>Informacije za buduće studente</span><b><?= icon('arrow-right') ?></b></a><a href="<?= esc(schoolLink('/Placanje-u-ratama')) ?>"><span class="dock-icon"><?= icon('credit-card') ?></span><span><strong>Plaćanje u ratama</strong>Planirajte svoje školovanje</span><b><?= icon('arrow-right') ?></b></a><a href="<?= esc(schoolLink('/360-virtual-tour')) ?>"><span class="dock-icon"><?= icon('view-360') ?></span><span><strong>Upoznajte CEPS</strong>360° virtualna šetnja</span><b><?= icon('arrow-right') ?></b></a></div>
+      <div class="home-width quick-dock"><a href="<?= siteLanguage() !== 'bs'?seoUrl('/Upisi'):'/Novost?id=1473' ?>"><span class="dock-icon"><?= icon('arrow-up-right') ?></span><span><strong>Upisi na CEPS</strong>Informacije za buduće studente</span><b><?= icon('arrow-right') ?></b></a><a href="<?= esc(schoolLink('/Placanje-u-ratama')) ?>"><span class="dock-icon"><?= icon('credit-card') ?></span><span><strong>Plaćanje u ratama</strong>Planirajte svoje školovanje</span><b><?= icon('arrow-right') ?></b></a><a href="<?= esc(schoolLink('/360-virtual-tour')) ?>"><span class="dock-icon"><?= icon('view-360') ?></span><span><strong>Upoznajte CEPS</strong>360° virtualna šetnja</span><b><?= icon('arrow-right') ?></b></a></div>
 
       <div class="home-width study-news-layout"><section id="studiji" class="home-section"><div class="section-heading"><div><p class="home-kicker">PRONAĐITE SVOJ SMJER</p><h2>Odaberi studij</h2></div><a class="text-link" href="<?= esc(schoolLink('/Studiji')) ?>">Svi studijski programi <?= icon('arrow-up-right') ?></a></div>
-        <div class="study-grid">
+        <div class="study-grid" id="study-carousel" data-study-carousel aria-label="Studijski programi">
           <?php $studyTracks = [
             'pravne-nauke.aspx' => ['Opće pravo'],
             'StudijPromet.aspx' => ['Cestovni promet', 'Željeznički promet'],
@@ -70,16 +82,20 @@ function homePage(): string {
             'StudijZdravstvo.aspx' => ['Sestrinstvo', 'Sanitarni inženjering', 'Fizioterapija', 'Gerijatrija', 'Nutricionizam i dijetetika'],
             'StudijZastita.aspx' => ['Zaštita na radu', 'Zaštita od požara', 'Upravljanje rizicima od katastrofa'],
             'StudijEng.aspx' => ['Management'],
-          ]; foreach ($studies as [$url,$title,$image,$number]): ?>
-          <a class="study-card study-colour-card" href="<?= esc(schoolLink('/' . $url)) ?>">
+          ]; foreach ($studies as $index => [$url,$title,$image,$number]): ?>
+          <a class="study-card study-colour-card" id="study-programme-<?= $index + 1 ?>" href="<?= esc(schoolLink('/' . $url)) ?>">
+            <img class="study-card-background" src="<?= esc($studyImages[$url]) ?>" alt="" loading="lazy" decoding="async">
             <div class="study-card-copy"><span class="study-icon"><?= studyIcon($url) ?></span><h3><?= esc($url === 'StudijEng.aspx' ? 'Business economics' : $title) ?></h3>
               <ul class="study-tracks"><?php foreach ($studyTracks[$url] as $track): ?><li><?= esc($track) ?></li><?php endforeach; ?></ul>
               <?php if ($url === 'StudijEng.aspx'): ?><span class="study-language">Studij na engleskom jeziku</span><?php endif; ?>
               <span class="study-go" aria-hidden="true"><?= icon('arrow-up-right') ?></span>
             </div>
           </a><?php endforeach; ?>
-          <a class="study-card study-all-card" href="/Studiji"><span class="study-all-icon"><?= icon('school') ?></span><strong>Svi studijski programi</strong><span>Pronađite svoj smjer <?= icon('arrow-up-right') ?></span></a>
         </div>
+        <nav class="study-index" aria-label="Pregled svih studija">
+          <?php foreach ($studies as $index => [$url,$title]): ?><a href="#study-programme-<?= $index + 1 ?>" aria-label="<?= esc($url === 'StudijEng.aspx' ? 'Business economics (na engleskom)' : $title) ?>" title="<?= esc($url === 'StudijEng.aspx' ? 'Business economics (na engleskom)' : $title) ?>"><?= studyIcon($url) ?></a><?php endforeach; ?>
+        </nav>
+        <div class="study-carousel-controls" hidden><span class="study-carousel-position" aria-live="polite" aria-atomic="true"></span><div><button type="button" data-study-prev aria-label="Prethodni studiji" aria-controls="study-carousel"><?= icon('chevron-left') ?></button><button type="button" data-study-next aria-label="Sljedeći studiji" aria-controls="study-carousel"><?= icon('chevron-right') ?></button></div></div>
       </section>
 
       </div>
@@ -93,7 +109,7 @@ function homePage(): string {
       <section class="home-section home-width"><div class="section-heading"><div><p class="home-kicker">UČENJE KOJE IDE DALJE</p><h2>Više od predavanja.</h2></div></div>
         <div class="opportunity-grid"><article class="campus-card"><video class="campus-video" tabindex="-1" disablepictureinpicture disableremoteplayback autoplay muted loop playsinline preload="metadata" poster="<?= homeAsset('Files/Images/novazgrada.jpg') ?>" aria-label="Video zgrade Visoke škole CEPS"><source src="<?= esc($programmes['Zgrada.aspx']['video']) ?>" type="video/mp4"></video><div><p class="home-kicker">NAŠ KAMPUS</p><h3>Nova zgrada CEPS-a</h3><?php foreach ($programmes['Zgrada.aspx']['paragraphs'] as $p): ?><p><?= esc($p) ?></p><?php endforeach; ?><a class="text-link" href="<?= esc(schoolLink('/Zgrada')) ?>">Upoznajte prostor <?= icon('arrow-up-right') ?></a></div></article>
         <article class="cisco-card"><img class="cisco-brand" src="https://ceps.edu.ba/Files/Images/cisco.jpg" alt="Cisco" width="1920" height="500" loading="lazy"><p class="home-kicker">ZNANJE BEZ GRANICA</p><h3>Cisco akademija.</h3><?php foreach ($programmes['Cisco.aspx']['paragraphs'] as $p): ?><p><?= esc($p) ?></p><?php endforeach; ?><a class="pill pill-yellow" href="<?= esc(schoolLink('/Cisco')) ?>">Saznajte više <?= icon('arrow-up-right') ?></a></article></div>
-        <div class="benefits"><?php foreach (array_chunk($copy['features'], (int) ceil(count($copy['features']) / 2)) as $column): ?><div class="benefits-column"><?php foreach ($column as $feature): ?><details name="ceps-faq"><summary><?= esc($feature['title']) ?><span aria-hidden="true"><?= icon('plus') ?></span></summary><div><?php foreach ($feature['paragraphs'] as $p): ?><p><?= esc($p) ?></p><?php endforeach; ?><?php if (str_starts_with($feature['title'], 'Dodatak diplomi')): ?><a class="diploma-certificate" href="https://ceps.edu.ba/Files/ceps_cert.jpg"><img src="https://ceps.edu.ba/Files/ceps_cert.jpg" alt="TÜV Austria certifikati CEPS-a – ISO 9001 i ISO 45001" loading="lazy"></a><?php endif; ?></div></details><?php endforeach; ?></div><?php endforeach; ?></div>
+        <div class="benefits"><?php foreach (array_chunk($copy['features'], (int) ceil(count($copy['features']) / 2)) as $column): ?><div class="benefits-column"><?php foreach ($column as $feature): ?><details name="ceps-faq"><summary><?= esc($feature['title']) ?><span aria-hidden="true"><?= icon('plus') ?></span></summary><div><?php foreach ($feature['paragraphs'] as $p): ?><p><?= esc($p) ?></p><?php endforeach; ?><?php if ((str_starts_with($feature['title'], 'Dodatak diplomi') || str_starts_with($feature['title'], 'Diploma Supplement'))): ?><a class="diploma-certificate" href="https://ceps.edu.ba/Files/ceps_cert.jpg"><img src="https://ceps.edu.ba/Files/ceps_cert.jpg" alt="TÜV Austria certifikati CEPS-a – ISO 9001 i ISO 45001" loading="lazy"></a><?php endif; ?></div></details><?php endforeach; ?></div><?php endforeach; ?></div>
       </section>
 
 
@@ -102,7 +118,7 @@ function homePage(): string {
         <div class="documents-grid"><?php
         $groups = ['Akreditacija i certifikati'=>[], 'Nostrifikacija diplome'=>[], 'Studentske Erasmus+ prakse'=>[], 'Konkursi'=>[]];
         foreach ($copy['documents'] as $d) {
-            $category = stripos($d['title'],'Nostrifikacija') !== false ? 'Nostrifikacija diplome' : (stripos($d['url'],'/Erasmus/') !== false || stripos($d['title'],'Erasmus povelja') !== false ? 'Studentske Erasmus+ prakse' : (stripos($d['title'],'Natječaj') !== false ? 'Konkursi' : 'Akreditacija i certifikati'));
+            $category = (stripos($d['title'],'Nostrifikacija') !== false || stripos($d['title'],'Recognition of our diploma') !== false) ? 'Nostrifikacija diplome' : (stripos($d['url'],'/Erasmus/') !== false || (stripos($d['title'],'Erasmus povelja') !== false || stripos($d['title'],'Erasmus Charter') !== false) ? 'Studentske Erasmus+ prakse' : ((stripos($d['title'],'Natječaj') !== false || str_starts_with($d['title'],'Call for student admission')) ? 'Konkursi' : 'Akreditacija i certifikati'));
             $groups[$category][] = $d;
         }
         $documentIcons = ['Akreditacija i certifikati'=>'certificate', 'Nostrifikacija diplome'=>'school', 'Studentske Erasmus+ prakse'=>'world', 'Konkursi'=>'clipboard-list'];

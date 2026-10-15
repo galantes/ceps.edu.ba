@@ -1,10 +1,12 @@
 document.querySelectorAll('[data-study]').forEach(page => {
+  const english = document.documentElement.lang === 'en';
+  const german = document.documentElement.lang === 'de';
   const content = page.querySelector('.legacy-content');
   const headings = [...content.querySelectorAll('h2')];
   if (!headings.length) return;
   const groups = [
-    ['O studiju', 'school'], ['Smjerovi', 'route'], ['Trajanje i zvanje', 'award'],
-    ['Nastavni plan i dokumenti', 'files']
+    [german ? 'Über den Studiengang' : (english ? 'About the programme' : 'O studiju'), 'school'], [german ? 'Fachrichtungen' : (english ? 'Study tracks' : 'Smjerovi'), 'route'], [german ? 'Dauer und Abschluss' : (english ? 'Duration and qualifications' : 'Trajanje i zvanje'), 'award'],
+    [german ? 'Studienplan und Dokumente' : (english ? 'Curriculum and documents' : 'Nastavni plan i dokumenti'), 'files']
   ].map(([title, icon]) => ({ title, icon, sections: [] }));
   const normalize = text => text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
   headings.forEach((heading, index) => {
@@ -15,12 +17,12 @@ document.querySelectorAll('[data-study]').forEach(page => {
     section.className = 'study-tab-section';
     section.append(range.cloneContents());
     const title = normalize(heading.textContent);
-    if (/novosti/.test(title)) return;
-    const category = index === 0 ? 0 : /nastavni|dokument|plan i program/.test(title) ? 3 : /trajanje|naziv|zvanje/.test(title) ? 2 : 1;
+    if (/novosti|news|presse|^press$/i.test(title)) return;
+    const category = index === 0 ? 0 : /nastavni|dokument|plan i program|curricul|document|learning outcome|studienplan|lehrplan/i.test(title) ? 3 : /trajanje|naziv|zvanje|duration|qualification|title|degree|studiendauer|abschluss/i.test(title) ? 2 : 1;
     groups[category].sections.push(section);
   });
   const tabs = document.createElement('div'); tabs.className = 'study-page-tabs';
-  tabs.setAttribute('role', 'tablist'); tabs.setAttribute('aria-label', 'Informacije o studiju');
+  tabs.setAttribute('role', 'tablist'); tabs.setAttribute('aria-label', german ? 'Studieninformationen' : (english ? 'Programme information' : 'Informacije o studiju'));
   const desktop = window.matchMedia('(min-width: 951px)');
   const updateOrientation = () => tabs.setAttribute('aria-orientation', desktop.matches ? 'vertical' : 'horizontal');
   updateOrientation(); desktop.addEventListener('change', updateOrientation);

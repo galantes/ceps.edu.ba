@@ -1,0 +1,56 @@
+{
+  "Files/PDF/NPP-Economics.pdf": {
+    "file": "NPP-Economics.pdf",
+    "source": "https://en.ceps.edu.ba/Files/PDF/NPP-Economics.pdf",
+    "bytes": 158431,
+    "sha256": "1c53db50ceeae474bbe65e84280971e49e0fd9f51d2fc432a537bbd82f8fa476"
+  },
+  "Files/PDF/IT_en.pdf": {
+    "file": "IT_en.pdf",
+    "source": "https://en.ceps.edu.ba/Files/PDF/IT_en.pdf",
+    "bytes": 141813,
+    "sha256": "c6fa0f23d9b08936a2ac970dc115b1f97bd11b4eeed2a2822dd2f334d267ae18"
+  },
+  "Files/PDF/Railway Traffic-6 semesters.pdf": {
+    "file": "Railway Traffic-6 semesters.pdf",
+    "source": "https://en.ceps.edu.ba/Files/PDF/Railway%20Traffic-6%20semesters.pdf",
+    "bytes": 32990,
+    "sha256": "81334f0c03c223b8f7aaf5956160cf9e753a2b53c88e80487b49f05cb2463ffe"
+  },
+  "Files/PDF/Railway Traffic- 8 semesters.pdf": {
+    "file": "Railway Traffic- 8 semesters.pdf",
+    "source": "https://en.ceps.edu.ba/Files/PDF/Railway%20Traffic-%208%20semesters.pdf",
+    "bytes": 41123,
+    "sha256": "95552ec674951a01e5e90b16651f2cea8fa52ecf8c75dcecb8ea19719335e3f4"
+  },
+  "Files/PDF/Healthcare.pdf": {
+    "file": "Healthcare.pdf",
+    "source": "https://en.ceps.edu.ba/Files/PDF/Healthcare.pdf",
+    "bytes": 107976,
+    "sha256": "ce1f2c3967830d753386e3004a821a76a81c4098aafb042e443b8868ced3b2ba"
+  },
+  "Files/PDF/NPP-Criminology.pdf": {
+    "file": "NPP-Criminology.pdf",
+    "source": "https://en.ceps.edu.ba/Files/PDF/NPP-Criminology.pdf",
+    "bytes": 109492,
+    "sha256": "66ca1f00ae00367a1282c3b4da55116afb0c58cccbecb822f7a91b93a7f4ec01"
+  },
+  "Files/PDF/NPP_NID.pdf": {
+    "file": "NPP_NID.pdf",
+    "source": "https://en.ceps.edu.ba/Files/PDF/NPP_NID.pdf",
+    "bytes": 164657,
+    "sha256": "d19af16ecb09b6d942e16549a3a3930286186af9a065fdf0b53bb7279819cac4"
+  },
+  "Files/PDF/NPP-Safety.pdf": {
+    "file": "NPP-Safety.pdf",
+    "source": "https://en.ceps.edu.ba/Files/PDF/NPP-Safety.pdf",
+    "bytes": 117736,
+    "sha256": "0d3d58fbcfb47ef571583b0538d4d0e4ffd93f95399772eadc4c812616cc28da"
+  },
+  "Files/PDF/EN_2017.pdf": {
+    "file": "EN_2017.pdf",
+    "source": "https://en.ceps.edu.ba/Files/PDF/EN_2017.pdf",
+    "bytes": 1321593,
+    "sha256": "23c1ede3a3891d03035d0a09cf76f124572ac24e61f2850cecc8c856ff8374cb"
+  }
+}

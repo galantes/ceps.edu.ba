@@ -1,0 +1,65 @@
+{
+    "akreditacija": {
+        "source": "https://de.ceps.edu.ba/Akreditacija.aspx"
+    },
+    "akademska_organizacija": {
+        "source": "https://de.ceps.edu.ba/Akademska_organizacija.aspx"
+    },
+    "dit": {
+        "source": "https://de.ceps.edu.ba/DIT.aspx"
+    },
+    "bolonjski_proces": {
+        "source": "https://de.ceps.edu.ba/Bolonjski_proces.aspx"
+    },
+    "kvaliteta": {
+        "source": "https://de.ceps.edu.ba/Kvaliteta.aspx"
+    },
+    "misija": {
+        "source": "https://de.ceps.edu.ba/Misija.aspx"
+    },
+    "knjiznica": {
+        "source": "https://de.ceps.edu.ba/Knjiznica.aspx"
+    },
+    "akti": {
+        "source": "https://de.ceps.edu.ba/Akti.aspx"
+    },
+    "maticni_podaci": {
+        "source": "https://de.ceps.edu.ba/Maticni_podaci.aspx"
+    },
+    "studiji": {
+        "source": "https://de.ceps.edu.ba/Studiji.aspx"
+    },
+    "studijeng": {
+        "source": "https://de.ceps.edu.ba/StudijEng.aspx"
+    },
+    "studijpromet": {
+        "source": "https://de.ceps.edu.ba/StudijPromet.aspx"
+    },
+    "studijenergetika": {
+        "source": "https://de.ceps.edu.ba/StudijEnergetika.aspx"
+    },
+    "studijsigurnost": {
+        "source": "https://de.ceps.edu.ba/StudijSigurnost.aspx"
+    },
+    "studijpe": {
+        "source": "https://de.ceps.edu.ba/StudijPE.aspx"
+    },
+    "studijit": {
+        "source": "https://de.ceps.edu.ba/StudijIT.aspx"
+    },
+    "studijzastita": {
+        "source": "https://de.ceps.edu.ba/StudijZastita.aspx"
+    },
+    "medunarodna_suradnja": {
+        "source": "https://de.ceps.edu.ba/Medunarodna_suradnja.aspx"
+    },
+    "galerija": {
+        "source": "https://de.ceps.edu.ba/Galerija.aspx"
+    },
+    "kontakt": {
+        "source": "https://de.ceps.edu.ba/Kontakt.aspx"
+    },
+    "upisi": {
+        "source": "https://de.ceps.edu.ba/Upisi.aspx"
+    }
+}

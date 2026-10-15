@@ -1,0 +1,189 @@
+{
+  "source": "ceps_14-10-2026.sql",
+  "source_sha256": "aec4fc7632b2fd764922369d901df9f8e8184e5cd682bba3899dea41a42a6e5a",
+  "date": "2026-10-14",
+  "database": {
+    "Novosti": {
+      "inserted": [
+        1571,
+        1572,
+        1573,
+        1574,
+        1575,
+        1576,
+        1577,
+        1578,
+        1579,
+        1580,
+        1581,
+        1582
+      ],
+      "updated": [
+        {
+          "ID": 1473,
+          "fields": [
+            "Tekst"
+          ]
+        },
+        {
+          "ID": 1565,
+          "fields": [
+            "Tekst"
+          ]
+        },
+        {
+          "ID": 1566,
+          "fields": [
+            "Tekst"
+          ]
+        },
+        {
+          "ID": 1567,
+          "fields": [
+            "Datum",
+            "Istaknuto"
+          ]
+        },
+        {
+          "ID": 1568,
+          "fields": [
+            "Datum",
+            "Istaknuto"
+          ]
+        }
+      ],
+      "source_rows": 1567,
+      "verified_fields": 50144,
+      "local_rows_after": 1567
+    },
+    "Sporazumi": {
+      "inserted": [
+        259,
+        260
+      ],
+      "updated": [],
+      "source_rows": 258,
+      "verified_fields": 2064,
+      "local_rows_after": 258
+    }
+  },
+  "new_news": [
+    {
+      "ID": 1571,
+      "title": "„LANAC SIGURNOSTI – ZAJEDNO PROTIV NASILJA“",
+      "Hr": 1,
+      "En": 0
+    },
+    {
+      "ID": 1572,
+      "title": "“SAFETY CHAIN – TOGETHER AGAINST VIOLENCE”",
+      "Hr": 0,
+      "En": 1
+    },
+    {
+      "ID": 1573,
+      "title": "NOVO MEĐUNARODNO PARTNERSTVO CEPS-a",
+      "Hr": 1,
+      "En": 0
+    },
+    {
+      "ID": 1574,
+      "title": "NEW INTERNATIONAL PARTNERSHIP OF CEPS",
+      "Hr": 0,
+      "En": 1
+    },
+    {
+      "ID": 1575,
+      "title": "CEPS KISELJAK UČESTVOVAO NA SKILL2SUSTAIN SIMPOZIJU I SASTANKU ZA UPRAVLJANJE PROJEKTOM ODRŽANIM U KOTORU",
+      "Hr": 1,
+      "En": 0
+    },
+    {
+      "ID": 1576,
+      "title": "CEPS KISELJAK PARTICIPATED AT THE SKILL2SUSTAIN SYMPOSIUM AND PROJECT MANAGEMENT MEETING HELD IN KOTOR",
+      "Hr": 0,
+      "En": 1
+    },
+    {
+      "ID": 1577,
+      "title": "Na CEPS-u održan trodnevni TECC Train The Trainer training “MARCH-PAWS” ",
+      "Hr": 1,
+      "En": 0
+    },
+    {
+      "ID": 1578,
+      "title": "Three-Day TECC Train The Trainer Training “MARCH-PAWS” Held at CEPS",
+      "Hr": 0,
+      "En": 1
+    },
+    {
+      "ID": 1579,
+      "title": "CEPS RAZVIO NOVE STUDIJSKE PROGRAME IZ OBLASTI UPRAVLJANJA RIZICIMA OD KATASTROFA",
+      "Hr": 1,
+      "En": 0
+    },
+    {
+      "ID": 1580,
+      "title": "CEPS DEVELOPED NEW STUDY PROGRAMMES IN DISASTER RISK MANAGEMENT",
+      "Hr": 0,
+      "En": 1
+    },
+    {
+      "ID": 1581,
+      "title": "CEPS PREDSTAVIO SEE-GL PROJEKAT NA SASTANKU EACEA-E S KORISNICIMA CB-VET PROJEKATA U SARAJEVU",
+      "Hr": 1,
+      "En": 0
+    },
+    {
+      "ID": 1582,
+      "title": "CEPS PRESENTS THE SEE-GL PROJECT AT THE EACEA MEETING WITH CB-VET PROJECT BENEFICIARIES IN SARAJEVO",
+      "Hr": 0,
+      "En": 1
+    }
+  ],
+  "project_checks": [
+    {
+      "column": "projekt_9",
+      "slug": "Projekt/skill-2-sustain",
+      "news_ids": [
+        1575,
+        1576,
+        1579,
+        1580
+      ]
+    },
+    {
+      "column": "projekt_8",
+      "slug": "Projekt/skills-and-employment-enhancement-in-green-logistics",
+      "news_ids": [
+        1581,
+        1582
+      ]
+    }
+  ],
+  "assets": {
+    "added": 60,
+    "unchanged": 11,
+    "failed": [
+      {
+        "path": "Files/2026/05 SKILL2SUSTAIN-POSTER_Sakic_Selimic_Palic.pdf",
+        "url": "https://ceps.edu.ba/Files/2026/05%20SKILL2SUSTAIN-POSTER_Sakic_Selimic_Palic.pdf",
+        "status": "failed",
+        "error": "www.ceps.edu.ba: HTTP Error 404: Not Found; ceps.edu.ba: HTTP Error 404: Not Found",
+        "news_ids": [
+          1575,
+          1576
+        ]
+      }
+    ]
+  },
+  "verification": "All 52,208 source fields match local database. Site settings preserved. HTTP checks passed.",
+  "limitations": [
+    "Sporazumi ID 259 remains inactive, as in the source export.",
+    "One PDF is unavailable on both active CEPS hosts (404).",
+    "This comparison covers Novosti and Sporazumi from the supplied export; static project/page text is not included in that SQL export."
+  ],
+  "backups": [
+    "php-app/var/live-sync-20261014/before-sync-20261014-200026.sql"
+  ]
+}

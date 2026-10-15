@@ -4,24 +4,6 @@ document.querySelectorAll('[data-slider]').forEach(slider => {
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
   let current = 0, paused = motion.matches, timer;
   let transition = [];
-  const videos = slides.map(slide => slide.querySelector('video'));
-  videos.forEach(video => {
-    if (!video) return;
-    video.addEventListener('playing', () => video.classList.add('is-playing'));
-    video.addEventListener('error', () => video.classList.remove('is-playing'));
-  });
-  function syncVideos() {
-    videos.forEach((video, i) => {
-      if (!video) return;
-      if (i !== current || paused || document.hidden || motion.matches) {
-        video.pause();
-        return;
-      }
-      if (!video.getAttribute('src')) video.src = video.dataset.src;
-      video.muted = true;
-      video.play().catch(() => video.classList.remove('is-playing'));
-    });
-  }
   function schedule() {
     clearInterval(timer);
     if (!paused && !document.hidden && !slider.matches(':hover') && !slider.contains(document.activeElement)) {
@@ -55,11 +37,9 @@ document.querySelectorAll('[data-slider]').forEach(slider => {
       };
     }
     dots.forEach((dot, i) => { if (i === current) dot.setAttribute('aria-current', 'true'); else dot.removeAttribute('aria-current'); });
-    syncVideos();
   }
   function updatePause() {
     schedule();
-    syncVideos();
   }
   slider.querySelector('.slider-controls').hidden = false;
   slider.querySelector('[data-prev]').addEventListener('click', () => { show(current - 1); schedule(); });
@@ -69,7 +49,7 @@ document.querySelectorAll('[data-slider]').forEach(slider => {
   slider.addEventListener('mouseleave', schedule);
   slider.addEventListener('focusin', schedule);
   slider.addEventListener('focusout', () => setTimeout(schedule, 0));
-  document.addEventListener('visibilitychange', () => { schedule(); syncVideos(); });
+  document.addEventListener('visibilitychange', () => { schedule(); });
   motion.addEventListener('change', () => { paused = motion.matches; updatePause(); });
   show(Math.floor(Math.random() * slides.length), false);
   updatePause();

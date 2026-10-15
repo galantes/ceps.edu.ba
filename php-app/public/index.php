@@ -4,7 +4,8 @@ require dirname(__DIR__) . '/src/bootstrap.php';
 require_once dirname(__DIR__) . '/src/news-image.php';
 require_once dirname(__DIR__) . '/src/icons.php';
 
-$path = rawurldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?: '/');
+legacyEnglishRedirect();
+$path = languagePath(rawurldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?: '/'));
 if (str_starts_with($path,'/media/')) {
     if(!in_array($_SERVER['REQUEST_METHOD'],['GET','HEAD'],true)){http_response_code(405);exit;}
     require dirname(__DIR__).'/src/admin-media.php';serveAdminMedia($path);
@@ -23,19 +24,20 @@ $seoTarget = seoUrl($requestedUrl);
 if ($seoTarget !== $requestedUrl && in_array($_SERVER['REQUEST_METHOD'], ['GET','HEAD'], true)) {
     header('Location: '.$seoTarget, true, 301); exit;
 }
-if (preg_match('~^/novosti/([0-9]+)(?:-.*)?$~i', $path, $newsRoute)) {
+if (preg_match('~^/(?:novosti|news|nachrichten)/([0-9]+)(?:-.*)?$~i', $path, $newsRoute)) {
     $_GET['id'] = (string)(int)$newsRoute[1];
     $path = '/Novost';
 } else $path = seoInternalPath($path);
 $route = strtolower($path);
-if (!in_array($_SERVER['REQUEST_METHOD'], ['GET', 'HEAD'], true) && !($_SERVER['REQUEST_METHOD'] === 'POST' && $path === '/Kontakt')) {
+if (!in_array($_SERVER['REQUEST_METHOD'], ['GET', 'HEAD'], true)) {
     header('Allow: GET, HEAD');
     layout('Nedopušten zahtjev', '', '', '<section class="empty"><h1>Nedopušten zahtjev</h1></section>', 405);
 }
+if ($route === '/sitemap.xml') { require dirname(__DIR__).'/src/sitemap.php'; serveSitemap(); }
 if ($route === '/robots.txt') {
     header('Content-Type: text/plain; charset=utf-8');
     echo getenv('CEPS_ENV') === 'production'
-        ? "User-agent: *\nDisallow: /admin\nDisallow: /pretraga\n"
+        ? "User-agent: *\nDisallow: /admin\nDisallow: /pretraga\nDisallow: /en/search\nDisallow: /de/suche\nSitemap: https://ceps.edu.ba/sitemap.xml\n"
         : "User-agent: *\nDisallow: /\n";
     exit;
 }
@@ -44,12 +46,12 @@ if ($route === '/robots.txt') {
         layout('Pretraga', 'Pretražite novosti i podstranice CEPS-a.', '', searchPage());
     }
     if (in_array($route, ['/', '/default', '/default.aspx'], true)) {
-        if ($path !== '/') { header('Location: /', true, 301); exit; }
+        if ($path !== '/') { header('Location: '.seoUrl('/'), true, 301); exit; }
         require dirname(__DIR__) . '/src/home.php';
         layout(SCHOOL_NAME, 'CEPS – Centar za poslovne studije. Studijski programi, upisi, novosti i informacije o studiranju u Kiseljaku.', '/', homePage());
     }
     if (in_array($route, ['/onama', '/onama.aspx'], true)) {
-        if ($path !== '/Onama') { header('Location: /Onama', true, 301); exit; }
+        if ($path !== '/Onama') { header('Location: '.seoUrl('/Onama'), true, 301); exit; }
         require dirname(__DIR__) . '/src/about.php';
         layout('O nama', 'Upoznajte Visoku školu CEPS u Kiseljaku, osnivanje i razvoj ustanove te mogućnosti studiranja.', '/Onama', aboutPage());
     }
@@ -59,7 +61,7 @@ if ($route === '/robots.txt') {
     if (isset($staticPages[$pageKey])) {
         $staticPage = $staticPages[$pageKey];
         $canonical = '/' . $staticPage['slug'];
-        if ($path !== $canonical) { header('Location: ' . $canonical . (!empty($_SERVER['QUERY_STRING']) ? '?' . $_SERVER['QUERY_STRING'] : ''), true, 301); exit; }
+        if ($path !== $canonical) { header('Location: ' . seoUrl($canonical) . (!empty($_SERVER['QUERY_STRING']) ? '?' . $_SERVER['QUERY_STRING'] : ''), true, 301); exit; }
         layout($staticPage['title'], excerpt(preg_replace('/\{\{[^}]+\}\}/', '', $staticPage['html'])), $canonical, contentPage($staticPage));
     }
     if (str_starts_with($route, '/files/')) {
@@ -71,7 +73,7 @@ if ($route === '/robots.txt') {
         $id = $params['id'] ?? '';
         $row = false;
         if (is_string($id) && preg_match('/^[0-9]{1,18}$/D', $id)) {
-            $stmt = database()->prepare('SELECT * FROM Novosti WHERE ID = ?');
+            $stmt = database()->prepare('SELECT * FROM Novosti WHERE ID = ?'.(siteLanguage() !== 'bs'?' AND '.newsLanguageColumn().'=1':'').'');
             $stmt->execute([(int)$id]);
             $row = $stmt->fetch();
         }
@@ -80,7 +82,7 @@ if ($route === '/robots.txt') {
         }
         $canonical = '/Novost?id=' . $row['ID'];
         if ($path !== '/Novost' || $id !== (string)$row['ID'] || !isset($_GET['id'])) {
-            header('Location: ' . $canonical, true, 301);
+            header('Location: ' . seoUrl($canonical), true, 301);
             exit;
         }
         require_once dirname(__DIR__) . '/src/news-footer.php';
@@ -97,17 +99,17 @@ if ($route === '/robots.txt') {
         }
         $page = (int)$page;
         $pdo = database();
-        $count = (int)$pdo->query('SELECT COUNT(*) FROM Novosti WHERE Hr=1')->fetchColumn();
+        $count = (int)$pdo->query('SELECT COUNT(*) FROM Novosti WHERE '.newsLanguageColumn().'=1')->fetchColumn();
         $pages = max(1, (int)ceil($count / 12));
         if ($page > $pages) layout('Stranica nije pronađena', '', '', '<section class="empty"><h1>Stranica nije pronađena.</h1></section>', 404);
         $canonical = '/Novosti' . ($page > 1 ? '?page=' . $page : '');
         if ($route !== '/novosti' || $path !== '/Novosti') {
             // Homepage is not implemented yet. Do not permanently consolidate
             // the real site's homepage into the news archive during development.
-            header('Location: ' . $canonical, true, in_array($route, ['/', '/default', '/default.aspx'], true) ? 302 : 301);
+            header('Location: ' . seoUrl($canonical), true, in_array($route, ['/', '/default', '/default.aspx'], true) ? 302 : 301);
             exit;
         }
-        $stmt = $pdo->prepare('SELECT ID, Naslov, Tekst, Datum FROM Novosti WHERE Hr=1 ORDER BY Datum DESC, ID DESC LIMIT 12 OFFSET ?');
+        $stmt = $pdo->prepare('SELECT ID, Naslov, Tekst, Datum FROM Novosti WHERE '.newsLanguageColumn().'=1 ORDER BY Datum DESC, ID DESC LIMIT 12 OFFSET ?');
         $stmt->bindValue(1, ($page - 1) * 12, PDO::PARAM_INT);
         $stmt->execute();
         $content = '<section class="intro news-intro"><h1>Novosti i objave</h1><span class="heading-rule" aria-hidden="true"></span><p>Novosti, događaji i obavijesti CEPS-a.</p></section><section class="archive" aria-label="Arhiva novosti"><div class="archive-label"><h2>Najnovije s CEPS-a</h2><span>' . $count . ' objava u arhivi</span></div><div class="cards">';

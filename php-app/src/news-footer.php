@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 function newsFooter(array $row): string {
     $title = titleText($row['Naslov']);
-    $url = rtrim(getenv('CEPS_ORIGIN') ?: 'https://www.ceps.edu.ba', '/') . seoUrl('/Novost?id=' . $row['ID']);
+    $url = siteOrigin() . seoUrl('/Novost?id=' . $row['ID']);
     $encoded = rawurlencode($url);
     $date = $row['Datum'] ?? '';
     ob_start(); ?>

@@ -2,8 +2,8 @@
 declare(strict_types=1);
 function homeDefaults(): array {
     $copy=json_decode(file_get_contents(dirname(__DIR__).'/content/home.json'),true,512,JSON_THROW_ON_ERROR);$programmes=[];foreach($copy['programmes'] as $p)$programmes[$p['url']]=$p;
-    $images=['Cisco.aspx'=>'cisco.jpg','StudijZdravstvo.aspx'=>'zdravstvo.jpg','Zgrada.aspx'=>'novazgrada.jpg','StudijEng.aspx'=>'studij_eng.jpg','StudijIT.aspx'=>'Informacijske_tehnologije.jpg','StudijPE.aspx'=>'ekonomija_1.jpg','StudijEnergetika.aspx'=>'energetika_1.jpg','StudijPromet.aspx'=>'promet_1.jpg','StudijSigurnost.aspx'=>'sigurnost_1.jpg','StudijZastita.aspx'=>'zastita_1.jpg'];
-    $slides=[];foreach($images as $url=>$image){$p=$programmes[$url];$slides[]=['title'=>$p['title'],'description'=>implode(' ',$p['paragraphs']),'url'=>'/'.$url,'image'=>'https://ceps.edu.ba/Files/Images/'.$image,'video'=>$p['video']??'','enabled'=>true,'order'=>count($slides)+1];}
+    $images=json_decode(file_get_contents(dirname(__DIR__).'/content/hero-images.json'),true,512,JSON_THROW_ON_ERROR);
+    $slides=[];foreach($images as $url=>$image){$p=$programmes[$url];$slides[]=['title'=>$p['title'],'description'=>implode(' ',$p['paragraphs']),'url'=>'/'.$url,'image'=>$image,'enabled'=>true,'order'=>count($slides)+1];}
     return ['popup'=>['enabled'=>true,'url'=>'/Novost?id=1473','image'=>'https://ceps.edu.ba/Files/2026/popupisi.jpg','alt'=>'Upisi na CEPS — otvorite obavijest'],'slides'=>$slides];
 }
 function homeSettings(?PDO $pdo=null): array {
@@ -24,9 +24,9 @@ function adminHomeSettings(PDO $pdo,bool $post): never {
         foreach(['url','image'] as $key)adminSettingUrl($next['popup'][$key]);
         for($i=0;$i<count($data['slides']);$i++){
             $item=['enabled'=>isset($_POST['enabled_'.$i]),'order'=>(int)adminValue($_POST,'order_'.$i,(string)$i)];
-            foreach(['title','description','url','image','video'] as $key)$item[$key]=trim(adminValue($_POST,$key.'_'.$i));
+            foreach(['title','description','url','image'] as $key)$item[$key]=trim(adminValue($_POST,$key.'_'.$i));
             if($item['title']===''||strlen($item['title'])>500)throw new InvalidArgumentException('Svaki slajd mora imati naslov do 500 znakova.');
-            foreach(['url','image','video'] as $key)if($item[$key]!=='')adminSettingUrl($item[$key]);
+            foreach(['url','image'] as $key)if($item[$key]!=='')adminSettingUrl($item[$key]);
             $next['slides'][]=$item;
         }
         if(!array_filter($next['slides'],fn($s)=>$s['enabled']))throw new InvalidArgumentException('Ostavite barem jedan aktivni slajd.');
@@ -43,7 +43,7 @@ function adminHomeSettings(PDO $pdo,bool $post): never {
     foreach(['image'=>'Slika','url'=>'Link na novost','alt'=>'Opis slike'] as $key=>$label)$html.='<label>'.$label.'<input name="popup_'.$key.'" value="'.esc($data['popup'][$key]).'" required></label>';
     $html.='<h2>Slajder</h2>';
     foreach($data['slides'] as $i=>$slide){$html.='<details class="slide-settings"><summary>'.esc($slide['title']).'</summary><label class="check"><input type="checkbox" name="enabled_'.$i.'"'.($slide['enabled']?' checked':'').'>Prikaži slajd</label><label>Redoslijed<input type="number" name="order_'.$i.'" value="'.$slide['order'].'"></label>';
-        foreach(['title'=>'Naslov','description'=>'Opis','url'=>'Link','image'=>'Slika','video'=>'Video (opcionalno)'] as $key=>$label)$html.='<label>'.$label.'<input name="'.$key.'_'.$i.'" value="'.esc($slide[$key]).'"></label>';
+        foreach(['title'=>'Naslov','description'=>'Opis','url'=>'Link','image'=>'Slika'] as $key=>$label)$html.='<label>'.$label.'<input name="'.$key.'_'.$i.'" value="'.esc($slide[$key]).'"></label>';
         $html.='</details>';
     }
     adminPage('Naslovnica — slajder i popup',$html.'<div class="save"><button class="primary">Objavi postavke</button></div></form>'.adminRevisionList($pdo,'home','1'));

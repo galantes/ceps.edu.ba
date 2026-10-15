@@ -1,0 +1,50 @@
+{
+  "Files/PDF/Promet_de.pdf": {
+    "file": "Promet_de.pdf",
+    "source": "https://de.ceps.edu.ba/Files/PDF/Promet_de.pdf",
+    "bytes": 1297844,
+    "sha256": "52150a9fb917654246b3008cf80f585a387a50cbfc8d269b391196d48a3bcfef"
+  },
+  "Files/PDF/CEPS_vodic_de.pdf": {
+    "file": "CEPS_vodic_de.pdf",
+    "source": "https://de.ceps.edu.ba/Files/PDF/CEPS_vodic_de.pdf",
+    "bytes": 9443191,
+    "sha256": "810db5e2eeb01c51e23e352872df0b16894b0798bfa9580bb28d31b7e92768da"
+  },
+  "Files/PDF/Sigurnost_de.pdf": {
+    "file": "Sigurnost_de.pdf",
+    "source": "https://de.ceps.edu.ba/Files/PDF/Sigurnost_de.pdf",
+    "bytes": 524851,
+    "sha256": "8905dd6dc96690dfc894570bf5ef0786990783ed00003ed38759413e3f5e1878"
+  },
+  "Files/PDF/Energetika_de.pdf": {
+    "file": "Energetika_de.pdf",
+    "source": "https://de.ceps.edu.ba/Files/PDF/Energetika_de.pdf",
+    "bytes": 1123370,
+    "sha256": "88d3aeb4c573ac5c876d2253c788a73273a7d38419fb6d0ae6124b9b4ecee757"
+  },
+  "Files/PDF/Letak_de.pdf": {
+    "file": "Letak_de.pdf",
+    "source": "https://de.ceps.edu.ba/Files/PDF/Letak_de.pdf",
+    "bytes": 17989628,
+    "sha256": "5e025ece37ad88c85b70da81d11e9486ce42b77ff6b4dd5afd7e5c618823ef51"
+  },
+  "Files/PDF/IT-DE.pdf": {
+    "file": "IT-DE.pdf",
+    "source": "https://de.ceps.edu.ba/Files/PDF/IT-DE.pdf",
+    "bytes": 130460,
+    "sha256": "6b4689d3d52eb278ae9c3a0a383b2f8b0ffc7303aff95fc8bfc315593380d44c"
+  },
+  "Files/PDF/Ekonomija_de.pdf": {
+    "file": "Ekonomija_de.pdf",
+    "source": "https://de.ceps.edu.ba/Files/PDF/Ekonomija_de.pdf",
+    "bytes": 953488,
+    "sha256": "5d34f8b92341093cccabaa77dd2ddfafe71aa2c39b1ed7326177bd7be1f5eb25"
+  },
+  "Files/PDF/Zastita_de.pdf": {
+    "file": "Zastita_de.pdf",
+    "source": "https://de.ceps.edu.ba/Files/PDF/Zastita_de.pdf",
+    "bytes": 852323,
+    "sha256": "149ae8adc2cb1c5377732d8ec0b200e587fc922eaccde84453a096b6f47745d4"
+  }
+}
