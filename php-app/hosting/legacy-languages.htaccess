@@ -1,0 +1,17 @@
+# Only for a SEPARATE document root of en.ceps.edu.ba / de.ceps.edu.ba.
+# Copy this file there as .htaccess. Do not replace the main site's .htaccess.
+Options -Indexes -MultiViews
+RewriteEngine On
+
+# Documents and shared assets have no language prefix.
+RewriteCond %{HTTP_HOST} ^(?:en|de)\.ceps\.edu\.ba$ [NC]
+RewriteRule ^((?:Files|App_Themes|assets|media)(?:/.*)?)$ https://ceps.edu.ba/$1 [R=301,L,NC]
+
+# Avoid repeating an existing language prefix; the old host selects the language.
+RewriteCond %{HTTP_HOST} ^(en|de)\.ceps\.edu\.ba$ [NC]
+RewriteRule ^(?:en|de)(?:/(.*))?$ https://ceps.edu.ba/%1/$1 [R=301,L,NC]
+
+# The main application maps old .aspx pages and article IDs to their canonical URLs.
+# Apache preserves the original query string, including article IDs.
+RewriteCond %{HTTP_HOST} ^(en|de)\.ceps\.edu\.ba$ [NC]
+RewriteRule ^(.*)$ https://ceps.edu.ba/%1/$1 [R=301,L]

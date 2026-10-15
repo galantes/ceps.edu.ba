@@ -154,6 +154,20 @@ Stari njemački host ima pripremljena 301 preusmjerenja na odgovarajuće `/de` a
 Za njihovu aktivaciju na hostingu potrebno je usmjeriti domenu na novu aplikaciju.
 Njemačke stranice i članci uključeni su u sitemap i jezičke alternate oznake.
 
+Izbor jezika u zaglavlju koristi relativne adrese `/`, `/en` i `/de` te odgovarajuće
+podstranice. Za stare poddomene postoje dvije mogućnosti na hostingu:
+
+- Ako `en.ceps.edu.ba` i `de.ceps.edu.ba` koriste isti document root kao glavni web,
+  postojeći `hosting/.htaccess` prosljeđuje zahtjev aplikaciji. PHP vraća trajni 301
+  direktno na odgovarajuću adresu na `https://ceps.edu.ba/en` ili `/de`.
+- Ako poddomene imaju zasebne foldere, u svaki njihov document root postaviti
+  `hosting/legacy-languages.htaccess` pod nazivom `.htaccess`. Ne postavljati taj
+  predložak umjesto glavnog `.htaccess` fajla. Stare `.aspx` adrese i parametri
+  članaka prosljeđuju se glavnoj aplikaciji, koja ih zatim kanonizira.
+
+U oba slučaja poddomene moraju imati DNS zapis i važeći TLS certifikat kako bi
+radila i stara HTTPS adresa. Lokalna priprema ne aktivira pravila na hostingu.
+
 Ponovni uvoz: `php bin/import-german-pages.php SOURCE_DIRECTORY` iz `php-app/`.
 Izvorni HTML treba biti imenovan prema starim slugovima, npr. `StudijIT.html`,
 uz `Default.html` i `Onama.html`. Originali ostaju sačuvani u ulaznom direktoriju.
